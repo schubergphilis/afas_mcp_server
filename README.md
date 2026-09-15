@@ -21,6 +21,42 @@ GetConnectors, inspect connector schemas, and, only when you switch it on, write
   rendered into the AFAS query syntax, including OR groups and the JSON filter fallback.
 - **Runs anywhere an MCP client does.** stdio for desktop clients, streamable HTTP for shared deployments.
 
+## How it fits together
+
+```mermaid
+flowchart LR
+    client["<b>MCP client</b><br/>Claude Desktop · Claude Code · Cursor · ..."]
+
+    subgraph server["afas-mcp-server &nbsp;·&nbsp; one AFAS token &nbsp;·&nbsp; read-only by default"]
+        direction TB
+        read["<b>Read tools</b> (always on)<br/>afas_connection_info · afas_list_connectors<br/>afas_describe_get_connector · afas_describe_update_connector<br/>afas_get_rows · afas_validate_payload"]
+        filters["Filters by field id and operator name,<br/>rendered to the AFAS query syntax"]
+        write["<b>Write tools</b> (only with AFAS_ALLOW_WRITES=true)<br/>afas_insert · afas_update · afas_delete"]
+        validate["Offline validation against<br/>the UpdateConnector schema"]
+        read --> filters
+        write --> validate
+    end
+
+    subgraph afas["AFAS Profit REST services"]
+        direction TB
+        meta["metainfo"]
+        get["GetConnectors"]
+        upd["UpdateConnectors"]
+    end
+
+    client <-- "MCP over stdio<br/>or streamable HTTP" --> server
+    read -- "GET" --> meta
+    filters -- "GET · skip, take, orderby" --> get
+    validate -- "POST · PUT · DELETE" --> upd
+
+    classDef writes fill:#fff4e5,stroke:#e08a00,color:#5c3d00
+    class write,validate writes
+```
+
+The assistant discovers connectors and fields through AFAS metainfo, reads rows through GetConnectors with filters
+and paging, and can only reach UpdateConnectors when the operator has enabled writes, and then only after the
+payload has been checked against the connector's schema.
+
 ## Quick start
 
 1. In AFAS Profit, create an app connector (*Algemeen > Beheer > App connector*), add the GetConnectors and
