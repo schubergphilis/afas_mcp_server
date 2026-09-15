@@ -17,7 +17,9 @@ How the automated maintenance is wired, which repository settings it needs, and 
 ## Before you start
 
 - Admin access to the repository.
-- A Claude API key from the [Claude Console](https://platform.claude.com), or a subscription token from `claude setup-token`.
+- An admin of your organization in the [Claude Console](https://platform.claude.com), for a ten-minute one-time setup
+  of workload identity federation. (An API key stored as a secret also works; a subscription token from
+  `claude setup-token` does not for SSO-managed accounts.)
 - The [GitHub CLI](https://cli.github.com) logged in as an admin.
 
 ## Repository settings
@@ -26,13 +28,29 @@ The workflows assume the following. Run the commands from a clone with `OWNER=sc
 
 1. **Install the Claude GitHub App** on the repository: <https://github.com/apps/claude>. It authenticates the agent's commits and comments.
 
-2. **Add the authentication secret** the workflows read:
+2. **Give the agent access to the Claude API without storing a credential.** The workflows use
+   [workload identity federation](https://platform.claude.com/docs/en/manage-claude/workload-identity-federation):
+   each run exchanges GitHub's OIDC token for short-lived API access through a Console service account. A Console
+   organization admin does this once under *Settings → Workload identity*:
+
+   | Step | Value |
+   | --- | --- |
+   | Register an issuer | URL `https://token.actions.githubusercontent.com`, JWKS source *discovery* |
+   | Create a service account | Add it to the workspace the agent should bill to; note its `svac_...` id |
+   | Create a federation rule | Target that service account; match subject prefix `repo:schubergphilis/afas_mcp_server:`; audience `https://api.anthropic.com`; note its `fdrl_...` id |
+
+   Then store the identifiers as repository variables. They are not secrets:
 
    ```bash
-   gh secret set ANTHROPIC_API_KEY --repo $OWNER/$REPO
+   gh variable set ANTHROPIC_FEDERATION_RULE_ID --repo $OWNER/$REPO --body fdrl_...
+   gh variable set ANTHROPIC_ORGANIZATION_ID --repo $OWNER/$REPO --body <organization uuid>
+   gh variable set ANTHROPIC_SERVICE_ACCOUNT_ID --repo $OWNER/$REPO --body svac_...
    ```
 
-   Use `CLAUDE_CODE_OAUTH_TOKEN` instead, and change the `anthropic_api_key` lines in both Claude workflows, when authenticating with a subscription.
+   If the rule spans several workspaces, add `anthropic_workspace_id: ${{ vars.ANTHROPIC_WORKSPACE_ID }}` to the three
+   Claude steps and set that variable too. To use an API key instead, store it as the `ANTHROPIC_API_KEY` secret and
+   replace the three `anthropic_*` inputs with `anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}`; never set both,
+   a static credential makes the action skip federation.
 
 3. **Let workflows approve pull requests**, which the auto-merge workflow needs:
 
@@ -74,7 +92,7 @@ The workflows assume the following. Run the commands from a clone with `OWNER=sc
 
 ## What stays with humans
 
-Merging behaviour changes, releasing and publishing, approving the `pypi` deployment, verifying anything against a real AFAS environment, changing the license or adding a dependency with a non-permissive license, handling security disclosures, and rotating the API key.
+Merging behaviour changes, releasing and publishing, approving the `pypi` deployment, verifying anything against a real AFAS environment, changing the license or adding a dependency with a non-permissive license, handling security disclosures, and changing the federation rule or service account the agent authenticates with.
 
 ## See also
 

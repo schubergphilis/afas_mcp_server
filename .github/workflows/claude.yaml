@@ -62,7 +62,13 @@ jobs:
       - name: Run Claude Code
         uses: anthropics/claude-code-action@bf38e86e58df9ebf3420326d019f955bb3be64dd  # v1
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Workload identity federation: the job's GitHub OIDC token (hence `id-token: write`) is
+          # exchanged for Claude API access through a Console service account, so no long-lived
+          # credential is stored anywhere. The identifiers are not secrets and live in repository
+          # variables; docs/developer/how-to/maintain-with-an-agent.md explains the one-time setup.
+          anthropic_federation_rule_id: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
+          anthropic_organization_id: ${{ vars.ANTHROPIC_ORGANIZATION_ID }}
+          anthropic_service_account_id: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID }}
           # The shell is limited to the project's own task runner, uv, git and gh; the web to the
           # sites the manual points at. Widen deliberately, in a pull request, when a task needs more.
           claude_args: |

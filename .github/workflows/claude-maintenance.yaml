@@ -7,9 +7,9 @@ name: Claude maintenance
 # - After Continuous Integration finishes on a Dependabot branch: reviews that pull request when
 #   the auto-merge workflow labelled it `agent-review`, i.e. a runtime dependency or a major bump.
 #
-# Both shapes run from `main`, with Actions secrets, which is why the review is driven by
-# `workflow_run` rather than by the Dependabot pull request event: Dependabot-triggered runs only
-# see Dependabot secrets and a read-only token.
+# Both shapes run from `main` after Continuous Integration has finished, which is why the review is
+# driven by `workflow_run` rather than by the Dependabot pull request event: the agent needs the CI
+# conclusion, and Dependabot-triggered runs would only get a read-only token.
 
 on:
   schedule:
@@ -78,7 +78,10 @@ jobs:
         if: steps.pr.outputs.review == 'true'
         uses: anthropics/claude-code-action@bf38e86e58df9ebf3420326d019f955bb3be64dd  # v1
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Workload identity federation via repository variables; see claude.yaml for the rationale.
+          anthropic_federation_rule_id: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
+          anthropic_organization_id: ${{ vars.ANTHROPIC_ORGANIZATION_ID }}
+          anthropic_service_account_id: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID }}
           # The triggering actor is Dependabot; the action rejects bots unless listed.
           allowed_bots: "dependabot[bot]"
           prompt: |
@@ -122,7 +125,10 @@ jobs:
       - name: Run the maintenance checklist
         uses: anthropics/claude-code-action@bf38e86e58df9ebf3420326d019f955bb3be64dd  # v1
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Workload identity federation via repository variables; see claude.yaml for the rationale.
+          anthropic_federation_rule_id: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
+          anthropic_organization_id: ${{ vars.ANTHROPIC_ORGANIZATION_ID }}
+          anthropic_service_account_id: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID }}
           prompt: |
             Run the "Weekly maintenance checklist" in AGENTS.md for ${{ github.repository }}. Determine today's
             date with `date -u +%Y-%m-%d` first; this is workflow run ${{ github.run_id }}.
