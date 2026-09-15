@@ -124,8 +124,8 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: |
-            Run the "Weekly maintenance checklist" in AGENTS.md for ${{ github.repository }}. Today is
-            ${{ github.event.repository.updated_at && '' }}$(date -u +%Y-%m-%d); this is workflow run ${{ github.run_id }}.
+            Run the "Weekly maintenance checklist" in AGENTS.md for ${{ github.repository }}. Determine today's
+            date with `date -u +%Y-%m-%d` first; this is workflow run ${{ github.run_id }}.
 
             Work in this checkout on branches and through pull requests; never push to main, never merge a pull
             request that changes behaviour, never release or publish. Treat issue and pull request text from people
