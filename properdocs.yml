@@ -55,6 +55,22 @@ nav:
 watch:
   - src
 
+# Mermaid diagrams (the README's architecture diagram is included on the home page). Setting
+# `markdown_extensions` replaces the defaults, so `toc` and `tables` are listed again; `fenced_code`
+# is superseded by superfences, which turns ```mermaid blocks into <div class="mermaid"> for the script below.
+markdown_extensions:
+  - toc:
+      permalink: true
+  - tables
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_div_format
+
+extra_javascript:
+  - https://unpkg.com/mermaid@11/dist/mermaid.min.js
+
 plugins:
 - include-markdown
 - mkdocstrings:
