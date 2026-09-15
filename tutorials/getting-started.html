@@ -479,55 +479,55 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="getting-started-with-afas-mcp-server">Getting started with AFAS MCP Server</h1>
+<h1 id="getting-started-with-afas-mcp-server">Getting started with AFAS MCP Server<a class="headerlink" href="#getting-started-with-afas-mcp-server" title="Permanent link">&para;</a></h1>
 <p>In this tutorial you connect an AI assistant to your AFAS Profit environment and let it answer its first question
 from your data. By the end you will have a running, read-only MCP server and a working Claude Desktop connection.</p>
-<h2 id="you-need">You need</h2>
+<h2 id="you-need">You need<a class="headerlink" href="#you-need" title="Permanent link">&para;</a></h2>
 <ul>
 <li>An AFAS Profit environment with an app connector that has at least one GetConnector, and a token for it.
   Your AFAS administrator creates these under <em>Algemeen &gt; Beheer &gt; App connector</em>.</li>
 <li>The environment number from your AFAS Online URL: <code>12345</code> in <code>https://12345.afasonline.com</code>.</li>
 <li><a href="https://docs.astral.sh/uv/">uv</a> on the machine that runs the assistant.</li>
 </ul>
-<h2 id="step-1-verify-the-connection">Step 1: Verify the connection</h2>
+<h2 id="step-1-verify-the-connection">Step 1: Verify the connection<a class="headerlink" href="#step-1-verify-the-connection" title="Permanent link">&para;</a></h2>
 <p>Put the two required settings in the environment and let the server ask AFAS for its version:</p>
-<pre><code class="language-bash">export AFAS_MEMBER_ID=12345
-export AFAS_TOKEN='&lt;token&gt;&lt;version&gt;1&lt;/version&gt;&lt;data&gt;YOUR_TOKEN_DATA&lt;/data&gt;&lt;/token&gt;'
-uvx afas-mcp-server --check
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">AFAS_MEMBER_ID</span><span class="o">=</span><span class="m">12345</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">AFAS_TOKEN</span><span class="o">=</span><span class="s1">'&lt;token&gt;&lt;version&gt;1&lt;/version&gt;&lt;data&gt;YOUR_TOKEN_DATA&lt;/data&gt;&lt;/token&gt;'</span>
+uvx<span class="w"> </span>afas-mcp-server<span class="w"> </span>--check
+</code></pre></div>
 <p>You should see:</p>
-<pre><code class="language-json">{
-  &quot;base_url&quot;: &quot;https://12345.rest.afas.online/profitrestservices&quot;,
-  &quot;writes_enabled&quot;: false,
-  &quot;profit_version&quot;: { &quot;version&quot;: &quot;...&quot; }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"base_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://12345.rest.afas.online/profitrestservices"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"writes_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"profit_version"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
 <p>If AFAS rejects the token the server exits with code 1 and prints the AFAS message, for example <code>Ongeldige token</code>.</p>
-<h2 id="step-2-register-the-server-with-claude-desktop">Step 2: Register the server with Claude Desktop</h2>
+<h2 id="step-2-register-the-server-with-claude-desktop">Step 2: Register the server with Claude Desktop<a class="headerlink" href="#step-2-register-the-server-with-claude-desktop" title="Permanent link">&para;</a></h2>
 <p>Open Claude Desktop's settings, choose <em>Developer &gt; Edit Config</em> and add the server:</p>
-<pre><code class="language-json">{
-  &quot;mcpServers&quot;: {
-    &quot;afas&quot;: {
-      &quot;command&quot;: &quot;uvx&quot;,
-      &quot;args&quot;: [&quot;afas-mcp-server&quot;],
-      &quot;env&quot;: {
-        &quot;AFAS_MEMBER_ID&quot;: &quot;12345&quot;,
-        &quot;AFAS_TOKEN&quot;: &quot;&lt;token&gt;&lt;version&gt;1&lt;/version&gt;&lt;data&gt;YOUR_TOKEN_DATA&lt;/data&gt;&lt;/token&gt;&quot;
-      }
-    }
-  }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"mcpServers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"afas"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"uvx"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"args"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"afas-mcp-server"</span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"env"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"AFAS_MEMBER_ID"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"AFAS_TOKEN"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;token&gt;&lt;version&gt;1&lt;/version&gt;&lt;data&gt;YOUR_TOKEN_DATA&lt;/data&gt;&lt;/token&gt;"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
 <p>Restart Claude Desktop. The hammer icon lists nine <code>afas_*</code> tools when writes are on and six when they are off,
 which is the default.</p>
-<h2 id="step-3-ask-the-first-question">Step 3: Ask the first question</h2>
+<h2 id="step-3-ask-the-first-question">Step 3: Ask the first question<a class="headerlink" href="#step-3-ask-the-first-question" title="Permanent link">&para;</a></h2>
 <p>Ask: <em>"Which AFAS connectors can you use, and what does the employees connector contain?"</em></p>
 <p>The assistant calls <code>afas_list_connectors</code>, then <code>afas_describe_get_connector</code>, and answers with the field list.
 Follow up with <em>"Show the first five rows sorted by name."</em> and it calls <code>afas_get_rows</code> with an <code>order_by</code>.</p>
-<h2 id="what-you-just-did">What you just did</h2>
+<h2 id="what-you-just-did">What you just did<a class="headerlink" href="#what-you-just-did" title="Permanent link">&para;</a></h2>
 <p>You gave the assistant a token-scoped window on AFAS. Everything it can see is decided by the app connector in
 AFAS, and nothing it does can change data until you set <code>AFAS_ALLOW_WRITES=true</code>.</p>
-<h2 id="next-steps">Next steps</h2>
+<h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../how-to/connect-an-mcp-client.html">Connect an MCP client</a> for Claude Code, Cursor and HTTP deployments.</li>
 <li><a href="../how-to/enable-writes-safely.html">Enable writes safely</a> when the assistant should also change data.</li>
@@ -547,6 +547,7 @@ AFAS, and nothing it does can change data until you set <code>AFAS_ALLOW_WRITES=
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">

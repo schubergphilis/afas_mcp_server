@@ -479,35 +479,35 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="add-a-dependency">Add a dependency</h1>
-<h2 id="add-a-runtime-dependency">Add a runtime dependency</h2>
-<pre><code class="language-bash">uv add httpx
-</code></pre>
+<h1 id="add-a-dependency">Add a dependency<a class="headerlink" href="#add-a-dependency" title="Permanent link">&para;</a></h1>
+<h2 id="add-a-runtime-dependency">Add a runtime dependency<a class="headerlink" href="#add-a-runtime-dependency" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>add<span class="w"> </span>httpx
+</code></pre></div>
 <p>This updates <code>pyproject.toml</code>'s <code>[project.dependencies]</code> and <code>uv.lock</code>. Commit both files.</p>
-<h2 id="add-a-development-only-dependency">Add a development-only dependency</h2>
+<h2 id="add-a-development-only-dependency">Add a development-only dependency<a class="headerlink" href="#add-a-development-only-dependency" title="Permanent link">&para;</a></h2>
 <p>Dev dependencies live in named groups in <code>pyproject.toml</code>. The full group list is in <a href="../reference/dependency-groups.html">Reference: dependency groups</a>.</p>
-<pre><code class="language-bash">uv add --group test pytest-asyncio
-uv add --group lint flake8-bugbear
-uv add --group document mkdocs-glightbox
-</code></pre>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>add<span class="w"> </span>--group<span class="w"> </span><span class="nb">test</span><span class="w"> </span>pytest-asyncio
+uv<span class="w"> </span>add<span class="w"> </span>--group<span class="w"> </span>lint<span class="w"> </span>flake8-bugbear
+uv<span class="w"> </span>add<span class="w"> </span>--group<span class="w"> </span>document<span class="w"> </span>mkdocs-glightbox
+</code></pre></div>
 <p>Use the group whose workflow task will actually run the package. A dep used only during <code>lint</code> should not be in <code>test</code>; the bootstrap will install it either way, but CI matrices and container layers will not.</p>
-<h2 id="pin-or-constrain-a-version">Pin or constrain a version</h2>
-<pre><code class="language-bash">uv add 'httpx&gt;=0.27,&lt;0.28'
-</code></pre>
+<h2 id="pin-or-constrain-a-version">Pin or constrain a version<a class="headerlink" href="#pin-or-constrain-a-version" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>add<span class="w"> </span><span class="s1">'httpx&gt;=0.27,&lt;0.28'</span>
+</code></pre></div>
 <p>Pinning happens in <code>pyproject.toml</code>; uv records the exact resolved version in <code>uv.lock</code>.</p>
-<h2 id="remove-a-dependency">Remove a dependency</h2>
-<pre><code class="language-bash">uv remove httpx
-uv remove --group lint flake8-bugbear
-</code></pre>
-<h2 id="after-any-change">After any change</h2>
+<h2 id="remove-a-dependency">Remove a dependency<a class="headerlink" href="#remove-a-dependency" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>remove<span class="w"> </span>httpx
+uv<span class="w"> </span>remove<span class="w"> </span>--group<span class="w"> </span>lint<span class="w"> </span>flake8-bugbear
+</code></pre></div>
+<h2 id="after-any-change">After any change<a class="headerlink" href="#after-any-change" title="Permanent link">&para;</a></h2>
 <p>Re-run the bootstrap so every group's venv is in sync:</p>
-<pre><code class="language-bash">./workflow.cmd bootstrap --force
-</code></pre>
+<div class="highlight"><pre><span></span><code>./workflow.cmd<span class="w"> </span>bootstrap<span class="w"> </span>--force
+</code></pre></div>
 <p>And re-run the affected stage:</p>
-<pre><code class="language-bash">./workflow.cmd lint    # if you changed lint or dev deps
-./workflow.cmd test    # if you changed test or runtime deps
-</code></pre>
-<h2 id="what-to-commit">What to commit</h2>
+<div class="highlight"><pre><span></span><code>./workflow.cmd<span class="w"> </span>lint<span class="w">    </span><span class="c1"># if you changed lint or dev deps</span>
+./workflow.cmd<span class="w"> </span><span class="nb">test</span><span class="w">    </span><span class="c1"># if you changed test or runtime deps</span>
+</code></pre></div>
+<h2 id="what-to-commit">What to commit<a class="headerlink" href="#what-to-commit" title="Permanent link">&para;</a></h2>
 <p>Always: <code>pyproject.toml</code> and <code>uv.lock</code>. Never: the <code>.venv*/</code> directories (already gitignored).</p></div>
             </div>
         </div>
@@ -522,6 +522,7 @@ uv remove --group lint flake8-bugbear
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">

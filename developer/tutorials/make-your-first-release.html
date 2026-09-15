@@ -479,25 +479,25 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="make-your-first-release">Make your first release</h1>
+<h1 id="make-your-first-release">Make your first release<a class="headerlink" href="#make-your-first-release" title="Permanent link">&para;</a></h1>
 <p>Picks up after <a href="first-run-setup.html">First-run setup</a>: you have a green dev cycle. This tutorial cuts a real release — branch, bump, changelog, tag, push.</p>
-<h2 id="step-1-write-a-feature">Step 1 — Write a feature</h2>
+<h2 id="step-1-write-a-feature">Step 1 — Write a feature<a class="headerlink" href="#step-1-write-a-feature" title="Permanent link">&para;</a></h2>
 <p>Open <code>src/afas_mcp_server/afas_mcp_server.py</code> and edit <code>hello()</code>:</p>
-<pre><code class="language-python">def hello(someone: str = 'you') -&gt; str:
-    &quot;&quot;&quot;Greet `someone` and announce the project.&quot;&quot;&quot;
-    return f'Hello {someone} from afas_mcp_server!'
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">hello</span><span class="p">(</span><span class="n">someone</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">'you'</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Greet `someone` and announce the project."""</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">'Hello </span><span class="si">{</span><span class="n">someone</span><span class="si">}</span><span class="s1"> from afas_mcp_server!'</span>
+</code></pre></div>
 <p>Update the smoke test under <code>tests/</code> to match. Confirm the dev cycle is still green:</p>
-<pre><code class="language-bash">./workflow.cmd format &amp;&amp; ./workflow.cmd lint &amp;&amp; ./workflow.cmd test
-</code></pre>
-<h2 id="step-2-commit-with-conventional-commits">Step 2 — Commit with Conventional Commits</h2>
-<pre><code class="language-bash">git add -A
-git commit -m &quot;feat: greet someone by name&quot;
-</code></pre>
+<div class="highlight"><pre><span></span><code>./workflow.cmd<span class="w"> </span>format<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./workflow.cmd<span class="w"> </span>lint<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./workflow.cmd<span class="w"> </span><span class="nb">test</span>
+</code></pre></div>
+<h2 id="step-2-commit-with-conventional-commits">Step 2 — Commit with Conventional Commits<a class="headerlink" href="#step-2-commit-with-conventional-commits" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>add<span class="w"> </span>-A
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"feat: greet someone by name"</span>
+</code></pre></div>
 <p>The prefix does <strong>not</strong> drive the version bump — you'll pass that explicitly in the next step. What it drives is the <strong>release notes</strong>: when commitizen generates the changelog, it groups commits by prefix (<code>feat:</code> under "Features", <code>fix:</code> under "Bug Fixes", etc.). The lint step rejects any message that doesn't parse as Conventional Commits.</p>
-<h2 id="step-3-cut-the-release">Step 3 — Cut the release</h2>
-<pre><code class="language-bash">./workflow.cmd release -i minor
-</code></pre>
+<h2 id="step-3-cut-the-release">Step 3 — Cut the release<a class="headerlink" href="#step-3-cut-the-release" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>./workflow.cmd<span class="w"> </span>release<span class="w"> </span>-i<span class="w"> </span>minor
+</code></pre></div>
 <p><code>-i</code> is your explicit version-increment choice (<code>major</code>, <code>minor</code>, <code>patch</code>, <code>alpha</code>, <code>beta</code>, or <code>rc</code>). The template does not infer it from commit messages.</p>
 <p>The <code>release</code> task is the orchestrator. In order, it:</p>
 <ol>
@@ -511,14 +511,14 @@ git commit -m &quot;feat: greet someone by name&quot;
 <li><strong>Opens the PR/MR</strong> — via the host's API when a token is set, otherwise prints a URL you can open yourself. Set <code>GITHUB_TOKEN</code> to a token with <code>Pull requests: read/write</code>.</li>
 </ol>
 <p>Pass <code>--no-push</code> to keep the branch and tag local for inspection.</p>
-<h2 id="step-4-approve-and-merge">Step 4 — Approve and merge</h2>
+<h2 id="step-4-approve-and-merge">Step 4 — Approve and merge<a class="headerlink" href="#step-4-approve-and-merge" title="Permanent link">&para;</a></h2>
 <p>On your git host, approve the release PR/MR and merge with a merge commit (not a squash). The tag and bump land on <code>main</code>. If CI is configured for trusted publishing, <code>release.publish</code> fires automatically when the tag appears on <code>main</code> and your wheel lands on PyPI.</p>
-<h2 id="verify">Verify</h2>
+<h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>pip install &lt;your_project_slug&gt;==&lt;new_version&gt;</code> from a fresh venv succeeds.</li>
 <li><code>pypi.org/project/&lt;your_project_slug&gt;/</code> shows the new version.</li>
 </ul>
-<h2 id="youre-done">You're done</h2>
+<h2 id="youre-done">You're done<a class="headerlink" href="#youre-done" title="Permanent link">&para;</a></h2>
 <p>You've cut a release. Next:</p>
 <ul>
 <li><a href="../how-to/triage-a-security-finding.html">Triage a security finding</a> — what to do when pip-audit flags something.</li>
@@ -537,6 +537,7 @@ git commit -m &quot;feat: greet someone by name&quot;
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">

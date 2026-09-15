@@ -483,18 +483,18 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="about-afas-mcp-server">About AFAS MCP Server</h1>
+<h1 id="about-afas-mcp-server">About AFAS MCP Server<a class="headerlink" href="#about-afas-mcp-server" title="Permanent link">&para;</a></h1>
 <p>AFAS Profit holds the HR, payroll, finance and CRM data of tens of thousands of organisations, and its REST
 connectors are how that data leaves the system. The Model Context Protocol is how AI assistants call tools.
 This project is the small, honest piece between the two.</p>
-<h2 id="what-problem-does-it-solve">What problem does it solve?</h2>
+<h2 id="what-problem-does-it-solve">What problem does it solve?<a class="headerlink" href="#what-problem-does-it-solve" title="Permanent link">&para;</a></h2>
 <p>People who work with AFAS data spend their days answering questions such as "which employees changed cost centre
 last month" or "which debtors have overdue invoices in Utrecht". Each answer means finding the right GetConnector,
 knowing its field ids, writing a filter in AFAS's numeric operator syntax and paging through the result. An
 assistant can do that work if it can see the connectors. Existing options were hosted proxies that put a third
 party between you and your ERP, or building a one-off integration. This server runs where you run it, uses your
 token and nothing else, and is small enough to audit in an afternoon.</p>
-<h2 id="how-it-works-at-a-glance">How it works, at a glance</h2>
+<h2 id="how-it-works-at-a-glance">How it works, at a glance<a class="headerlink" href="#how-it-works-at-a-glance" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>configuration.py</code> reads <code>AFAS_*</code> settings and encodes the token the way AFAS wants it.</li>
 <li><code>client.py</code> is a thin asynchronous client for the REST services: metainfo, GetConnectors, UpdateConnectors, and
@@ -506,7 +506,7 @@ token and nothing else, and is small enough to audit in an afternoon.</p>
 <li><code>__main__.py</code> is the command line: stdio or streamable HTTP, plus <code>--check</code>.</li>
 </ul>
 <p>One AFAS client lives for the lifetime of the server and is shared by all tool calls.</p>
-<h2 id="key-design-decisions">Key design decisions</h2>
+<h2 id="key-design-decisions">Key design decisions<a class="headerlink" href="#key-design-decisions" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Read-only unless asked.</strong> The write tools are not merely refused, they are not registered without
   <code>AFAS_ALLOW_WRITES=true</code>. A model cannot be talked into calling a tool it cannot see, and an operator can tell
@@ -530,7 +530,7 @@ token and nothing else, and is small enough to audit in an afternoon.</p>
   Per-user AFAS identity would need OAuth-style delegation AFAS does not offer for app connectors; the honest
   alternative is to run one server per token, which the configuration makes cheap.</li>
 </ul>
-<h2 id="how-it-is-maintained">How it is maintained</h2>
+<h2 id="how-it-is-maintained">How it is maintained<a class="headerlink" href="#how-it-is-maintained" title="Permanent link">&para;</a></h2>
 <p>The repository is maintained by an AI agent under human supervision, following the rules in
 <a href="https://github.com/schubergphilis/afas_mcp_server/blob/main/AGENTS.md"><code>AGENTS.md</code></a>. The reasoning:</p>
 <ul>
@@ -548,14 +548,14 @@ token and nothing else, and is small enough to audit in an afternoon.</p>
   Dependabot, where it gates what gets proposed; reproducibility comes from exact pins and
   <code>uv.lock</code>. See <a href="../developer/reference/dependency-groups.html">Dependency groups</a>.</li>
 </ul>
-<h2 id="license">License</h2>
+<h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
 <p>Apache-2.0. Every runtime dependency in the lockfile is MIT, BSD-3-Clause, Apache-2.0, PSF-2.0
 or MIT-0, so nothing forces a copyleft license and any permissive one would have been possible.
 Apache-2.0 was chosen over MIT because it adds an explicit patent grant, it is the license of
 every other Schuberg Philis open-source repository, and it is what the project template emits.
 AFAS and AFAS Profit are trademarks of AFAS Software B.V.; this project is not affiliated with
 AFAS.</p>
-<h2 id="scope-and-non-goals">Scope and non-goals</h2>
+<h2 id="scope-and-non-goals">Scope and non-goals<a class="headerlink" href="#scope-and-non-goals" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Not a general AFAS SDK. The client covers what the tools need; use it if it fits, but completeness is not a goal.</li>
 <li>No SOAP, no Insite or Outsite, no file, image or report connectors in this version. They are candidates once
@@ -565,7 +565,7 @@ AFAS.</p>
 <li>No authentication for the HTTP transport. Deployments that need it already have a reverse proxy that does it
   better.</li>
 </ul>
-<h2 id="see-also">See also</h2>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../reference/tools.html">Tools</a> and <a href="../reference/configuration.html">Configuration</a>.</li>
 <li><a href="../developer/index.html">The scaffold</a>: the tooling this project inherited from its template.</li>
@@ -583,6 +583,7 @@ AFAS.</p>
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">

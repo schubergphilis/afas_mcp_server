@@ -488,9 +488,9 @@
                     <div class="col-md-9" role="main">
 
 <!-- canonical: synced from docs/maintaining/explanation/the-ci-tasks-architecture.md in the paleofuturistic_python template repo. Edit there first. -->
-<h1 id="the-_ci-tasks-architecture">The _CI tasks architecture</h1>
+<h1 id="the-_ci-tasks-architecture">The _CI tasks architecture<a class="headerlink" href="#the-_ci-tasks-architecture" title="Permanent link">&para;</a></h1>
 <p>The <code>_CI/</code> directory is this project's portable CI/CD framework — vendored <a href="https://www.pyinvoke.org/">Invoke</a> plus a set of opinionated task modules. This page covers the design.</p>
-<h2 id="why-invoke-not-make-just-nox">Why Invoke, not make / just / nox</h2>
+<h2 id="why-invoke-not-make-just-nox">Why Invoke, not make / just / nox<a class="headerlink" href="#why-invoke-not-make-just-nox" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -523,13 +523,13 @@
 </tbody>
 </table>
 <p>The deciding factor was vendoring: a fresh clone runs <code>./workflow.cmd …</code> immediately, no <code>pip install invoke</code> step. Invoke + its deps live committed under <code>_CI/lib/vendor/</code>.</p>
-<h2 id="the-polyglot-launcher">The polyglot launcher</h2>
+<h2 id="the-polyglot-launcher">The polyglot launcher<a class="headerlink" href="#the-polyglot-launcher" title="Permanent link">&para;</a></h2>
 <p><code>workflow.cmd</code> is a single script that both sh and Windows cmd read as valid — three lines,
 each doing different work depending on who is reading:</p>
-<pre><code class="language-sh">#!/bin/sh
-: ; exec uv run python _CI/lib/vendor/bin/invoke --search-root _CI &quot;$@&quot;
-@uv run python _CI\lib\vendor\bin\invoke --search-root _CI %*
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/bin/sh</span>
+:<span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nb">exec</span><span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>_CI/lib/vendor/bin/invoke<span class="w"> </span>--search-root<span class="w"> </span>_CI<span class="w"> </span><span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
+@uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>_CI<span class="se">\l</span>ib<span class="se">\v</span>endor<span class="se">\b</span>in<span class="se">\i</span>nvoke<span class="w"> </span>--search-root<span class="w"> </span>_CI<span class="w"> </span>%*
+</code></pre></div>
 <p>The trick is line 2, and it hinges on <code>:</code> meaning two different things:</p>
 <ul>
 <li><strong>sh</strong> treats <code>:</code> as the do-nothing builtin, runs the rest of the line, and <code>exec</code> replaces
@@ -541,8 +541,8 @@ each doing different work depending on who is reading:</p>
 the task package. uv creates and syncs the virtualenv on the way through; the vendored Invoke
 means there is nothing to install first. No global installs, and no second copy of the
 launcher to keep in step.</p>
-<h2 id="module-structure">Module structure</h2>
-<pre><code>_CI/tasks/
+<h2 id="module-structure">Module structure<a class="headerlink" href="#module-structure" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>_CI/tasks/
 ├── __init__.py          # Namespace aggregation + bootstrap pre-task wiring
 ├── bootstrap.py         # First-run setup framework
 ├── configuration.py     # Shared constants (paths, env vars, registry settings)
@@ -551,7 +551,7 @@ launcher to keep in step.</p>
 ├── local.py             # Yours. Never overwritten by `copier update`
 └── &lt;feature&gt;.py         # build, container, develop, document, format_, lint,
                          #   quality, release, secure, test
-</code></pre>
+</code></pre></div>
 <p>Everything there except <code>local.py</code> is template-owned and replaced on update, which is why
 project-specific tasks belong in <code>local.py</code> — <code>__init__.py</code> picks it up automatically.</p>
 <p>Each feature module:</p>
@@ -562,25 +562,25 @@ project-specific tasks belong in <code>local.py</code> — <code>__init__.py</co
 <li><code>add_task(...)</code> registers each task; one is <code>default=True</code> for the bare-namespace shortcut.</li>
 </ul>
 <p><code>__init__.py</code> aggregates all module namespaces into one <code>namespace</code> that Invoke discovers.</p>
-<h2 id="logged-and-indented-output"><code>@logged</code> and indented output</h2>
+<h2 id="logged-and-indented-output"><code>@logged</code> and indented output<a class="headerlink" href="#logged-and-indented-output" title="Permanent link">&para;</a></h2>
 <p>The <code>@logged</code> decorator wraps a task to print a clean status line:</p>
-<pre><code>    ✅ lint.ruff passed 👍
-</code></pre>
+<div class="highlight"><pre><span></span><code>    ✅ lint.ruff passed 👍
+</code></pre></div>
 <p>For tasks that call other tasks (a "workflow task" like <code>release</code> that calls <code>validate</code>, <code>bump</code>, <code>changelog</code>, <code>push</code>), nested output is indented under the parent banner via the <code>IndentingStream</code> class in <code>shared.py</code>. The indent is applied at the stdout/stderr layer, so even commands invoked through <code>context.run()</code> get their output indented.</p>
 <p>This single design choice does a lot of heavy lifting — terminal output for <code>./workflow.cmd release</code> is hierarchical and scannable instead of a flat dump.</p>
-<h2 id="bootstrap-as-a-pre-task">Bootstrap as a pre-task</h2>
+<h2 id="bootstrap-as-a-pre-task">Bootstrap as a pre-task<a class="headerlink" href="#bootstrap-as-a-pre-task" title="Permanent link">&para;</a></h2>
 <p>Every top-level task has <code>bootstrap_task</code> inserted as its first <code>pre</code>. This means the first run of <em>any</em> workflow command triggers the bootstrap; subsequent runs see the sentinel file (<code>_CI/.bootstrapped</code>) and skip.</p>
 <p>Wired in <code>__init__.py</code>:</p>
-<pre><code class="language-python">bootstrap_task = bootstrap.bootstrap
-for module in (build, container, develop, ...):
-    for task in module.namespace.tasks.values():
-        task.pre.insert(0, bootstrap_task)
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="n">bootstrap_task</span> <span class="o">=</span> <span class="n">bootstrap</span><span class="o">.</span><span class="n">bootstrap</span>
+<span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="p">(</span><span class="n">build</span><span class="p">,</span> <span class="n">container</span><span class="p">,</span> <span class="n">develop</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">namespace</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="n">task</span><span class="o">.</span><span class="n">pre</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">bootstrap_task</span><span class="p">)</span>
+</code></pre></div>
 <p>This is why a fresh clone "just works" — <code>./workflow.cmd test</code> on day one is bootstrap-then-test; on day two it's just test.</p>
-<h2 id="run_steps-fail-last-no-short-circuiting"><code>run_steps</code>: fail-last, no short-circuiting</h2>
+<h2 id="run_steps-fail-last-no-short-circuiting"><code>run_steps</code>: fail-last, no short-circuiting<a class="headerlink" href="#run_steps-fail-last-no-short-circuiting" title="Permanent link">&para;</a></h2>
 <p>A workflow task that runs N steps (e.g. <code>lint</code> runs ruff + pylint + ty + complexipy + commitizen) doesn't short-circuit on the first failure. The <code>run_steps()</code> helper in <code>shared.py</code> runs every step, accumulates failures, and raises <code>SystemExit(1)</code> at the end with all the failures reported.</p>
 <p>This makes CI runs informative — you see every issue per run instead of fixing one at a time.</p>
-<h2 id="host-specific-code-isolation">Host-specific code isolation</h2>
+<h2 id="host-specific-code-isolation">Host-specific code isolation<a class="headerlink" href="#host-specific-code-isolation" title="Permanent link">&para;</a></h2>
 <p>Whichever host was chosen at generation time — GitHub or GitLab — determines whether <code>_CI/tasks/github.py</code> or <code>_CI/tasks/gitlab.py</code> shipped in this project. Both expose the same contract:</p>
 <ul>
 <li><code>registry_settings() -&gt; RegistrySettings</code></li>
@@ -589,7 +589,7 @@ for module in (build, container, develop, ...):
 <li><code>pr_create_url(context, branch) -&gt; str</code></li>
 </ul>
 <p><code>container.py</code> and <code>release.py</code> import whichever module survived generation via a relative import that was rendered concrete at copy time. Because the unchosen module is omitted entirely at generation time via a copier conditional filename, this project has exactly one code path and no runtime branching between hosts.</p>
-<h2 id="see-also">See also</h2>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../how-to/add-a-workflow-task.html">Add a workflow task</a> — practical recipe for extending the framework.</li>
 <li><a href="../reference/ci-framework.html">CI framework internals</a> — shared utilities, constants, and the directory layout.</li>
@@ -607,6 +607,7 @@ for module in (build, container, develop, ...):
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">

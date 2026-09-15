@@ -479,9 +479,9 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="ci-framework-internals">CI framework internals</h1>
+<h1 id="ci-framework-internals">CI framework internals<a class="headerlink" href="#ci-framework-internals" title="Permanent link">&para;</a></h1>
 <p>The <code>_CI/</code> directory is the vendored <a href="https://www.pyinvoke.org/">Invoke</a>-based workflow framework behind <code>./workflow.cmd</code>. This page is the lookup reference for its building blocks — for the task catalog see <a href="invoke-tasks.html">Invoke task catalog</a>, for the design rationale see <a href="../explanation/the-ci-tasks-architecture.html">The _CI tasks architecture</a>.</p>
-<h2 id="shared-utilities-_citaskssharedpy">Shared utilities (<code>_CI/tasks/shared.py</code>)</h2>
+<h2 id="shared-utilities-_citaskssharedpy">Shared utilities (<code>_CI/tasks/shared.py</code>)<a class="headerlink" href="#shared-utilities-_citaskssharedpy" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -508,7 +508,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="configuration-_citasksconfigurationpy">Configuration (<code>_CI/tasks/configuration.py</code>)</h2>
+<h2 id="configuration-_citasksconfigurationpy">Configuration (<code>_CI/tasks/configuration.py</code>)<a class="headerlink" href="#configuration-_citasksconfigurationpy" title="Permanent link">&para;</a></h2>
 <p>Centralized constants shared across task modules:</p>
 <table>
 <thead>
@@ -556,8 +556,8 @@
 </tr>
 </tbody>
 </table>
-<h2 id="the-deps-image-and-its-cache">The deps image and its cache</h2>
-<h3 id="it-runs-as-a-non-root-user">It runs as a non-root user</h3>
+<h2 id="the-deps-image-and-its-cache">The deps image and its cache<a class="headerlink" href="#the-deps-image-and-its-cache" title="Permanent link">&para;</a></h2>
+<h3 id="it-runs-as-a-non-root-user">It runs as a non-root user<a class="headerlink" href="#it-runs-as-a-non-root-user" title="Permanent link">&para;</a></h3>
 <p><code>Dockerfile.deps</code> ends with <code>USER 1001</code>, so nothing in CI runs as root. Two things have
 to line up for that to work, and both are in the Dockerfile:</p>
 <ul>
@@ -597,21 +597,21 @@ run inside their image, including the publish job that holds PyPI OIDC. Digest p
   <code>publish_deps_image()</code> so every run rebuilds from the repository. The cost is a full
   image build per gated run.</li>
 </ul>
-<h2 id="bootstrap-framework-_citasksbootstrappy">Bootstrap framework (<code>_CI/tasks/bootstrap.py</code>)</h2>
+<h2 id="bootstrap-framework-_citasksbootstrappy">Bootstrap framework (<code>_CI/tasks/bootstrap.py</code>)<a class="headerlink" href="#bootstrap-framework-_citasksbootstrappy" title="Permanent link">&para;</a></h2>
 <p>A sentinel file (<code>_CI/.bootstrapped</code>) ensures first-time setup runs exactly once; every task inherits bootstrap as an Invoke <code>pre</code> task. New setup steps are added by appending to the <code>STEPS</code> list:</p>
-<pre><code class="language-python">STEPS: list[BootstrapStep] = [
-    BootstrapStep(
-        name='pre-commit hooks',
-        action=install_pre_commit,
-        prompt='Install pre-commit hooks? [y/N] ',
-        ci_behavior='skip',  # 'run' or 'skip' in CI
-    ),
-    # Add more steps here
-]
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="n">STEPS</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">BootstrapStep</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">BootstrapStep</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="s1">'pre-commit hooks'</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="n">install_pre_commit</span><span class="p">,</span>
+        <span class="n">prompt</span><span class="o">=</span><span class="s1">'Install pre-commit hooks? [y/N] '</span><span class="p">,</span>
+        <span class="n">ci_behavior</span><span class="o">=</span><span class="s1">'skip'</span><span class="p">,</span>  <span class="c1"># 'run' or 'skip' in CI</span>
+    <span class="p">),</span>
+    <span class="c1"># Add more steps here</span>
+<span class="p">]</span>
+</code></pre></div>
 <p>Each step has a <code>prompt</code> for local interactive use and a <code>ci_behavior</code> for unattended execution — when the <code>CI</code> environment variable is set, prompts are suppressed and steps execute or skip accordingly. See <a href="../how-to/customize-the-bootstrap.html">Customize the bootstrap</a> for the recipe.</p>
-<h2 id="directory-layout">Directory layout</h2>
-<pre><code>_CI/
+<h2 id="directory-layout">Directory layout<a class="headerlink" href="#directory-layout" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>_CI/
   tasks/
     __init__.py        Namespace aggregation + bootstrap wiring
     configuration.py   Centralized constants
@@ -632,14 +632,14 @@ run inside their image, including the publish job that holds PyPI OIDC. Digest p
   lib/
     vendor/            Vendored Invoke + dependencies (committed — don't hand-edit)
     vendor.txt         Pinned dependency list
-</code></pre>
+</code></pre></div>
 <p>Everything in that tree is template-owned and replaced on <code>copier update</code> — <strong>except
 <code>local.py</code></strong>. It is listed in the template's <code>_skip_if_exists</code>, so it is seeded once and then
 left alone. Put project-specific tasks there and updates stay conflict-free; put them in any
 other module and that hunk needs resolving on every update. <code>__init__.py</code> includes it
 automatically when present, with the same bootstrap pre-task the built-in namespaces get, so
 there is no registration step. See <a href="../how-to/add-a-workflow-task.html">Add a workflow task</a>.</p>
-<h2 id="see-also">See also</h2>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="invoke-tasks.html">Invoke task catalog</a> — every task and its flags.</li>
 <li><a href="../how-to/add-a-workflow-task.html">Add a workflow task</a> — extending the framework.</li>
@@ -657,6 +657,7 @@ there is no registration step. See <a href="../how-to/add-a-workflow-task.html">
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">

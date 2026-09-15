@@ -499,9 +499,9 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="configuration-files">Configuration files</h1>
+<h1 id="configuration-files">Configuration files<a class="headerlink" href="#configuration-files" title="Permanent link">&para;</a></h1>
 <p>Every config file shipped at the project root, what it's for, and what NOT to edit.</p>
-<h2 id="pyprojecttoml"><code>pyproject.toml</code></h2>
+<h2 id="pyprojecttoml"><code>pyproject.toml</code><a class="headerlink" href="#pyprojecttoml" title="Permanent link">&para;</a></h2>
 <p>The single source of truth for project metadata and tool configuration. Sections worth knowing about:</p>
 <table>
 <thead>
@@ -574,11 +574,11 @@
 </tr>
 </tbody>
 </table>
-<h2 id="uvlock"><code>uv.lock</code></h2>
+<h2 id="uvlock"><code>uv.lock</code><a class="headerlink" href="#uvlock" title="Permanent link">&para;</a></h2>
 <p>Locked dependency graph. Managed by uv; never edit by hand. Commit it.</p>
-<h2 id="toxini"><code>tox.ini</code></h2>
+<h2 id="toxini"><code>tox.ini</code><a class="headerlink" href="#toxini" title="Permanent link">&para;</a></h2>
 <p>Empty placeholder. Tox config lives in <code>pyproject.toml</code>'s <code>[tool.tox]</code>. The file exists because some IDEs (and older <code>tox</code> versions) expect it.</p>
-<h2 id="pre-commit-configyaml"><code>.pre-commit-config.yaml</code></h2>
+<h2 id="pre-commit-configyaml"><code>.pre-commit-config.yaml</code><a class="headerlink" href="#pre-commit-configyaml" title="Permanent link">&para;</a></h2>
 <p>Hook definitions, split across three git stages:</p>
 <table>
 <thead>
@@ -635,15 +635,15 @@ the <code>test</code> aggregator, so it gates without rewriting the README badge
 firing mid-commit.</p>
 <p>Edit to add hooks; don't remove the existing ones without thinking — they keep the main
 branch clean.</p>
-<h2 id="security-overrides"><code>.security-overrides</code></h2>
+<h2 id="security-overrides"><code>.security-overrides</code><a class="headerlink" href="#security-overrides" title="Permanent link">&para;</a></h2>
 <p>Allow-list for pip-audit findings. Each entry is a single token, <code>&lt;VULN_ID&gt;[::YYYY-MM-DD]</code>,
 with the justification in a <code>#</code> comment — anything after the id on the same line is not
 part of the entry. See <a href="../how-to/triage-a-security-finding.html">Triage a security finding</a>.</p>
-<h2 id="gitignore"><code>.gitignore</code></h2>
+<h2 id="gitignore"><code>.gitignore</code><a class="headerlink" href="#gitignore" title="Permanent link">&para;</a></h2>
 <p>Standard Python + the project's own outputs (<code>reports/</code>, <code>site/</code>, <code>dist/</code>, <code>.deps-image</code>, <code>_CI/.bootstrapped</code>).</p>
-<h2 id="dockerfiledeps"><code>Dockerfile.deps</code></h2>
+<h2 id="dockerfiledeps"><code>Dockerfile.deps</code><a class="headerlink" href="#dockerfiledeps" title="Permanent link">&para;</a></h2>
 <p>Multi-stage build for the dependency-cache image. Reads <code>[tool.docker-versions]</code> from <code>pyproject.toml</code>. See <a href="../how-to/build-and-push-a-container.html">Build and push a container</a>.</p>
-<h2 id="properdocsyml"><code>properdocs.yml</code></h2>
+<h2 id="properdocsyml"><code>properdocs.yml</code><a class="headerlink" href="#properdocsyml" title="Permanent link">&para;</a></h2>
 <p>Docs site config. Sections worth knowing:</p>
 <ul>
 <li><code>nav:</code> — the navigation tree.</li>
@@ -651,11 +651,11 @@ part of the entry. See <a href="../how-to/triage-a-security-finding.html">Triage
 <li><code>watch:</code> — <code>src/</code> is watched so docstring edits live-reload via mkdocstrings.</li>
 <li><code>plugins:</code> — <code>include-markdown</code> (pulls README into <code>index.md</code>) and <code>mkdocstrings</code> (API reference from Google-style docstrings).</li>
 </ul>
-<h2 id="workflowcmd-and-workflowcmdbat"><code>workflow.cmd</code> and <code>workflow.cmd.bat</code></h2>
+<h2 id="workflowcmd-and-workflowcmdbat"><code>workflow.cmd</code> and <code>workflow.cmd.bat</code><a class="headerlink" href="#workflowcmd-and-workflowcmdbat" title="Permanent link">&para;</a></h2>
 <p>Polyglot launcher: a shell script on Unix, a batch file on Windows. Resolves to <code>uv run python -m _CI.invoke -- &lt;args&gt;</code>. Don't edit.</p>
-<h2 id="github-or-gitlab-ciyml"><code>.github/</code> or <code>.gitlab-ci.yml</code></h2>
+<h2 id="github-or-gitlab-ciyml"><code>.github/</code> or <code>.gitlab-ci.yml</code><a class="headerlink" href="#github-or-gitlab-ciyml" title="Permanent link">&para;</a></h2>
 <p>The chosen host's CI config (only one of these exists per project, per the <code>git_hosting_service</code> answer). Edit to add jobs; preserve the existing lint/test/build flow if you want <code>copier update</code> to keep working.</p>
-<h2 id="copier-answersyml"><code>.copier-answers.yml</code></h2>
+<h2 id="copier-answersyml"><code>.copier-answers.yml</code><a class="headerlink" href="#copier-answersyml" title="Permanent link">&para;</a></h2>
 <p>Copier's state file. Records the template URL, the revision, and your answers. Managed by copier — never edit it manually. To pull template updates into this project run <code>uvx copier update --trust</code> from the project root — see the <a href="https://copier.readthedocs.io/en/stable/updating/">copier docs</a>.</p></div>
             </div>
         </div>
@@ -670,6 +670,7 @@ part of the entry. See <a href="../how-to/triage-a-security-finding.html">Triage
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">

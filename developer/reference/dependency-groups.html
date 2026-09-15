@@ -483,13 +483,13 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="dependency-groups">Dependency groups</h1>
+<h1 id="dependency-groups">Dependency groups<a class="headerlink" href="#dependency-groups" title="Permanent link">&para;</a></h1>
 <p>The template uses <a href="https://peps.python.org/pep-0735/">PEP 735 dependency groups</a> (uv's first-class support for them) to separate dev-time tooling from runtime requirements. Each group corresponds to one workflow task family.</p>
-<h2 id="runtime">Runtime</h2>
+<h2 id="runtime">Runtime<a class="headerlink" href="#runtime" title="Permanent link">&para;</a></h2>
 <p>The <code>[project.dependencies]</code> list in <code>pyproject.toml</code>. These ship in the published wheel. Add via:</p>
-<pre><code class="language-bash">uv add &lt;package&gt;
-</code></pre>
-<h2 id="dev-time-groups">Dev-time groups</h2>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>add<span class="w"> </span>&lt;package&gt;
+</code></pre></div>
+<h2 id="dev-time-groups">Dev-time groups<a class="headerlink" href="#dev-time-groups" title="Permanent link">&para;</a></h2>
 <p>Listed under <code>[dependency-groups]</code> in <code>pyproject.toml</code>. They're installed by <code>develop.bootstrap</code> and on demand by individual workflow tasks, but never end up in the wheel.</p>
 <table>
 <thead>
@@ -537,11 +537,11 @@
 </tr>
 </tbody>
 </table>
-<h2 id="adding-to-a-group">Adding to a group</h2>
-<pre><code class="language-bash">uv add --group &lt;group-name&gt; &lt;package&gt;
-</code></pre>
+<h2 id="adding-to-a-group">Adding to a group<a class="headerlink" href="#adding-to-a-group" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>add<span class="w"> </span>--group<span class="w"> </span>&lt;group-name&gt;<span class="w"> </span>&lt;package&gt;
+</code></pre></div>
 <p>This updates both <code>pyproject.toml</code> and <code>uv.lock</code>. Commit both. See <a href="../how-to/add-a-dependency.html">How-to: add a dependency</a> for the full flow.</p>
-<h2 id="why-everything-is-pinned-and-what-bounds-the-rest">Why everything is pinned, and what bounds the rest</h2>
+<h2 id="why-everything-is-pinned-and-what-bounds-the-rest">Why everything is pinned, and what bounds the rest<a class="headerlink" href="#why-everything-is-pinned-and-what-bounds-the-rest" title="Permanent link">&para;</a></h2>
 <p>Every entry in every group is pinned to an exact version, and <code>uv.lock</code> records the whole
 transitive closure. CI installs from the lock, so a resolution only changes when a commit
 changes it.</p>
@@ -566,7 +566,7 @@ opens a PR for it.</p>
 <p><code>[tool.docker-versions]</code> is pinned by tag <em>and</em> digest. When bumping uv, change the version
 in the tag and the digest together: a reference carrying both resolves to the digest, so a
 bumped tag with a stale digest silently keeps the old image.</p>
-<h2 id="the-uv-pin-and-the-one-command-that-moves-it">The uv pin, and the one command that moves it</h2>
+<h2 id="the-uv-pin-and-the-one-command-that-moves-it">The uv pin, and the one command that moves it<a class="headerlink" href="#the-uv-pin-and-the-one-command-that-moves-it" title="Permanent link">&para;</a></h2>
 <p>uv gets its own treatment because <code>[tool.uv] required-version</code> is an <strong>exact</strong> match: a stale
 uv pin does not merely lag, it refuses to run. And the version appears in five places that
 must agree:</p>
@@ -605,22 +605,22 @@ when this project was generated</strong> — not a literal inherited from the te
 have grown staler the longer the template went unbumped.</p>
 <p>It does not advance on its own. This moves all five together, re-resolving the image digest
 and the lockfile in one step:</p>
-<pre><code class="language-bash">./workflow.cmd develop.bump-uv
-</code></pre>
+<div class="highlight"><pre><span></span><code>./workflow.cmd<span class="w"> </span>develop.bump-uv
+</code></pre></div>
 <p>It picks the newest release at least <strong>7 days</strong> old — long enough that a same-day release
 withdrawn hours later never reaches you, and the reason the pin is always resolvable under an
 <code>exclude-newer</code> stamped at generation. It refuses a version the <code>uv-build</code> backend has not
 published, says nothing changed rather than pretending, and warns when a bump crosses a minor
 version, because uv is pre-1.0 and minor releases may break behaviour.</p>
 <p>To take a specific version, including one newer than the cool-down allows:</p>
-<pre><code class="language-bash">./workflow.cmd develop.bump-uv --version=0.12.1
-</code></pre>
+<div class="highlight"><pre><span></span><code>./workflow.cmd<span class="w"> </span>develop.bump-uv<span class="w"> </span>--version<span class="o">=</span><span class="m">0</span>.12.1
+</code></pre></div>
 <p><strong>Editing any of those five by hand is the failure this command exists to avoid</strong> — most of all
 the tag, whose digest has to be re-resolved with it.</p>
-<h2 id="how-ci-picks-them-up">How CI picks them up</h2>
+<h2 id="how-ci-picks-them-up">How CI picks them up<a class="headerlink" href="#how-ci-picks-them-up" title="Permanent link">&para;</a></h2>
 <p>The CI workflow installs only the group it needs for each job — <code>lint</code> job installs the <code>lint</code> group, <code>test</code> job installs <code>test</code>. This keeps job containers small and parallel-safe.</p>
 <p>The container images built by <code>./workflow.cmd container.publish</code> cache the <code>dev</code> group's resolution so subsequent CI runs skip the install step.</p>
-<h2 id="see-also">See also</h2>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../how-to/add-a-dependency.html">Add a dependency</a> — adding to any group.</li>
 <li><a href="configuration-files.html">Configuration files</a> — where the groups are declared.</li>
@@ -638,6 +638,7 @@ the tag, whose digest has to be re-resolved with it.</p>
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">

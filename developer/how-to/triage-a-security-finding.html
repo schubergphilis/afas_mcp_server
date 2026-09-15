@@ -483,30 +483,30 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="triage-a-security-finding">Triage a security finding</h1>
+<h1 id="triage-a-security-finding">Triage a security finding<a class="headerlink" href="#triage-a-security-finding" title="Permanent link">&para;</a></h1>
 <p><code>./workflow.cmd secure</code> runs <a href="https://github.com/pypa/pip-audit">pip-audit</a> against the lockfile. When it reports a vulnerability, you have three responses: upgrade, override with an expiry, or accept and document.</p>
-<h2 id="option-1-upgrade-if-possible">Option 1. Upgrade if possible</h2>
+<h2 id="option-1-upgrade-if-possible">Option 1. Upgrade if possible<a class="headerlink" href="#option-1-upgrade-if-possible" title="Permanent link">&para;</a></h2>
 <p>The vast majority of findings have a fixed version available. Check the report:</p>
-<pre><code class="language-bash">./workflow.cmd secure.audit
-</code></pre>
+<div class="highlight"><pre><span></span><code>./workflow.cmd<span class="w"> </span>secure.audit
+</code></pre></div>
 <p>If a fix exists upstream:</p>
-<pre><code class="language-bash">uv lock --upgrade-package &lt;vulnerable-package&gt;
-./workflow.cmd secure.audit    # confirm clean
-git commit -am &quot;fix: bump &lt;package&gt; for &lt;CVE-id&gt;&quot;
-</code></pre>
-<h2 id="option-2-override-with-an-expiry-recommended-for-cant-upgrade-yet">Option 2. Override with an expiry (recommended for "can't upgrade yet")</h2>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>lock<span class="w"> </span>--upgrade-package<span class="w"> </span>&lt;vulnerable-package&gt;
+./workflow.cmd<span class="w"> </span>secure.audit<span class="w">    </span><span class="c1"># confirm clean</span>
+git<span class="w"> </span>commit<span class="w"> </span>-am<span class="w"> </span><span class="s2">"fix: bump &lt;package&gt; for &lt;CVE-id&gt;"</span>
+</code></pre></div>
+<h2 id="option-2-override-with-an-expiry-recommended-for-cant-upgrade-yet">Option 2. Override with an expiry (recommended for "can't upgrade yet")<a class="headerlink" href="#option-2-override-with-an-expiry-recommended-for-cant-upgrade-yet" title="Permanent link">&para;</a></h2>
 <p>The <code>.security-overrides</code> file at the project root lists allowed-for-now vulnerabilities with expiry dates. Each entry is a single token — the id and the optional expiry joined by <code>::</code>, with <strong>no</strong> justification field:</p>
-<pre><code class="language-text">&lt;VULN_ID&gt;[::YYYY-MM-DD]
-</code></pre>
+<div class="highlight"><pre><span></span><code>&lt;VULN_ID&gt;[::YYYY-MM-DD]
+</code></pre></div>
 <p>The justification goes in a <code>#</code> comment, since anything after the id on the same line is not part of the entry:</p>
-<pre><code class="language-text"># upstream fix pending in v2.3 — see https://github.com/pkg/issue/42
+<div class="highlight"><pre><span></span><code># upstream fix pending in v2.3 — see https://github.com/pkg/issue/42
 PYSEC-2024-1234::2026-06-01
-</code></pre>
+</code></pre></div>
 <p>Malformed entries abort the task with a <code>file:line: &lt;reason&gt;</code> message rather than being silently ignored, so a typo fails loudly instead of quietly un-suppressing (or over-suppressing) a finding. Note the failure direction that matters: a mistyped expiry like <code>::2020-1-1</code> is rejected outright rather than being read as a <em>permanent</em> suppression.</p>
 <p>After the expiry date, <code>secure.audit</code> fails again, forcing a re-triage. Don't extend overrides without revisiting the underlying issue. Omitting the expiry suppresses the finding permanently — prefer a date, because a permanent entry is never resurfaced.</p>
-<h2 id="option-3-accept-and-document-rare">Option 3. Accept and document (rare)</h2>
+<h2 id="option-3-accept-and-document-rare">Option 3. Accept and document (rare)<a class="headerlink" href="#option-3-accept-and-document-rare" title="Permanent link">&para;</a></h2>
 <p>For findings that don't apply to your usage — e.g. the vulnerable code path is gated on a feature you don't use — write an override with a thorough <code>#</code> justification and a far-future expiry. Keep this rare; the next maintainer needs to trust the override list.</p>
-<h2 id="where-suppressions-can-come-from">Where suppressions can come from</h2>
+<h2 id="where-suppressions-can-come-from">Where suppressions can come from<a class="headerlink" href="#where-suppressions-can-come-from" title="Permanent link">&para;</a></h2>
 <p>Three sources are merged, in this precedence order, and deduplicated by vulnerability id:</p>
 <table>
 <thead>
@@ -536,22 +536,22 @@ PYSEC-2024-1234::2026-06-01
 </table>
 <p>The first two must carry an <code>::YYYY-MM-DD</code> expiry. They are convenient for unblocking a single run, but nothing in the repository records that they were used — so an expiry-less entry there could mute a finding forever with no code change to review. A permanent suppression has to go in <code>.security-overrides</code>, where it shows up in a diff and gets read by whoever touches it next.</p>
 <p>Whichever source they come from, the suppressions actually applied are printed with their origin before the audit runs:</p>
-<pre><code class="language-console">Applying 1 suppression(s):
-  PYSEC-2024-1234 (expires 2026-06-01) from .security-overrides:12
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="go">Applying 1 suppression(s):</span>
+<span class="go">  PYSEC-2024-1234 (expires 2026-06-01) from .security-overrides:12</span>
+</code></pre></div>
 <p>Expired entries are reported too, naming the source, and then ignored — so the finding comes back rather than lingering behind a stale override.</p>
-<h2 id="where-the-audit-runs">Where the audit runs</h2>
+<h2 id="where-the-audit-runs">Where the audit runs<a class="headerlink" href="#where-the-audit-runs" title="Permanent link">&para;</a></h2>
 <p><code>secure.audit</code> is not only a local command — it gates automatically, which is what makes the expiry dates above meaningful:</p>
 <ul>
 <li><strong>Every CI run</strong> — the <code>secure</code> job in <code>.github/workflows/continuous-integration.yaml</code> runs it alongside lint, test and build.</li>
 <li><strong>Daily on a schedule</strong> — <code>.github/workflows/security-audit.yaml</code>. A dependency can turn out to be vulnerable, and an override can expire, with nobody pushing a commit; without the scheduled run a quiet repository would stop being checked and expiry dates would never come due. Trigger it by hand from the Actions tab (<code>workflow_dispatch</code>) to re-check on demand.</li>
 <li><strong>Pre-commit</strong> — only <code>secure.validate-overrides</code>, and only when <code>.security-overrides</code> itself changes. That checks the file's syntax, not your dependencies.</li>
 </ul>
-<h2 id="re-running-after-a-triage">Re-running after a triage</h2>
-<pre><code class="language-bash">./workflow.cmd secure
-</code></pre>
+<h2 id="re-running-after-a-triage">Re-running after a triage<a class="headerlink" href="#re-running-after-a-triage" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>./workflow.cmd<span class="w"> </span>secure
+</code></pre></div>
 <p>This runs the full security pass: audit, SBOM generation. Audit failures abort the run before SBOM upload.</p>
-<h2 id="see-also">See also</h2>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../explanation/sbom-and-security-model.html">SBOM and security model</a> — why pip-audit and the SBOM layer together.</li>
 </ul></div>
@@ -568,6 +568,7 @@ PYSEC-2024-1234::2026-06-01
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">

@@ -484,9 +484,9 @@
                     <div class="col-md-9" role="main">
 
 <!-- canonical: synced from docs/using/explanation/sbom-and-security-model.md in the paleofuturistic_python template repo. Edit there first. -->
-<h1 id="sbom-and-security-model">SBOM and security model</h1>
+<h1 id="sbom-and-security-model">SBOM and security model<a class="headerlink" href="#sbom-and-security-model" title="Permanent link">&para;</a></h1>
 <p>The scaffold's security pipeline has two layers: known-vulnerability scanning and SBOM generation. This page explains what each layer does and what threat model it addresses.</p>
-<h2 id="the-threat-model">The threat model</h2>
+<h2 id="the-threat-model">The threat model<a class="headerlink" href="#the-threat-model" title="Permanent link">&para;</a></h2>
 <p>The scaffold assumes this project:</p>
 <ul>
 <li>Publishes a Python package consumed by people its maintainers mostly don't know.</li>
@@ -495,7 +495,7 @@
 <li>Will eventually get asked by a downstream consumer "is your software affected by CVE-X?" — faster than anyone could audit by hand.</li>
 </ul>
 <p>The pipeline answers those questions before the questions are asked.</p>
-<h2 id="layer-1-pip-audit">Layer 1 — pip-audit</h2>
+<h2 id="layer-1-pip-audit">Layer 1 — pip-audit<a class="headerlink" href="#layer-1-pip-audit" title="Permanent link">&para;</a></h2>
 <p><code>./workflow.cmd secure.audit</code> runs <a href="https://github.com/pypa/pip-audit">pip-audit</a> against <code>uv.lock</code>, comparing every pinned package against the <a href="https://github.com/pypa/advisory-database">PyPI advisory database</a>.</p>
 <p>What it catches: a vulnerability with a known CVE/PYSEC ID affecting a version in the lockfile.</p>
 <p>What it doesn't catch:</p>
@@ -505,9 +505,9 @@
 <li>Misuse of a safe dependency.</li>
 </ul>
 <p>Runs on every CI pipeline.</p>
-<h2 id="layer-2-cyclonedx-sbom">Layer 2 — CycloneDX SBOM</h2>
+<h2 id="layer-2-cyclonedx-sbom">Layer 2 — CycloneDX SBOM<a class="headerlink" href="#layer-2-cyclonedx-sbom" title="Permanent link">&para;</a></h2>
 <p><code>./workflow.cmd secure.sbom-extract --write</code> generates a <a href="https://cyclonedx.org/">CycloneDX</a> 1.7 bill of materials and writes it to <code>src/afas_mcp_server/sbom.cdx.json</code>. Because that path is inside the package data tree, <code>uv build</code> automatically ships the SBOM <strong>inside the wheel</strong> — a downstream consumer unpacks the wheel and finds <code>afas_mcp_server/sbom.cdx.json</code> alongside the Python modules.</p>
-<h3 id="whats-in-it">What's in it</h3>
+<h3 id="whats-in-it">What's in it<a class="headerlink" href="#whats-in-it" title="Permanent link">&para;</a></h3>
 <p><strong>Metadata header</strong> declares:</p>
 <ul>
 <li>A <code>lifecycles</code> entry of <code>phase: build</code> — this SBOM was produced during the build, not as a post-shipment inventory.</li>
@@ -559,38 +559,38 @@
 <li>The build-environment depends on the vendored + pipeline components.</li>
 </ul>
 <p>Reading top-down: "the project depends on these runtime + dev components for itself, and on the build-environment to be assembled. The build-environment in turn depends on these vendored + pipeline components."</p>
-<h3 id="per-component-enrichment">Per-component enrichment</h3>
+<h3 id="per-component-enrichment">Per-component enrichment<a class="headerlink" href="#per-component-enrichment" title="Permanent link">&para;</a></h3>
 <p>Each PyPI component (runtime, dev, vendored) carries:</p>
 <ul>
 <li><strong><code>licenses</code></strong> — declared SPDX expression. The lookup walks <code>PEP 639 License-Expression → legacy License header → LICENSE-File text → Trove classifier mapping</code>. Vendored entries first try text-detection over the <code>_CI/lib/vendor/&lt;name&gt;/LICENSE*</code> files (the vendoring tool drops dist-info but keeps the LICENSE), then defer to the venv-installed copy when the same package is also a transitive dev dep. A handful of packages with no licence-bearing file locally end up with <code>licenses: []</code> — graceful degradation rather than failure.</li>
 <li><strong><code>hashes</code></strong> — SHA-256 from <code>uv.lock</code>'s <code>wheels[*].hash</code> (or <code>sdist.hash</code> fallback). Pipeline and vendored components carry no hash here.</li>
 <li><strong><code>external_references</code></strong> — every PyPI component points at its PyPI project page (<code>type=website</code>); GitHub Actions point at their repo (<code>type=vcs</code>).</li>
 </ul>
-<h3 id="validation">Validation</h3>
+<h3 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h3>
 <p><code>./workflow.cmd secure.sbom-validate</code> runs the CycloneDX 1.7 JSON-schema validator in a clean <code>uv run python</code> subprocess (so the venv-installed validator wins over the older vendored <code>jsonschema</code> that the workflow.cmd launcher places earlier on <code>sys.path</code>). The aggregate <code>./workflow.cmd secure</code> runs all sub-steps; a clean run means: no known vulns, a fresh SBOM written, validated against the schema.</p>
-<h3 id="what-this-enables">What this enables</h3>
+<h3 id="what-this-enables">What this enables<a class="headerlink" href="#what-this-enables" title="Permanent link">&para;</a></h3>
 <ul>
 <li>A downstream consumer can extract the SBOM from the wheel with <code>unzip -p &lt;wheel&gt; afas_mcp_server/sbom.cdx.json</code> or <code>importlib.resources</code> — no separate artefact to track.</li>
 <li>A security responder can answer "are we affected by X?" against this project in seconds, not hours.</li>
 <li>Compliance frameworks (SLSA, NIST SSDF, EU CRA) that mandate SBOMs are satisfied — the SBOM travels with the artefact instead of needing to be re-correlated post-release.</li>
 </ul>
 <p>The SBOM is part of every release.</p>
-<h2 id="layer-4-build-provenance">Layer 4 — build provenance</h2>
+<h2 id="layer-4-build-provenance">Layer 4 — build provenance<a class="headerlink" href="#layer-4-build-provenance" title="Permanent link">&para;</a></h2>
 <p>The SBOM says what is <em>inside</em> your artifact. Provenance says where it <em>came from</em> — and unlike the SBOM, it is not self-reported. <code>actions/attest-build-provenance</code> signs a statement binding the exact file digests to the workflow, commit and runner that produced them, and that signature chains to GitHub's Sigstore instance rather than to anything this project controls. A forged SBOM is a text edit; a forged attestation is not.</p>
 <p>Anyone who downloads a release can verify it:</p>
-<pre><code class="language-bash">gh attestation verify afas_mcp_server-&lt;version&gt;-py3-none-any.whl --repo &lt;owner&gt;/&lt;repo&gt;
-</code></pre>
+<div class="highlight"><pre><span></span><code>gh<span class="w"> </span>attestation<span class="w"> </span>verify<span class="w"> </span>afas_mcp_server-&lt;version&gt;-py3-none-any.whl<span class="w"> </span>--repo<span class="w"> </span>&lt;owner&gt;/&lt;repo&gt;
+</code></pre></div>
 <p>Order matters in the publish job: <code>release.dist</code> builds into <code>dist/</code>, the attestation is taken over those files, and <code>release.publish --prebuilt</code> uploads them <em>without</em> rebuilding. If you change that sequence so the artifacts are rebuilt after being attested, you will publish files no attestation refers to, and verification will fail — reading as tampering rather than as a fresh build.</p>
-<h2 id="what-about-overrides">What about overrides?</h2>
+<h2 id="what-about-overrides">What about overrides?<a class="headerlink" href="#what-about-overrides" title="Permanent link">&para;</a></h2>
 <p><code>.security-overrides</code> is a project-local allow-list with mandatory expiry dates. It applies to <code>pip-audit</code>. It does <strong>not</strong> suppress findings in the SBOM — those continue to show the world the full truth. Override = "we accept this locally for now," not "make this invisible."</p>
 <p>The expiry dates are load-bearing: a stale override is a security regression hidden in plain sight. The lint config doesn't enforce this; treat it as a code-review convention.</p>
-<h2 id="whats-deliberately-out-of-scope">What's deliberately out of scope</h2>
+<h2 id="whats-deliberately-out-of-scope">What's deliberately out of scope<a class="headerlink" href="#whats-deliberately-out-of-scope" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>SAST</strong>: Bandit / Semgrep / pyright security rules are not shipped. Add them as a <code>secure.*</code> task if needed.</li>
 <li><strong>Container scanning</strong>: Trivy / Grype are not shipped. The deps image built by <code>container.publish</code> is a dev convenience, not a published artifact, so releases aren't gated on it.</li>
 <li><strong>License compliance</strong>: SBOM includes license metadata, but the scaffold doesn't enforce license policies.</li>
 </ul>
-<h2 id="see-also">See also</h2>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../how-to/triage-a-security-finding.html">Triage a security finding</a> — what to do when pip-audit flags something.</li>
 </ul></div>
@@ -607,6 +607,7 @@
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">

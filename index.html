@@ -448,6 +448,10 @@
             
             <li class="nav-item" data-bs-level="1"><a href="#afas-mcp-server" class="nav-link">AFAS MCP Server</a>
               <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#how-it-fits-together" class="nav-link">How it fits together</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-bs-level="2"><a href="#quick-start" class="nav-link">Quick start</a>
               <ul class="nav flex-column">
               </ul>
@@ -499,7 +503,7 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="afas-mcp-server">AFAS MCP Server</h1>
+<h1 id="afas-mcp-server">AFAS MCP Server<a class="headerlink" href="#afas-mcp-server" title="Permanent link">&para;</a></h1>
 <p><a href="https://pypi.org/project/afas_mcp_server/"><img alt="Version" src="https://img.shields.io/badge/version-0.0.0-blue" /></a>
 <a href="https://www.python.org"><img alt="Python" src="https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue?logo=python&amp;logoColor=white" /></a>
 <a href="https://opensource.org/license/apache-2.0"><img alt="License" src="https://img.shields.io/badge/license-Apache--2.0-blue" /></a>
@@ -520,7 +524,38 @@ GetConnectors, inspect connector schemas, and, only when you switch it on, write
   rendered into the AFAS query syntax, including OR groups and the JSON filter fallback.</li>
 <li><strong>Runs anywhere an MCP client does.</strong> stdio for desktop clients, streamable HTTP for shared deployments.</li>
 </ul>
-<h2 id="quick-start">Quick start</h2>
+<h2 id="how-it-fits-together">How it fits together<a class="headerlink" href="#how-it-fits-together" title="Permanent link">&para;</a></h2>
+<div class="mermaid">flowchart LR
+    client["&lt;b&gt;MCP client&lt;/b&gt;&lt;br/&gt;Claude Desktop · Claude Code · Cursor · ..."]
+
+    subgraph server["afas-mcp-server &amp;nbsp;·&amp;nbsp; one AFAS token &amp;nbsp;·&amp;nbsp; read-only by default"]
+        direction TB
+        read["&lt;b&gt;Read tools&lt;/b&gt; (always on)&lt;br/&gt;afas_connection_info · afas_list_connectors&lt;br/&gt;afas_describe_get_connector · afas_describe_update_connector&lt;br/&gt;afas_get_rows · afas_validate_payload"]
+        filters["Filters by field id and operator name,&lt;br/&gt;rendered to the AFAS query syntax"]
+        write["&lt;b&gt;Write tools&lt;/b&gt; (only with AFAS_ALLOW_WRITES=true)&lt;br/&gt;afas_insert · afas_update · afas_delete"]
+        validate["Offline validation against&lt;br/&gt;the UpdateConnector schema"]
+        read --&gt; filters
+        write --&gt; validate
+    end
+
+    subgraph afas["AFAS Profit REST services"]
+        direction TB
+        meta["metainfo"]
+        get["GetConnectors"]
+        upd["UpdateConnectors"]
+    end
+
+    client &lt;-- "MCP over stdio&lt;br/&gt;or streamable HTTP" --&gt; server
+    read -- "GET" --&gt; meta
+    filters -- "GET · skip, take, orderby" --&gt; get
+    validate -- "POST · PUT · DELETE" --&gt; upd
+
+    classDef writes fill:#fff4e5,stroke:#e08a00,color:#5c3d00
+    class write,validate writes</div>
+<p>The assistant discovers connectors and fields through AFAS metainfo, reads rows through GetConnectors with filters
+and paging, and can only reach UpdateConnectors when the operator has enabled writes, and then only after the
+payload has been checked against the connector's schema.</p>
+<h2 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
 <ol>
 <li>
 <p>In AFAS Profit, create an app connector (<em>Algemeen &gt; Beheer &gt; App connector</em>), add the GetConnectors and
@@ -531,37 +566,37 @@ GetConnectors, inspect connector schemas, and, only when you switch it on, write
 <p>Install <a href="https://docs.astral.sh/uv/">uv</a> and verify the connection:</p>
 </li>
 </ol>
-<p><code>bash
-   export AFAS_MEMBER_ID=12345
-   export AFAS_TOKEN='&lt;token&gt;&lt;version&gt;1&lt;/version&gt;&lt;data&gt;YOUR_TOKEN_DATA&lt;/data&gt;&lt;/token&gt;'
-   uvx afas-mcp-server --check</code></p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">AFAS_MEMBER_ID</span><span class="o">=</span><span class="m">12345</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">AFAS_TOKEN</span><span class="o">=</span><span class="s1">'&lt;token&gt;&lt;version&gt;1&lt;/version&gt;&lt;data&gt;YOUR_TOKEN_DATA&lt;/data&gt;&lt;/token&gt;'</span>
+uvx<span class="w"> </span>afas-mcp-server<span class="w"> </span>--check
+</code></pre></div>
 <p>You should see the base URL the server will talk to and the Profit version AFAS reports.</p>
 <ol>
 <li>Register the server with your MCP client. For Claude Desktop, add this to <code>claude_desktop_config.json</code>:</li>
 </ol>
-<p><code>json
-   {
-     "mcpServers": {
-       "afas": {
-         "command": "uvx",
-         "args": ["afas-mcp-server"],
-         "env": {
-           "AFAS_MEMBER_ID": "12345",
-           "AFAS_TOKEN": "&lt;token&gt;&lt;version&gt;1&lt;/version&gt;&lt;data&gt;YOUR_TOKEN_DATA&lt;/data&gt;&lt;/token&gt;"
-         }
-       }
-     }
-   }</code></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"mcpServers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"afas"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"uvx"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"args"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"afas-mcp-server"</span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"env"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"AFAS_MEMBER_ID"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"AFAS_TOKEN"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;token&gt;&lt;version&gt;1&lt;/version&gt;&lt;data&gt;YOUR_TOKEN_DATA&lt;/data&gt;&lt;/token&gt;"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
 <p>For Claude Code:</p>
-<p><code>bash
-   claude mcp add afas -e AFAS_MEMBER_ID=12345 -e AFAS_TOKEN='&lt;token&gt;...&lt;/token&gt;' -- uvx afas-mcp-server</code></p>
+<div class="highlight"><pre><span></span><code>claude<span class="w"> </span>mcp<span class="w"> </span>add<span class="w"> </span>afas<span class="w"> </span>-e<span class="w"> </span><span class="nv">AFAS_MEMBER_ID</span><span class="o">=</span><span class="m">12345</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">AFAS_TOKEN</span><span class="o">=</span><span class="s1">'&lt;token&gt;...&lt;/token&gt;'</span><span class="w"> </span>--<span class="w"> </span>uvx<span class="w"> </span>afas-mcp-server
+</code></pre></div>
 <ol>
 <li>Ask your assistant something like <em>"Which AFAS connectors can you use?"</em> or <em>"Show the ten most recently
    changed employees."</em> It will discover connectors, read their field definitions and page through rows.</li>
 </ol>
 <p>Until the package is published on PyPI, run it from a checkout instead: <code>uv run afas-mcp-server</code>, or from git with
 <code>uvx --from git+https://github.com/schubergphilis/afas_mcp_server afas-mcp-server</code>.</p>
-<h2 id="tools">Tools</h2>
+<h2 id="tools">Tools<a class="headerlink" href="#tools" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -619,7 +654,7 @@ GetConnectors, inspect connector schemas, and, only when you switch it on, write
 </tbody>
 </table>
 <p>The full parameter reference is in <a href="reference/tools.html">docs/reference/tools.md</a>.</p>
-<h2 id="configuration">Configuration</h2>
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
 <p>Settings come from <code>AFAS_*</code> environment variables or a <code>.env</code> file in the working directory
 (see <a href="https://github.com/schubergphilis/afas_mcp_server/blob/main/.env.example"><code>.env.example</code></a>).</p>
 <table>
@@ -684,7 +719,7 @@ GetConnectors, inspect connector schemas, and, only when you switch it on, write
 </tbody>
 </table>
 <p>Command line: <code>afas-mcp-server [--transport stdio|streamable-http] [--host H] [--port P] [--path /mcp] [--check]</code>.</p>
-<h2 id="writing-to-afas">Writing to AFAS</h2>
+<h2 id="writing-to-afas">Writing to AFAS<a class="headerlink" href="#writing-to-afas" title="Permanent link">&para;</a></h2>
 <p>Writes are off until you set <code>AFAS_ALLOW_WRITES=true</code>. With writes on, the assistant is instructed to describe the
 UpdateConnector, validate the payload and show the change before sending it, and every write tool validates the
 payload against the schema first (switch off per call with <code>validate: false</code>). Recommended practice:</p>
@@ -693,7 +728,7 @@ payload against the schema first (switch off per call with <code>validate: false
 <li>Give the token an app connector with only the connectors the assistant needs.</li>
 <li>Keep separate tokens, and separate server instances, for read-only and writing use.</li>
 </ul>
-<h2 id="security-notes">Security notes</h2>
+<h2 id="security-notes">Security notes<a class="headerlink" href="#security-notes" title="Permanent link">&para;</a></h2>
 <ul>
 <li>The token is a credential for your ERP and HR data. Keep it in environment variables or a <code>.env</code> file that is not
   committed; never paste it into a prompt.</li>
@@ -701,7 +736,7 @@ payload against the schema first (switch off per call with <code>validate: false
 <li>The streamable HTTP transport has no authentication of its own. Bind it to localhost or put it behind a reverse
   proxy that authenticates clients.</li>
 </ul>
-<h2 id="how-this-repository-is-maintained">How this repository is maintained</h2>
+<h2 id="how-this-repository-is-maintained">How this repository is maintained<a class="headerlink" href="#how-this-repository-is-maintained" title="Permanent link">&para;</a></h2>
 <p>An AI agent, running as the <a href="https://code.claude.com/docs/en/github-actions">Claude Code GitHub Action</a>, maintains
 this repository under human supervision. Its standing instructions are in <a href="https://github.com/schubergphilis/afas_mcp_server/blob/main/AGENTS.md">AGENTS.md</a>: what it must never
 do (make writing possible by default, touch credentials, add a non-permissive dependency, push to <code>main</code>, publish),
@@ -720,10 +755,10 @@ how it runs the checks, and the weekly checklist it works through.</p>
 </ul>
 <p>Contributors follow the same rules; see <a href="https://github.com/schubergphilis/afas_mcp_server/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>. The wiring and the repository settings
 it relies on are described in <a href="developer/how-to/maintain-with-an-agent.html">Maintain the repository with an agent</a>.</p>
-<h2 id="documentation">Documentation</h2>
+<h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
 <p>Full documentation lives in <a href="index.html"><code>docs/</code></a>: build and open it with <code>./workflow.cmd document</code>, or read it
 online at <a href="https://schubergphilis.github.io/afas_mcp_server/">https://schubergphilis.github.io/afas_mcp_server/</a> once GitHub Pages is enabled for the repository.</p>
-<h2 id="developing">Developing</h2>
+<h2 id="developing">Developing<a class="headerlink" href="#developing" title="Permanent link">&para;</a></h2>
 <blockquote>
 <p>Development flow as <a href="https://github.com/schubergphilis/paleofuturistic_python">Paleofuturistic Python</a></p>
 </blockquote>
@@ -733,9 +768,9 @@ will use most.</p>
 <p>The scaffold manual lives in the docs' <strong>Developer</strong> section: start with
 <a href="developer/tutorials/first-run-setup.html">First-run setup</a>; the full command list is in the
 <a href="developer/reference/invoke-tasks.html">Invoke task catalog</a>.</p>
-<h2 id="license">License</h2>
+<h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
 <p>Apache-2.0. AFAS and AFAS Profit are trademarks of AFAS Software B.V.; this project is not affiliated with AFAS.</p>
-<h2 id="where-to-go-next">Where to go next</h2>
+<h2 id="where-to-go-next">Where to go next<a class="headerlink" href="#where-to-go-next" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>New here?</strong> <a href="tutorials/getting-started.html">Getting started</a> takes you from a token to a first answer.</li>
 <li><strong>Setting up a client?</strong> <a href="how-to/connect-an-mcp-client.html">Connect an MCP client</a> covers Claude Desktop, Claude
@@ -746,7 +781,7 @@ will use most.</p>
 <li><strong>Wondering why?</strong> <a href="explanation/about-your-project.html">About AFAS MCP Server</a> explains the design decisions and
   what is deliberately out of scope.</li>
 </ul>
-<h2 id="how-this-site-is-organized">How this site is organized</h2>
+<h2 id="how-this-site-is-organized">How this site is organized<a class="headerlink" href="#how-this-site-is-organized" title="Permanent link">&para;</a></h2>
 <p>The four <a href="https://diataxis.fr/">Diátaxis</a> sections in the navigation bar, <strong>Tutorials</strong>, <strong>How-to</strong>, <strong>Reference</strong>
 and <strong>Explanation</strong>, document the server for its users.</p>
 <p>The <strong>Developer</strong> section is the manual for the scaffold this project inherited from the
@@ -766,6 +801,7 @@ the task runner, testing, security, releasing, and the design rationale behind i
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -813,5 +849,5 @@ the task runner, testing, security, releasing, and the design rationale behind i
 
 <!--
 ProperDocs version : ProperDocs 1.6.7
-Build Date UTC : 2026-09-15 12:49:12.760131+00:00
+Build Date UTC : 2026-09-15 12:50:52.914488+00:00
 -->

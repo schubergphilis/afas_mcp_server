@@ -475,13 +475,13 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="document-your-project">Document your project</h1>
+<h1 id="document-your-project">Document your project<a class="headerlink" href="#document-your-project" title="Permanent link">&para;</a></h1>
 <p>This site is <em>your project's</em> documentation. It ships pre-wired with <a href="https://properdocs.org/">properdocs</a>
 and organized around the <a href="https://diataxis.fr/">Diátaxis</a> framework, so the structure is ready — you just
 write the content that describes <strong>your</strong> software.</p>
 <p>This page is about documenting what your project <em>does</em>. For how the surrounding scaffold works
 (the <code>_CI</code> tasks, uv, testing, SBOMs), see <a href="../index.html">The scaffold</a>.</p>
-<h2 id="the-four-kinds-of-documentation">The four kinds of documentation</h2>
+<h2 id="the-four-kinds-of-documentation">The four kinds of documentation<a class="headerlink" href="#the-four-kinds-of-documentation" title="Permanent link">&para;</a></h2>
 <p>Diátaxis splits docs by what the reader needs <em>right now</em>. Put each page in the section that matches its
 job — mixing them is the most common way docs get hard to use.</p>
 <table>
@@ -523,18 +523,18 @@ job — mixing them is the most common way docs get hard to use.</p>
 <p>A good rule: a tutorial has one happy path and never stops to explain alternatives; a how-to assumes
 competence and gets to the point; reference is exhaustive and boring on purpose; explanation is allowed
 to discuss, compare, and admit trade-offs.</p>
-<h2 id="add-a-page">Add a page</h2>
+<h2 id="add-a-page">Add a page<a class="headerlink" href="#add-a-page" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Create a markdown file under the matching section, e.g. <code>docs/how-to/export-to-csv.md</code>.</li>
 <li>Register it in the <code>nav:</code> block of <code>properdocs.yml</code> so it appears in the navigation:</li>
 </ol>
-<p><code>yaml
-   nav:
-     - How-to:
-       - Export to CSV: how-to/export-to-csv.md</code>
+<p><div class="highlight"><pre><span></span><code><span class="nt">nav</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">How-to</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Export to CSV</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">how-to/export-to-csv.md</span>
+</code></pre></div>
 3. Preview it — see <a href="preview-docs-locally.html">Preview docs locally</a> for the live-reload server.</p>
 <p>Files not listed in <code>nav:</code> still build, but won't appear in the navigation — keep the two in sync.</p>
-<h2 id="your-api-reference-writes-itself">Your API reference writes itself</h2>
+<h2 id="your-api-reference-writes-itself">Your API reference writes itself<a class="headerlink" href="#your-api-reference-writes-itself" title="Permanent link">&para;</a></h2>
 <p>The <strong>Reference → API</strong> page is generated from your code's docstrings by
 <a href="https://mkdocstrings.github.io/">mkdocstrings</a>. You don't maintain it by hand — you maintain your
 docstrings, and the page follows.</p>
@@ -545,7 +545,7 @@ docstrings, and the page follows.</p>
 <li>Run the live-reload server and edit a docstring — the API page updates as you save.</li>
 </ul>
 <p>So the most effective "documentation" you can write for reference material is a good docstring in the code.</p>
-<h2 id="replace-the-starters">Replace the starters</h2>
+<h2 id="replace-the-starters">Replace the starters<a class="headerlink" href="#replace-the-starters" title="Permanent link">&para;</a></h2>
 <p>Each of the four sections ships with a starter page carrying inline coaching comments — fill-in-the-blanks
 scaffolding to edit, duplicate, or delete, not content to keep:</p>
 <ul>
@@ -557,7 +557,7 @@ scaffolding to edit, duplicate, or delete, not content to keep:</p>
 </ul>
 <p>Make each one yours, then delete the coaching comments. Everything under <strong>Developer</strong> (this section)
 documents the inherited scaffold instead — leave it be; it's kept up to date via <code>copier update</code>.</p>
-<h2 id="see-also">See also</h2>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="preview-docs-locally.html">Preview docs locally</a> — build and live-reload the site while you write.</li>
 <li><a href="../index.html">The scaffold</a> — the tooling behind properdocs and the rest of the project.</li>
@@ -576,6 +576,7 @@ documents the inherited scaffold instead — leave it be; it's kept up to date v
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">

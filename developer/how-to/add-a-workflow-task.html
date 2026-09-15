@@ -475,67 +475,67 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="add-a-workflow-task">Add a workflow task</h1>
+<h1 id="add-a-workflow-task">Add a workflow task<a class="headerlink" href="#add-a-workflow-task" title="Permanent link">&para;</a></h1>
 <p>The <code>./workflow.cmd &lt;namespace&gt;.&lt;task&gt;</code> interface is backed by Invoke.</p>
-<h2 id="put-your-tasks-in-_citaskslocalpy">Put your tasks in <code>_CI/tasks/local.py</code></h2>
+<h2 id="put-your-tasks-in-_citaskslocalpy">Put your tasks in <code>_CI/tasks/local.py</code><a class="headerlink" href="#put-your-tasks-in-_citaskslocalpy" title="Permanent link">&para;</a></h2>
 <p><strong><code>_CI/tasks/local.py</code> is yours. Every other module under <code>_CI/tasks/</code> belongs to the template.</strong></p>
 <p>That distinction matters on <code>copier update</code>: the template replaces the modules it owns, so a task added to <code>lint.py</code> — or a registration added to <code>__init__.py</code> — collides on every single update, forever. <code>local.py</code> is listed in the template's <code>_skip_if_exists</code>, so it is created once and then never overwritten or merged. Your tasks stay put and updates stay clean.</p>
 <p>It ships with an empty namespace, ready to fill in:</p>
-<pre><code class="language-python">from typing import cast
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">cast</span>
 
-from invoke import Collection, Context, Task, task
+<span class="kn">from</span><span class="w"> </span><span class="nn">invoke</span><span class="w"> </span><span class="kn">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Context</span><span class="p">,</span> <span class="n">Task</span><span class="p">,</span> <span class="n">task</span>
 
-from .shared import execute, logged
+<span class="kn">from</span><span class="w"> </span><span class="nn">.shared</span><span class="w"> </span><span class="kn">import</span> <span class="n">execute</span><span class="p">,</span> <span class="n">logged</span>
 
-namespace = Collection('local')
-
-
-@task
-@logged('local.benchmark')
-def benchmark(context: Context) -&gt; None:
-    &quot;&quot;&quot;Run the project's benchmark suite.&quot;&quot;&quot;
-    execute(context, 'uv run pytest benchmarks/ --benchmark-only')
+<span class="n">namespace</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="s1">'local'</span><span class="p">)</span>
 
 
-namespace.add_task(cast(Task, benchmark))
-</code></pre>
+<span class="nd">@task</span>
+<span class="nd">@logged</span><span class="p">(</span><span class="s1">'local.benchmark'</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">benchmark</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">Context</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Run the project's benchmark suite."""</span>
+    <span class="n">execute</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="s1">'uv run pytest benchmarks/ --benchmark-only'</span><span class="p">)</span>
+
+
+<span class="n">namespace</span><span class="o">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">cast</span><span class="p">(</span><span class="n">Task</span><span class="p">,</span> <span class="n">benchmark</span><span class="p">))</span>
+</code></pre></div>
 <p>That's the whole job — <code>./workflow.cmd local.benchmark</code> works immediately. There is no registration step: <code>_CI/tasks/__init__.py</code> picks <code>local.py</code> up if it is present, and wires the same bootstrap pre-task the built-in namespaces get, so a first invocation still bootstraps the environment.</p>
 <p>The <code>@logged</code> decorator emits the pass/fail status line. The <code>execute</code> helper raises <code>SystemExit(1)</code> on non-zero exit; nested stdout is indented under the parent banner (the <code>IndentingStream</code> wiring in <code>_CI/tasks/shared.py</code>).</p>
-<h3 id="giving-the-namespace-a-default-task">Giving the namespace a default task</h3>
+<h3 id="giving-the-namespace-a-default-task">Giving the namespace a default task<a class="headerlink" href="#giving-the-namespace-a-default-task" title="Permanent link">&para;</a></h3>
 <p>So <code>./workflow.cmd local</code> runs something on its own:</p>
-<pre><code class="language-python">namespace.add_task(cast(Task, benchmark), default=True, name='all')
-</code></pre>
-<h3 id="if-you-outgrow-one-file">If you outgrow one file</h3>
+<div class="highlight"><pre><span></span><code><span class="n">namespace</span><span class="o">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">cast</span><span class="p">(</span><span class="n">Task</span><span class="p">,</span> <span class="n">benchmark</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'all'</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="if-you-outgrow-one-file">If you outgrow one file<a class="headerlink" href="#if-you-outgrow-one-file" title="Permanent link">&para;</a></h3>
 <p>Add more modules next to it and import them from <code>local.py</code>, which keeps everything hanging off the one file the template will not touch:</p>
-<pre><code class="language-python"># _CI/tasks/local.py
-from .local_deploy import deploy
+<div class="highlight"><pre><span></span><code><span class="c1"># _CI/tasks/local.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.local_deploy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deploy</span>
 
-namespace.add_task(cast(Task, deploy))
-</code></pre>
+<span class="n">namespace</span><span class="o">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">cast</span><span class="p">(</span><span class="n">Task</span><span class="p">,</span> <span class="n">deploy</span><span class="p">))</span>
+</code></pre></div>
 <p>Only <code>local.py</code> itself is protected from updates, but since the template never ships a
 <code>local_deploy.py</code> there is nothing for it to collide with.</p>
-<h2 id="changing-a-task-the-template-owns">Changing a task the template owns</h2>
+<h2 id="changing-a-task-the-template-owns">Changing a task the template owns<a class="headerlink" href="#changing-a-task-the-template-owns" title="Permanent link">&para;</a></h2>
 <p>Sometimes you genuinely need different behaviour from a built-in task rather than a new one. Wrap it from <code>local.py</code> instead of editing it in place:</p>
-<pre><code class="language-python">from .lint import ruff_lint
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">.lint</span><span class="w"> </span><span class="kn">import</span> <span class="n">ruff_lint</span>
 
 
-@task
-@logged('local.lint-strict')
-def lint_strict(context: Context) -&gt; None:
-    &quot;&quot;&quot;Lint the extra paths this project cares about.&quot;&quot;&quot;
-    ruff_lint(context, paths='src/ tests/ scripts/')
-</code></pre>
+<span class="nd">@task</span>
+<span class="nd">@logged</span><span class="p">(</span><span class="s1">'local.lint-strict'</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">lint_strict</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">Context</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Lint the extra paths this project cares about."""</span>
+    <span class="n">ruff_lint</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">paths</span><span class="o">=</span><span class="s1">'src/ tests/ scripts/'</span><span class="p">)</span>
+</code></pre></div>
 <p>If that isn't enough and you must edit a template-owned module, expect to resolve that hunk on every update — and consider whether the change belongs upstream in the template instead.</p>
-<h2 id="calling-from-another-task">Calling from another task</h2>
+<h2 id="calling-from-another-task">Calling from another task<a class="headerlink" href="#calling-from-another-task" title="Permanent link">&para;</a></h2>
 <p>Modules compose via direct function calls — they don't reach into each other's Invoke internals:</p>
-<pre><code class="language-python">from .build import build as build_task
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">.build</span><span class="w"> </span><span class="kn">import</span> <span class="n">build</span> <span class="k">as</span> <span class="n">build_task</span>
 
-@task
-def my_thing(context):
-    build_task(context)   # plain call
-    ...
-</code></pre>
-<h2 id="conventions">Conventions</h2>
+<span class="nd">@task</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_thing</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
+    <span class="n">build_task</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>   <span class="c1"># plain call</span>
+    <span class="o">...</span>
+</code></pre></div>
+<h2 id="conventions">Conventions<a class="headerlink" href="#conventions" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Your tasks live in <code>local.py</code>; the rest of <code>_CI/tasks/</code> is the template's.</li>
 <li>One module per concern. Lint covers all linters; security covers all security tools. Don't sprawl.</li>
@@ -543,7 +543,7 @@ def my_thing(context):
 <li>Don't catch <code>SystemExit</code> — let the <code>run_steps()</code> runner accumulate failures.</li>
 <li>Don't use leading underscores on module-level function names; the project's pylint config disallows it.</li>
 </ul>
-<h2 id="see-also">See also</h2>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../reference/ci-framework.html">Generated project tree</a> — the full <code>_CI/</code> directory layout and shared utilities.</li>
 <li><a href="../explanation/the-ci-tasks-architecture.html">The _CI tasks architecture</a> — design rationale for the <code>@logged</code> + <code>IndentingStream</code> plumbing.</li>
@@ -561,6 +561,7 @@ def my_thing(context):
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">

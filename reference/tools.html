@@ -467,14 +467,14 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="tools">Tools</h1>
+<h1 id="tools">Tools<a class="headerlink" href="#tools" title="Permanent link">&para;</a></h1>
 <p>Every tool returns structured JSON. Errors from AFAS come back as tool errors carrying the AFAS <code>externalMessage</code>
 and, when it adds information, the <code>internalMessage</code>.</p>
-<h2 id="read-tools-always-registered">Read tools (always registered)</h2>
-<h3 id="afas_connection_info"><code>afas_connection_info</code></h3>
+<h2 id="read-tools-always-registered">Read tools (always registered)<a class="headerlink" href="#read-tools-always-registered" title="Permanent link">&para;</a></h2>
+<h3 id="afas_connection_info"><code>afas_connection_info</code><a class="headerlink" href="#afas_connection_info" title="Permanent link">&para;</a></h3>
 <p>No parameters. Returns <code>base_url</code>, <code>environment</code>, <code>member_id</code>, <code>writes_enabled</code>, <code>profit_version</code> (as AFAS
 reports it) and <code>server_version</code>. Fails with the AFAS message when the token is rejected.</p>
-<h3 id="afas_list_connectors"><code>afas_list_connectors</code></h3>
+<h3 id="afas_list_connectors"><code>afas_list_connectors</code><a class="headerlink" href="#afas_list_connectors" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -500,7 +500,7 @@ reports it) and <code>server_version</code>. Fails with the AFAS message when th
 </tbody>
 </table>
 <p>Returns <code>get_connectors</code> and <code>update_connectors</code> (each a list of <code>{id, description}</code>) plus their counts.</p>
-<h3 id="afas_describe_get_connector"><code>afas_describe_get_connector</code></h3>
+<h3 id="afas_describe_get_connector"><code>afas_describe_get_connector</code><a class="headerlink" href="#afas_describe_get_connector" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -519,7 +519,7 @@ reports it) and <code>server_version</code>. Fails with the AFAS message when th
 </table>
 <p>Returns the AFAS metainfo document unchanged: <code>name</code>, <code>description</code> and <code>fields</code>, where each field has <code>id</code>,
 <code>fieldId</code>, <code>dataType</code>, <code>label</code>, <code>length</code>, <code>controlType</code> and <code>decimals</code>. Use <code>fieldId</code> values in filters and sorting.</p>
-<h3 id="afas_describe_update_connector"><code>afas_describe_update_connector</code></h3>
+<h3 id="afas_describe_update_connector"><code>afas_describe_update_connector</code><a class="headerlink" href="#afas_describe_update_connector" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -539,7 +539,7 @@ reports it) and <code>server_version</code>. Fails with the AFAS message when th
 <p>Returns the AFAS metainfo document unchanged: <code>fields</code> (each with <code>fieldId</code>, <code>primaryKey</code>, <code>dataType</code>, <code>label</code>,
 <code>mandatory</code>, <code>length</code>, <code>decimals</code>, <code>notzero</code>, <code>controlType</code> and optional <code>values</code>) and <code>objects</code>, the nested
 objects with the same structure.</p>
-<h3 id="afas_get_rows"><code>afas_get_rows</code></h3>
+<h3 id="afas_get_rows"><code>afas_get_rows</code><a class="headerlink" href="#afas_get_rows" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -584,7 +584,7 @@ objects with the same structure.</p>
 </table>
 <p>Returns <code>connector_id</code>, <code>skip</code>, <code>take</code>, <code>row_count</code>, <code>has_more</code> (true when the page was full), <code>next_skip</code> (the
 <code>skip</code> for the following page, or null) and <code>rows</code>.</p>
-<h4 id="filters">Filters</h4>
+<h4 id="filters">Filters<a class="headerlink" href="#filters" title="Permanent link">&para;</a></h4>
 <p>Each filter is an object:</p>
 <table>
 <thead>
@@ -706,13 +706,13 @@ objects with the same structure.</p>
 <p>Booleans are sent as <code>true</code>/<code>false</code>. When a field id or value contains <code>,</code> or <code>;</code> the server switches to the AFAS
 <code>filterjson</code> syntax automatically, so such values need no escaping.</p>
 <p>Example, "active employees in Amsterdam, or anyone named Jansen":</p>
-<pre><code class="language-json">[
-  { &quot;field&quot;: &quot;Status&quot;, &quot;operator&quot;: &quot;equals&quot;, &quot;value&quot;: &quot;A&quot;, &quot;group&quot;: 0 },
-  { &quot;field&quot;: &quot;City&quot;, &quot;operator&quot;: &quot;equals&quot;, &quot;value&quot;: &quot;Amsterdam&quot;, &quot;group&quot;: 0 },
-  { &quot;field&quot;: &quot;LastName&quot;, &quot;operator&quot;: &quot;equals&quot;, &quot;value&quot;: &quot;Jansen&quot;, &quot;group&quot;: 1 }
-]
-</code></pre>
-<h3 id="afas_validate_payload"><code>afas_validate_payload</code></h3>
+<div class="highlight"><pre><span></span><code><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nt">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Status"</span><span class="p">,</span><span class="w"> </span><span class="nt">"operator"</span><span class="p">:</span><span class="w"> </span><span class="s2">"equals"</span><span class="p">,</span><span class="w"> </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="nt">"group"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nt">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"City"</span><span class="p">,</span><span class="w"> </span><span class="nt">"operator"</span><span class="p">:</span><span class="w"> </span><span class="s2">"equals"</span><span class="p">,</span><span class="w"> </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Amsterdam"</span><span class="p">,</span><span class="w"> </span><span class="nt">"group"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nt">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LastName"</span><span class="p">,</span><span class="w"> </span><span class="nt">"operator"</span><span class="p">:</span><span class="w"> </span><span class="s2">"equals"</span><span class="p">,</span><span class="w"> </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Jansen"</span><span class="p">,</span><span class="w"> </span><span class="nt">"group"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">}</span>
+<span class="p">]</span>
+</code></pre></div>
+<h3 id="afas_validate_payload"><code>afas_validate_payload</code><a class="headerlink" href="#afas_validate_payload" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -744,15 +744,15 @@ objects with the same structure.</p>
 </tbody>
 </table>
 <p>Returns <code>valid</code>, <code>issues</code> (a list of <code>{path, message}</code>) and <code>body</code>, the exact JSON the write tools would send.</p>
-<h4 id="the-element-payload">The <code>element</code> payload</h4>
-<pre><code class="language-json">{
-  &quot;@SbId&quot;: 42,
-  &quot;Fields&quot;: { &quot;Ds&quot;: &quot;New description&quot;, &quot;St&quot;: &quot;A&quot; },
-  &quot;Objects&quot;: {
-    &quot;KnSubjectLink&quot;: { &quot;Element&quot;: { &quot;Fields&quot;: { &quot;ToPE&quot;: true } } }
-  }
-}
-</code></pre>
+<h4 id="the-element-payload">The <code>element</code> payload<a class="headerlink" href="#the-element-payload" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"@SbId"</span><span class="p">:</span><span class="w"> </span><span class="mi">42</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"Fields"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"Ds"</span><span class="p">:</span><span class="w"> </span><span class="s2">"New description"</span><span class="p">,</span><span class="w"> </span><span class="nt">"St"</span><span class="p">:</span><span class="w"> </span><span class="s2">"A"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"Objects"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"KnSubjectLink"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"Element"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"Fields"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"ToPE"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
 <ul>
 <li><code>@FieldId</code> entries at the top level identify the record; they are required for updates.</li>
 <li><code>Fields</code> maps field ids to values. <code>null</code> clears a field.</li>
@@ -762,8 +762,8 @@ objects with the same structure.</p>
 </ul>
 <p>Validation reports unknown field ids and object names, missing mandatory fields on insert, values of the wrong
 type, strings longer than the field allows, and values outside a field's allowed list.</p>
-<h2 id="write-tools-only-with-afas_allow_writestrue">Write tools (only with <code>AFAS_ALLOW_WRITES=true</code>)</h2>
-<h3 id="afas_insert"><code>afas_insert</code></h3>
+<h2 id="write-tools-only-with-afas_allow_writestrue">Write tools (only with <code>AFAS_ALLOW_WRITES=true</code>)<a class="headerlink" href="#write-tools-only-with-afas_allow_writestrue" title="Permanent link">&para;</a></h2>
+<h3 id="afas_insert"><code>afas_insert</code><a class="headerlink" href="#afas_insert" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -795,10 +795,10 @@ type, strings longer than the field allows, and values outside a field's allowed
 </tbody>
 </table>
 <p>HTTP POST. Returns <code>result</code>, usually the keys AFAS assigned.</p>
-<h3 id="afas_update"><code>afas_update</code></h3>
+<h3 id="afas_update"><code>afas_update</code><a class="headerlink" href="#afas_update" title="Permanent link">&para;</a></h3>
 <p>Same parameters as <code>afas_insert</code>, with <code>@FieldId</code> key entries in the element. HTTP PUT. <code>result</code> is often null
 because AFAS returns no body.</p>
-<h3 id="afas_delete"><code>afas_delete</code></h3>
+<h3 id="afas_delete"><code>afas_delete</code><a class="headerlink" href="#afas_delete" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -836,7 +836,7 @@ because AFAS returns no body.</p>
 </tbody>
 </table>
 <p>HTTP DELETE to <code>connectors/{connector}/{object}/@{key_field}/{key_value}</code>. Irreversible.</p>
-<h2 id="tool-annotations">Tool annotations</h2>
+<h2 id="tool-annotations">Tool annotations<a class="headerlink" href="#tool-annotations" title="Permanent link">&para;</a></h2>
 <p>Read tools are annotated <code>readOnlyHint: true</code>. <code>afas_insert</code> is <code>destructiveHint: false</code>; <code>afas_update</code> and
 <code>afas_delete</code> are <code>destructiveHint: true</code>. Clients that gate destructive tools behind a confirmation will use these.</p></div>
             </div>
@@ -852,6 +852,7 @@ because AFAS returns no body.</p>
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">

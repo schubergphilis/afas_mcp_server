@@ -483,57 +483,57 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="connect-an-mcp-client">Connect an MCP client</h1>
+<h1 id="connect-an-mcp-client">Connect an MCP client<a class="headerlink" href="#connect-an-mcp-client" title="Permanent link">&para;</a></h1>
 <p>Register the server with the MCP client you use. All variants run the same command; they differ in where the
 settings live.</p>
-<h2 id="before-you-start">Before you start</h2>
+<h2 id="before-you-start">Before you start<a class="headerlink" href="#before-you-start" title="Permanent link">&para;</a></h2>
 <ul>
 <li>The connection works: <code>afas-mcp-server --check</code> prints the Profit version
   (see <a href="../tutorials/getting-started.html">Getting started</a>).</li>
 <li>You know whether this client should be able to write. If so, read <a href="enable-writes-safely.html">Enable writes safely</a>
   first.</li>
 </ul>
-<h2 id="claude-desktop">Claude Desktop</h2>
+<h2 id="claude-desktop">Claude Desktop<a class="headerlink" href="#claude-desktop" title="Permanent link">&para;</a></h2>
 <p>Add to <code>claude_desktop_config.json</code> (<em>Settings &gt; Developer &gt; Edit Config</em>):</p>
-<pre><code class="language-json">{
-  &quot;mcpServers&quot;: {
-    &quot;afas&quot;: {
-      &quot;command&quot;: &quot;uvx&quot;,
-      &quot;args&quot;: [&quot;afas-mcp-server&quot;],
-      &quot;env&quot;: {
-        &quot;AFAS_MEMBER_ID&quot;: &quot;12345&quot;,
-        &quot;AFAS_TOKEN&quot;: &quot;&lt;token&gt;&lt;version&gt;1&lt;/version&gt;&lt;data&gt;YOUR_TOKEN_DATA&lt;/data&gt;&lt;/token&gt;&quot;
-      }
-    }
-  }
-}
-</code></pre>
-<h2 id="claude-code">Claude Code</h2>
-<pre><code class="language-bash">claude mcp add afas \
-  -e AFAS_MEMBER_ID=12345 \
-  -e AFAS_TOKEN='&lt;token&gt;&lt;version&gt;1&lt;/version&gt;&lt;data&gt;YOUR_TOKEN_DATA&lt;/data&gt;&lt;/token&gt;' \
-  -- uvx afas-mcp-server
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"mcpServers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"afas"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"uvx"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"args"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"afas-mcp-server"</span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"env"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"AFAS_MEMBER_ID"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"AFAS_TOKEN"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;token&gt;&lt;version&gt;1&lt;/version&gt;&lt;data&gt;YOUR_TOKEN_DATA&lt;/data&gt;&lt;/token&gt;"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="claude-code">Claude Code<a class="headerlink" href="#claude-code" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>claude<span class="w"> </span>mcp<span class="w"> </span>add<span class="w"> </span>afas<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">AFAS_MEMBER_ID</span><span class="o">=</span><span class="m">12345</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">AFAS_TOKEN</span><span class="o">=</span><span class="s1">'&lt;token&gt;&lt;version&gt;1&lt;/version&gt;&lt;data&gt;YOUR_TOKEN_DATA&lt;/data&gt;&lt;/token&gt;'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--<span class="w"> </span>uvx<span class="w"> </span>afas-mcp-server
+</code></pre></div>
 <p>Add <code>--scope project</code> to share the entry through <code>.mcp.json</code>; keep the token out of it by referencing an
 environment variable instead of a literal value.</p>
-<h2 id="cursor-and-other-stdio-clients">Cursor and other stdio clients</h2>
+<h2 id="cursor-and-other-stdio-clients">Cursor and other stdio clients<a class="headerlink" href="#cursor-and-other-stdio-clients" title="Permanent link">&para;</a></h2>
 <p>Any client that launches a command works with:</p>
-<pre><code class="language-json">{
-  &quot;command&quot;: &quot;uvx&quot;,
-  &quot;args&quot;: [&quot;afas-mcp-server&quot;],
-  &quot;env&quot;: { &quot;AFAS_MEMBER_ID&quot;: &quot;12345&quot;, &quot;AFAS_TOKEN&quot;: &quot;...&quot; }
-}
-</code></pre>
-<h2 id="streamable-http-for-shared-deployments">Streamable HTTP for shared deployments</h2>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"uvx"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"args"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"afas-mcp-server"</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"env"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"AFAS_MEMBER_ID"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345"</span><span class="p">,</span><span class="w"> </span><span class="nt">"AFAS_TOKEN"</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="streamable-http-for-shared-deployments">Streamable HTTP for shared deployments<a class="headerlink" href="#streamable-http-for-shared-deployments" title="Permanent link">&para;</a></h2>
 <p>Run one server for several clients:</p>
-<pre><code class="language-bash">AFAS_MEMBER_ID=12345 AFAS_TOKEN='...' afas-mcp-server --transport streamable-http --host 127.0.0.1 --port 8000
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="nv">AFAS_MEMBER_ID</span><span class="o">=</span><span class="m">12345</span><span class="w"> </span><span class="nv">AFAS_TOKEN</span><span class="o">=</span><span class="s1">'...'</span><span class="w"> </span>afas-mcp-server<span class="w"> </span>--transport<span class="w"> </span>streamable-http<span class="w"> </span>--host<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span>
+</code></pre></div>
 <p>Clients connect to <code>http://127.0.0.1:8000/mcp</code>. The server does not authenticate HTTP clients itself, so bind it to
 localhost or place it behind a reverse proxy that does, and remember that every client shares the one AFAS token.</p>
-<h2 id="use-a-env-file-instead-of-inline-variables">Use a <code>.env</code> file instead of inline variables</h2>
+<h2 id="use-a-env-file-instead-of-inline-variables">Use a <code>.env</code> file instead of inline variables<a class="headerlink" href="#use-a-env-file-instead-of-inline-variables" title="Permanent link">&para;</a></h2>
 <p>Create <code>.env</code> in the directory the server starts in, using <a href="https://github.com/schubergphilis/afas_mcp_server/blob/main/.env.example"><code>.env.example</code></a>
 as the template. Variables set in the environment win over the file.</p>
-<h2 id="verify">Verify</h2>
+<h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
 <p>Ask the assistant to run <code>afas_connection_info</code>. It returns the base URL, whether writes are enabled and the Profit
 version. If the tool list is empty, check the client's log for the server's stderr output; configuration errors are
 printed there with the missing variable named.</p></div>
@@ -550,6 +550,7 @@ printed there with the missing variable named.</p></div>
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">

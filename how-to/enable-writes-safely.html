@@ -471,14 +471,14 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="enable-writes-safely">Enable writes safely</h1>
+<h1 id="enable-writes-safely">Enable writes safely<a class="headerlink" href="#enable-writes-safely" title="Permanent link">&para;</a></h1>
 <p>Let the assistant create, change or delete records in AFAS without giving it more power than the task needs.</p>
-<h2 id="before-you-start">Before you start</h2>
+<h2 id="before-you-start">Before you start<a class="headerlink" href="#before-you-start" title="Permanent link">&para;</a></h2>
 <ul>
 <li>A read-only setup works (see <a href="connect-an-mcp-client.html">Connect an MCP client</a>).</li>
 <li>You have, or can get, an AFAS <strong>test</strong> environment and a separate app connector for writing.</li>
 </ul>
-<h2 id="steps">Steps</h2>
+<h2 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">&para;</a></h2>
 <ol>
 <li>
 <p>Create a dedicated app connector in AFAS with only the UpdateConnectors the assistant needs, and a token for a
@@ -488,10 +488,10 @@
 <p>Point a separate server instance at the test environment with writes enabled:</p>
 </li>
 </ol>
-<p><code>bash
-   export AFAS_ENVIRONMENT=test
-   export AFAS_ALLOW_WRITES=true
-   afas-mcp-server --check</code></p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">AFAS_ENVIRONMENT</span><span class="o">=</span><span class="nb">test</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">AFAS_ALLOW_WRITES</span><span class="o">=</span><span class="nb">true</span>
+afas-mcp-server<span class="w"> </span>--check
+</code></pre></div>
 <p>The report shows <code>"writes_enabled": true</code>.</p>
 <ol>
 <li>
@@ -511,11 +511,11 @@
 <p>Verify in AFAS, then repeat against production by switching <code>AFAS_ENVIRONMENT</code> back to <code>production</code>.</p>
 </li>
 </ol>
-<h2 id="what-the-assistant-is-told">What the assistant is told</h2>
+<h2 id="what-the-assistant-is-told">What the assistant is told<a class="headerlink" href="#what-the-assistant-is-told" title="Permanent link">&para;</a></h2>
 <p>With writes enabled the server's instructions ask the model to describe the connector, validate the payload, show
 the user what will change, and confirm deletions before acting. The write tools are also annotated as not read-only
 and, for update and delete, as destructive, so clients that ask for confirmation on such tools will do so.</p>
-<h2 id="see-also">See also</h2>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../reference/tools.html">Tools</a> for the exact payload shape of <code>element</code>.</li>
 <li><a href="../reference/configuration.html">Configuration</a> for every variable used above.</li>
@@ -533,6 +533,7 @@ and, for update and delete, as destructive, so clients that ask for confirmation
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">

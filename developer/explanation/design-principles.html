@@ -504,48 +504,48 @@
                     <div class="col-md-9" role="main">
 
 <!-- canonical: synced from docs/maintaining/explanation/design-principles.md in the paleofuturistic_python template repo. Edit there first. -->
-<h1 id="design-principles">Design principles</h1>
+<h1 id="design-principles">Design principles<a class="headerlink" href="#design-principles" title="Permanent link">&para;</a></h1>
 <p>The scaffold this project inherited is opinionated. The choices below were made deliberately, not by accumulation — each replaces something an earlier revision of the template relied on.</p>
-<h2 id="pipelines-run-template-commands-only">Pipelines run template commands only</h2>
+<h2 id="pipelines-run-template-commands-only">Pipelines run template commands only<a class="headerlink" href="#pipelines-run-template-commands-only" title="Permanent link">&para;</a></h2>
 <p>Every CI step is a <code>./workflow.cmd &lt;task&gt;</code> call — no inline <code>uv …</code>, <code>pip install …</code>, ad-hoc <code>properdocs …</code>, or other business logic in YAML. Behaviour changes happen in <code>_CI/tasks/</code>; workflow files are glue.</p>
 <p>Two side-effects of this rule earn it its own section:</p>
 <p><strong>Parity.</strong> What CI runs is exactly what you can run locally. Debugging a failing CI step means running the same <code>./workflow.cmd</code> command on your laptop. No "but it worked on my machine" gap, no separate path to maintain.</p>
 <p><strong>And those commands lean on tracked dependencies.</strong> When a <code>properdocs</code> / <code>uv</code> / <code>pytest</code> invocation can do a CI step, it's preferred over a GitHub Action, because every Python dependency is pinned in <code>uv.lock</code> and surfaces in the project SBOM. Action dependencies are hidden inside <code>uses:</code> references and never appear in the supply-chain picture. Concretely: <code>properdocs gh-deploy</code> over <code>actions/upload-pages-artifact</code> + <code>actions/deploy-pages</code>; <code>./workflow.cmd test</code> over inline <code>pytest</code> invocations; and so on. Two scaffolding actions are unavoidable (<code>actions/checkout</code> to fetch the repo, <code>astral-sh/setup-uv</code> to bootstrap the toolchain itself when the deps image isn't used) — beyond that, prefer commands.</p>
-<h2 id="uv-is-the-only-tool-you-install">uv is the only tool you install</h2>
+<h2 id="uv-is-the-only-tool-you-install">uv is the only tool you install<a class="headerlink" href="#uv-is-the-only-tool-you-install" title="Permanent link">&para;</a></h2>
 <p>Earlier template revisions asked users to install Python, then <code>pipx</code>, then <code>tox</code>, then <code>pre-commit</code>, then <code>commitizen</code>. Today, every one of those is a uv-managed dependency group inside this project. You install uv; uv installs the rest.</p>
 <p><strong>Tradeoff:</strong> the scaffold is bound to uv's lifecycle. If uv goes away or changes lock format incompatibly, the template needs work. That risk is accepted because uv has compressed the toolchain to a single binary that's fast enough to run on every commit.</p>
-<h2 id="why-groups-not-extras">Why groups, not extras</h2>
+<h2 id="why-groups-not-extras">Why groups, not extras<a class="headerlink" href="#why-groups-not-extras" title="Permanent link">&para;</a></h2>
 <p>The template used to put dev tools under <code>[project.optional-dependencies]</code> (PEP 621 extras). Those work but they conflate two ideas:</p>
 <ul>
 <li><strong>Optional features</strong> of the library (e.g. an <code>excel</code> extra for openpyxl support).</li>
 <li><strong>Internal dev concerns</strong> (lint, test, docs).</li>
 </ul>
 <p><a href="https://peps.python.org/pep-0735/">PEP 735 dependency groups</a> — uv's first-class support for them — are explicitly for the second category. They never ship in the wheel and are never user-installable via <code>pip install &lt;pkg&gt;[&lt;extra&gt;]</code>. Cleaner contract, less to explain to users.</p>
-<h2 id="ruff-replaces-black-isort-flake8-and-most-of-pylint">Ruff replaces Black + isort + flake8 (and most of pylint)</h2>
+<h2 id="ruff-replaces-black-isort-flake8-and-most-of-pylint">Ruff replaces Black + isort + flake8 (and most of pylint)<a class="headerlink" href="#ruff-replaces-black-isort-flake8-and-most-of-pylint" title="Permanent link">&para;</a></h2>
 <p>One tool, one config block, one cache. Ruff doesn't yet cover everything pylint does — so pylint stays, but only for the checks Ruff doesn't have. Expect pylint's role to shrink as Ruff grows.</p>
-<h2 id="ty-replaces-mypy">ty replaces mypy</h2>
+<h2 id="ty-replaces-mypy">ty replaces mypy<a class="headerlink" href="#ty-replaces-mypy" title="Permanent link">&para;</a></h2>
 <p><a href="https://github.com/astral-sh/ty">ty</a> is Astral's type checker, written in Rust. It's faster than mypy and shares the Ruff/uv codebase's quality bar. Mypy compatibility issues still surface occasionally; that trade is accepted for the speed and consistency.</p>
-<h2 id="pytest-not-unittest">pytest, not unittest</h2>
+<h2 id="pytest-not-unittest">pytest, not unittest<a class="headerlink" href="#pytest-not-unittest" title="Permanent link">&para;</a></h2>
 <p>The template's original lineage used <code>python -m unittest</code>. It moved to pytest for fixtures, parametrization, coverage integration, and parallel execution via xdist. Unittest test classes still work — pytest discovers them.</p>
-<h2 id="conventional-commits-drive-the-release-notes">Conventional Commits drive the release notes</h2>
+<h2 id="conventional-commits-drive-the-release-notes">Conventional Commits drive the release notes<a class="headerlink" href="#conventional-commits-drive-the-release-notes" title="Permanent link">&para;</a></h2>
 <p>Commit messages must follow <a href="https://www.conventionalcommits.org/">Conventional Commits</a> — the lint step rejects anything that doesn't parse. They're used for <strong>automatic release notes</strong>: <a href="https://commitizen-tools.github.io/commitizen/">commitizen</a> reads the commits since the last tag and groups them by prefix (<code>feat:</code>, <code>fix:</code>, etc.) into a generated changelog.</p>
 <p>Commitizen's autorelease mode is <strong>not</strong> used. The version bump is an explicit choice you make at release time: <code>./workflow.cmd release -i &lt;major|minor|patch|…&gt;</code>. Commit prefixes inform changelog structure, not the version number.</p>
-<h2 id="properdocs-not-vanilla-mkdocs-with-mkdocstrings-for-api-docs">properdocs (not vanilla mkdocs), with mkdocstrings for API docs</h2>
+<h2 id="properdocs-not-vanilla-mkdocs-with-mkdocstrings-for-api-docs">properdocs (not vanilla mkdocs), with mkdocstrings for API docs<a class="headerlink" href="#properdocs-not-vanilla-mkdocs-with-mkdocstrings-for-api-docs" title="Permanent link">&para;</a></h2>
 <p>properdocs is mkdocs with a curated plugin set. mkdocstrings reads the source directly — no <code>.rst</code> files in the middle. Sphinx is more capable; that capability isn't needed here.</p>
-<h2 id="sboms-ship-inside-the-wheel">SBOMs ship inside the wheel</h2>
+<h2 id="sboms-ship-inside-the-wheel">SBOMs ship inside the wheel<a class="headerlink" href="#sboms-ship-inside-the-wheel" title="Permanent link">&para;</a></h2>
 <p>Every release composes a CycloneDX 1.7 SBOM covering four sources — runtime dependencies (from <code>uv export --no-dev</code> against the lockfile), dev / lint / test / docs / quality / security groups (the lockfile minus the runtime set), vendored CI tooling (every package in <code>_CI/lib/vendor.txt</code>), and the chosen host's pipeline components (GitHub Actions <code>uses:</code> refs or GitLab CI <code>image:</code> refs). Each component carries an SPDX-identified licence, a SHA-256 hash where the lockfile provides one, and an external_reference pointing at its upstream page. CycloneDX <code>scope</code> (<code>required</code> / <code>optional</code> / <code>excluded</code>) distinguishes what ships in the wheel from what builds it. A two-level dependency graph (project → runtime + dev + a synthetic <code>build-environment</code> → vendored + pipeline) makes "what's in the wheel" vs "what built the wheel" walkable from the root bom-ref.</p>
 <p>The SBOM is validated against the CycloneDX 1.7 JSON schema and written to <code>src/&lt;project_slug&gt;/sbom.cdx.json</code>, which <code>uv build</code> automatically ships <strong>inside the wheel</strong> rather than next to it. A downstream consumer extracts it with <code>unzip -p &lt;wheel&gt; &lt;project_slug&gt;/sbom.cdx.json</code> or <code>importlib.resources</code> — the SBOM travels with the artefact instead of needing to be re-correlated post-release.</p>
 <p>The cost is one Python module (<code>_CI/tasks/sbom.py</code>) and one extra build step; the benefit is that supply-chain questions have an answer the day someone asks them, without depending on a separate registry or pinned cyclonedx-cli binary.</p>
-<h2 id="vendored-ci-tooling">Vendored CI tooling</h2>
+<h2 id="vendored-ci-tooling">Vendored CI tooling<a class="headerlink" href="#vendored-ci-tooling" title="Permanent link">&para;</a></h2>
 <p><code>_CI/lib/vendor/</code> ships Invoke + its dependencies committed to the repo. <code>./workflow.cmd</code> works on a fresh clone with only uv installed — no <code>pip install invoke</code> step, no version drift between contributor machines. The vendoring cost is bytes in the repo; the benefit is that the dev cycle is the same on day one as on day one thousand.</p>
-<h2 id="what-we-deliberately-do-not-do">What we deliberately do not do</h2>
+<h2 id="what-we-deliberately-do-not-do">What we deliberately do not do<a class="headerlink" href="#what-we-deliberately-do-not-do" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>No framework choice.</strong> This is a library scaffold. It does not know about FastAPI, Django, or Click. Add what you need.</li>
 <li><strong>No monorepo support.</strong> One package, one repo.</li>
 <li><strong>No Python below the project's chosen minimum version (as low as 3.10).</strong> <code>tomllib</code> is imported via a 3.10-compatible fallback, so it's no longer a reason to require a higher floor.</li>
 <li><strong>No GitHub-only or GitLab-only assumptions in the dev cycle.</strong> Host-specific code lives in <code>_CI/tasks/&lt;host&gt;.py</code>; the rest of the workflow runs identically.</li>
 </ul>
-<h2 id="see-also">See also</h2>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../index.html">The scaffold</a> — the tour of everything these principles produced.</li>
 <li><a href="the-ci-tasks-architecture.html">The _CI tasks architecture</a> — the task-runner design in depth.</li>
@@ -563,6 +563,7 @@
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">

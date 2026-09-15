@@ -488,9 +488,9 @@
                     <div class="col-md-9" role="main">
 
 <!-- canonical: synced from docs/using/explanation/testing-strategy.md in the paleofuturistic_python template repo. Edit there first. -->
-<h1 id="testing-strategy">Testing strategy</h1>
+<h1 id="testing-strategy">Testing strategy<a class="headerlink" href="#testing-strategy" title="Permanent link">&para;</a></h1>
 <p>The scaffold layers three things to test this project's code: pytest for the test runner, coverage for what got executed, and tox for the multi-version matrix. Each does one job.</p>
-<h2 id="layer-1-pytest">Layer 1 — pytest</h2>
+<h2 id="layer-1-pytest">Layer 1 — pytest<a class="headerlink" href="#layer-1-pytest" title="Permanent link">&para;</a></h2>
 <p>Why pytest and not unittest:</p>
 <ul>
 <li><strong>Fixtures</strong>. Sharable, composable test setup.</li>
@@ -499,36 +499,36 @@
 <li><strong>Plugin ecosystem</strong>. xdist (parallel), coverage, hypothesis, asyncio, ...</li>
 </ul>
 <p>The scaffold ships pytest + a small set of plugins (coverage, xdist, html, env, metadata). Discover the registered markers with <code>./workflow.cmd test.pytest --args="--markers"</code> after bootstrap.</p>
-<h2 id="layer-2-coverage">Layer 2 — Coverage</h2>
+<h2 id="layer-2-coverage">Layer 2 — Coverage<a class="headerlink" href="#layer-2-coverage" title="Permanent link">&para;</a></h2>
 <p><code>pytest-cov</code> runs alongside pytest. The scaffold tracks branch coverage (not just line coverage) and writes HTML + JSON reports under <code>reports/</code>.</p>
 <p><code>pyproject.toml</code>'s <code>[tool.coverage.report]</code> has <code>fail_under</code> set, and the test task <strong>ratchets</strong> this value upward after each green run: if the latest coverage run was 87% and <code>fail_under</code> was 80%, the task bumps <code>fail_under</code> to 87%. Once engaged, the bar only goes up — lowering <code>fail_under</code> is a deliberate, reviewable change that shows up in the diff.</p>
-<h3 id="dormant-during-scaffold">Dormant during scaffold</h3>
+<h3 id="dormant-during-scaffold">Dormant during scaffold<a class="headerlink" href="#dormant-during-scaffold" title="Permanent link">&para;</a></h3>
 <p>The ratchet starts <strong>dormant</strong>. The smoke test (<code>def test_sanity</code> in <code>tests/test_&lt;slug&gt;.py</code>) drives the scaffolded project to 100% coverage on its very first run; if the ratchet engaged on that signal, the first real change would crash the build at a 100% floor. So the test task checks for the presence of <code>def test_sanity</code> and, while it's still there, prints a status line on every run explaining the dormant state and how to engage:</p>
-<pre><code>[ratchet] coverage=100% — scaffold still pristine (test_sanity present); ratchet dormant
+<div class="highlight"><pre><span></span><code>[ratchet] coverage=100% — scaffold still pristine (test_sanity present); ratchet dormant
 [ratchet]   ratchet engages when you remove `test_sanity` in tests/test_&lt;slug&gt;.py
-[ratchet]   to engage immediately, set [tool.test-ratchet] mode = &quot;strict&quot; in pyproject.toml
-</code></pre>
+[ratchet]   to engage immediately, set [tool.test-ratchet] mode = "strict" in pyproject.toml
+</code></pre></div>
 <p>The moment <code>test_sanity</code> is deleted or renamed — i.e., the moment real tests start getting written — the ratchet engages and works exactly as described above. Once any non-zero <code>fail_under</code> is written, dormancy is over for good; re-adding <code>test_sanity</code> later doesn't reactivate it.</p>
 <p>If this scaffold was seeded into a codebase that's already covered, set <code>[tool.test-ratchet] mode = "strict"</code> in <code>pyproject.toml</code> to bypass the dormancy check entirely.</p>
 <p>Coverage regressions still can't slip in silently — they just can't slip in <em>or out</em> during the scaffold phase.</p>
-<h2 id="layer-3-tox">Layer 3 — tox</h2>
+<h2 id="layer-3-tox">Layer 3 — tox<a class="headerlink" href="#layer-3-tox" title="Permanent link">&para;</a></h2>
 <p>tox + tox-uv runs the test suite against every Python version in the project's range. Configured in <code>pyproject.toml</code>'s <code>[tool.tox]</code>, generated from the Python version range chosen at generation time.</p>
 <p><code>./workflow.cmd test</code> runs only one Python version (whichever the active uv venv resolved to). The full matrix runs in CI per shipped workflow, or locally via <code>./workflow.cmd test.tox</code> — see <a href="../how-to/run-tests-for-one-python-version.html">Run tests for one Python version</a> for slicing it.</p>
-<h2 id="what-we-dont-ship">What we don't ship</h2>
+<h2 id="what-we-dont-ship">What we don't ship<a class="headerlink" href="#what-we-dont-ship" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>A testing pyramid.</strong> The scaffold doesn't pre-create unit/integration/e2e folders. The example smoke test lives directly in <code>tests/</code>. Structure tests how the project warrants.</li>
 <li><strong>Hypothesis or other property-based tooling.</strong> Add it as a <code>test</code> group dep if wanted.</li>
 <li><strong>Mutation testing.</strong> Mutmut or cosmic-ray. Add them as a <code>quality</code> group concern if the project reaches for them.</li>
 <li><strong>A "tests" service in <code>docker-compose</code>.</strong> The deps cache image (<code>Dockerfile.deps</code>) is for CI deps, not for app testing.</li>
 </ul>
-<h2 id="smoke-tests-vs-real-tests">Smoke tests vs. real tests</h2>
+<h2 id="smoke-tests-vs-real-tests">Smoke tests vs. real tests<a class="headerlink" href="#smoke-tests-vs-real-tests" title="Permanent link">&para;</a></h2>
 <p>The scaffold generated one smoke test — a <code>tests/test_&lt;slug&gt;.py</code> that exercises the example <code>hello()</code> function with two functions: <code>test_sanity</code> (an <code>assert True</code> placeholder) and <code>test_integration</code> (the actual call). Keep them or delete them; either is fine, but <code>test_sanity</code> doubles as the <a href="#dormant-during-scaffold">ratchet dormancy marker</a>, so removing it engages the ratchet.</p>
-<h2 id="parallel-execution">Parallel execution</h2>
+<h2 id="parallel-execution">Parallel execution<a class="headerlink" href="#parallel-execution" title="Permanent link">&para;</a></h2>
 <p><code>pytest-xdist</code> runs tests across CPU cores by default (<code>-n auto</code> in the pytest config). Some tests don't play well with parallelism — anything touching the filesystem in a fixed location, or relying on shared global state.</p>
 <p>For those, add <code>@pytest.mark.serial</code> and a corresponding <code>-m "not serial"</code> / <code>-m serial</code> two-pass setup. The scaffold doesn't ship this scaffolding because most projects don't need it.</p>
-<h2 id="coverage-of-_ci">Coverage of <code>_CI/</code></h2>
+<h2 id="coverage-of-_ci">Coverage of <code>_CI/</code><a class="headerlink" href="#coverage-of-_ci" title="Permanent link">&para;</a></h2>
 <p>The scaffold treats <code>_CI/</code> as part of the codebase for linting purposes but <strong>not</strong> for test coverage. The CI tooling isn't reasonably unit-testable — its job is to glue together external commands. Coverage of <code>_CI/</code> is implicit via the workflow tasks running successfully end-to-end on every commit.</p>
-<h2 id="see-also">See also</h2>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../how-to/run-tests-for-one-python-version.html">Run tests for one Python version</a> — the practical commands for the version matrix.</li>
 <li><a href="design-principles.html">Design principles</a> — why the scaffold uses dependency groups instead of extras.</li>
@@ -546,6 +546,7 @@
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">

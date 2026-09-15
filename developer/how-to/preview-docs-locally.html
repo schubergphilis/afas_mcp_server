@@ -479,34 +479,34 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="preview-docs-locally">Preview docs locally</h1>
+<h1 id="preview-docs-locally">Preview docs locally<a class="headerlink" href="#preview-docs-locally" title="Permanent link">&para;</a></h1>
 <p>The project's documentation is a <a href="https://properdocs.org/">properdocs</a> site with mkdocstrings for the API reference. One task builds it; another serves it with live reload.</p>
-<h2 id="one-shot-build">One-shot build</h2>
-<pre><code class="language-bash">./workflow.cmd document
-</code></pre>
+<h2 id="one-shot-build">One-shot build<a class="headerlink" href="#one-shot-build" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>./workflow.cmd<span class="w"> </span>document
+</code></pre></div>
 <p>Runs <code>properdocs build</code> and opens the rendered <code>site/index.html</code> in your default browser. Good for a quick check.</p>
 <p>Under <strong>WSL</strong> the file is handed to Windows instead, since there is no Linux browser to open it with: the path is translated with <code>wslpath -w</code> and passed to <code>cmd.exe</code>. If you still have <code>wslview</code> from the deprecated <code>wslu</code> package installed it is used first, but it is no longer required. Opening is best-effort on WSL only — <code>cmd.exe</code> reports failure even when it worked, so the task prints a message rather than failing if the browser can't be reached. If your distro has Windows interop disabled, <code>./workflow.cmd document.build</code> still builds the site and you can open <code>site/index.html</code> yourself.</p>
-<h2 id="live-reload">Live reload</h2>
-<pre><code class="language-bash">./workflow.cmd document.serve
-</code></pre>
+<h2 id="live-reload">Live reload<a class="headerlink" href="#live-reload" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>./workflow.cmd<span class="w"> </span>document.serve
+</code></pre></div>
 <p>Starts a local server (default <code>http://127.0.0.1:8000</code>) and watches <code>src/</code> plus <code>docs/</code> for changes. Edit a docstring or a markdown file and the browser refreshes in place. Press Ctrl-C to stop.</p>
 <p><code>src/</code> is in the watch list because mkdocstrings reads docstrings directly — changing a Google-format docstring in <code>src/afas_mcp_server/</code> regenerates the API reference page on the fly.</p>
-<h2 id="what-the-build-does">What the build does</h2>
+<h2 id="what-the-build-does">What the build does<a class="headerlink" href="#what-the-build-does" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Reads <code>properdocs.yml</code> for site config, nav, and plugins.</li>
 <li>The <code>include-markdown</code> plugin pulls <code>README.md</code> into <code>docs/index.md</code>.</li>
 <li>The <code>mkdocstrings</code> plugin walks <code>src/</code> and renders the API reference under <code>docs/reference/api.md</code>.</li>
 <li>The rest of <code>docs/</code> is rendered as plain markdown.</li>
 </ol>
-<h2 id="adding-a-page">Adding a page</h2>
+<h2 id="adding-a-page">Adding a page<a class="headerlink" href="#adding-a-page" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Drop a new <code>.md</code> under <code>docs/&lt;section&gt;/</code>.</li>
 <li>Add it to the <code>nav:</code> block in <code>properdocs.yml</code>.</li>
 <li>Either rebuild (<code>./workflow.cmd document</code>) or rely on the live-reload server.</li>
 </ol>
-<h2 id="docstring-style">Docstring style</h2>
+<h2 id="docstring-style">Docstring style<a class="headerlink" href="#docstring-style" title="Permanent link">&para;</a></h2>
 <p>mkdocstrings is configured for Google style (<code>docstring_style: google</code> in <code>properdocs.yml</code>). Sections it understands: <code>Args:</code>, <code>Returns:</code>, <code>Raises:</code>, <code>Yields:</code>, <code>Examples:</code>. Other formats render as plain text — useful, but you'll get less typed output and fewer cross-links.</p>
-<h2 id="see-also">See also</h2>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="document-your-project.html">Document your project</a> — what to write in each section, and how the API
   reference is generated from your docstrings.</li>
@@ -526,6 +526,7 @@
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">

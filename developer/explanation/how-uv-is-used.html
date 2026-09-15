@@ -476,9 +476,9 @@
                     <div class="col-md-9" role="main">
 
 <!-- canonical: synced from docs/using/explanation/how-uv-is-used.md in the paleofuturistic_python template repo. Edit there first. -->
-<h1 id="how-uv-is-used">How uv is used</h1>
+<h1 id="how-uv-is-used">How uv is used<a class="headerlink" href="#how-uv-is-used" title="Permanent link">&para;</a></h1>
 <p>This project uses <a href="https://docs.astral.sh/uv/">uv</a> for every Python operation: creating virtualenvs, installing dependencies, resolving the lockfile, publishing to PyPI, even fetching Python interpreters. This page explains why, and what the scaffold gives up to get there.</p>
-<h2 id="what-uv-replaces">What uv replaces</h2>
+<h2 id="what-uv-replaces">What uv replaces<a class="headerlink" href="#what-uv-replaces" title="Permanent link">&para;</a></h2>
 <p>In an older lineage of the template, a fresh checkout required: a system Python, pipx, virtualenv, pipenv, pip-tools, tox-uv, and twine. Each had its own configuration surface, its own caching behaviour, and its own update cadence.</p>
 <p>uv replaces all of them with a single Rust binary that:</p>
 <ul>
@@ -488,12 +488,12 @@
 <li>Publishes to PyPI (no <code>twine</code>).</li>
 <li>Runs tools in ephemeral environments (<code>uvx</code>, no global <code>pipx</code>).</li>
 </ul>
-<h2 id="why-this-is-worth-the-lock-in">Why this is worth the lock-in</h2>
+<h2 id="why-this-is-worth-the-lock-in">Why this is worth the lock-in<a class="headerlink" href="#why-this-is-worth-the-lock-in" title="Permanent link">&para;</a></h2>
 <p><strong>Speed.</strong> uv resolves a typical lockfile in under a second. pipenv took tens of seconds — sometimes minutes on large dependency graphs. The dev loop genuinely feels different.</p>
 <p><strong>One config surface.</strong> <code>pyproject.toml</code> plus <code>uv.lock</code>. Two files. No <code>requirements.in</code>, no <code>requirements.txt</code>, no <code>Pipfile</code>, no <code>Pipfile.lock</code>.</p>
 <p><strong>Reproducibility by default.</strong> uv's lockfile is platform-portable and hash-locked. CI and a contributor's laptop get bit-identical environments without opt-in flags.</p>
 <p><strong>Dependency groups, not extras-abuse.</strong> uv first-classed PEP 735 dependency groups, which are exactly what's needed for the dev/lint/test/document/security split. The template previously used <code>[project.optional-dependencies]</code> and had to explain that those aren't really "optional," they're internal grouping. See <a href="design-principles.html#why-groups-not-extras">Design principles</a> for the full rationale.</p>
-<h2 id="what-the-template-gives-up">What the template gives up</h2>
+<h2 id="what-the-template-gives-up">What the template gives up<a class="headerlink" href="#what-the-template-gives-up" title="Permanent link">&para;</a></h2>
 <p><strong>Tool risk.</strong> uv is one company's project (Astral). If they pivot or the project stalls, a project built on it is more exposed than one that stuck with the pip/build/twine stack maintained by the PyPA. The scaffold mitigates by:</p>
 <ul>
 <li>Keeping <code>pyproject.toml</code> valid against PEP 517 / 518 / 621 — any PEP-compliant tool could build it.</li>
@@ -501,14 +501,14 @@
 </ul>
 <p><strong>Older Python support.</strong> uv itself supports far older interpreters than the template targets, so this project's chosen minimum Python version (as low as 3.10) isn't a constraint uv adds.</p>
 <p><strong>Familiarity.</strong> Some contributors will arrive expecting <code>pip install -r requirements.txt</code>. The README points them at <code>./workflow.cmd</code>, and <a href="../tutorials/first-run-setup.html">First-run setup</a> walks the whole loop.</p>
-<h2 id="when-this-decision-could-be-revisited">When this decision could be revisited</h2>
+<h2 id="when-this-decision-could-be-revisited">When this decision could be revisited<a class="headerlink" href="#when-this-decision-could-be-revisited" title="Permanent link">&para;</a></h2>
 <p>If two of these became true together:</p>
 <ol>
 <li>uv's lockfile format incompatibly changed and broke existing projects.</li>
 <li>A maintained alternative offered comparable speed and PEP 735 support.</li>
 </ol>
 <p>Then the cost of migration would be one template revision and a <code>copier update</code>. The decision is reversible at the template level.</p>
-<h2 id="see-also">See also</h2>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="design-principles.html">Design principles</a> — why dependency groups replaced extras.</li>
 <li><a href="../reference/dependency-groups.html">Dependency groups</a> — the groups this project ships with.</li>
@@ -526,6 +526,7 @@
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js"></script>
+        <script src="https://unpkg.com/mermaid@11/dist/mermaid.min.js"></script>
 
         <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
