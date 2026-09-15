@@ -64,6 +64,9 @@ The workflows assume the following. Run the commands from a clone with `OWNER=sc
 
 - **Change the rules**: edit `AGENTS.md` in a pull request. It is the agent's prompt; keep it short.
 - **Ask for something**: comment `@claude ...` on an issue or PR. Only people with write access can trigger it; issue text from others is treated as untrusted input.
+- **Merge your own pull requests**: GitHub never lets an author approve their own PR, and `main` requires one
+  approval. Comment `@claude review this PR` so the agent reviews and approves it (its review counts), or, when the
+  agent is unavailable, merge with `gh pr merge --squash --admin`, which GitHub records as a bypass.
 - **Run maintenance now**: `gh workflow run claude-maintenance.yaml`.
 - **Read what it did**: the weekly summary lands on the issue titled *Maintenance log*; details are in the workflow run logs.
 - **Pause it**: `gh workflow disable claude-maintenance.yaml` (and `claude.yaml`). Dependabot and the auto-merge workflow keep running; disable those in their files if needed.
