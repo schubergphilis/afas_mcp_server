@@ -1,0 +1,70 @@
+name: Claude Code
+
+# The interactive maintainer agent. It answers `@claude` from people with write access, in issue
+# and pull request comments, in pull request reviews, and in the title or body of a newly opened
+# issue. The action itself refuses triggers from users without write access and from bots, so
+# the `if` below only keeps runners from starting for comments that never mention it.
+#
+# Everything the agent does is bound by AGENTS.md, which CLAUDE.md imports. It commits and
+# comments as the Claude GitHub App, so its pushes trigger CI like anyone else's.
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  pull_request_review:
+    types: [submitted]
+  issues:
+    types: [opened]
+
+# Workflow-level floor; the job widens to what the agent needs.
+permissions:
+  contents: read
+
+env:
+  # Keeps `./workflow.cmd` non-interactive: the first-run bootstrap would otherwise prompt.
+  CI: "true"
+
+concurrency:
+  group: claude-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  claude:
+    name: Respond to @claude
+    if: >-
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          # Full history: the agent reads changelogs and blames; the action supplies its own credentials.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
+        with:
+          enable-cache: true
+
+      - name: Run Claude Code
+        uses: anthropics/claude-code-action@bf38e86e58df9ebf3420326d019f955bb3be64dd  # v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # The shell is limited to the project's own task runner, uv, git and gh; the web to the
+          # sites the manual points at. Widen deliberately, in a pull request, when a task needs more.
+          claude_args: |
+            --max-turns 60
+            --allowedTools "Bash(./workflow.cmd:*),Bash(uv:*),Bash(uvx:*),Bash(git:*),Bash(gh:*),Read,Edit,MultiEdit,Write,Glob,Grep,WebFetch(domain:github.com),WebFetch(domain:pypi.org),WebFetch(domain:help.afas.nl),WebFetch(domain:docs.astral.sh),WebFetch(domain:modelcontextprotocol.io)"

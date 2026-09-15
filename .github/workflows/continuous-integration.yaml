@@ -1,0 +1,124 @@
+name: Continuous Integration
+
+on:
+  push:
+
+# Workflow-level floor. Without it every job would inherit the repository default,
+# which for many repositories is the full read/write token — far more than a lint or
+# test run needs. Jobs below narrow further; none of them writes anything.
+permissions:
+  contents: read
+
+# Why every checkout below sets `persist-credentials: false`, stated once rather than in
+# each job: auth goes into an `http.extraheader` that is removed once the fetch is done, so
+# no credential is left in `.git/config` and `origin` stays a clean URL. That matters
+# because the SBOM reads `origin` for its VCS reference and ships inside the wheel — a token
+# there becomes public and permanent. An invariant asserts none of these copies drifts.
+
+jobs:
+  build-deps-image:
+    uses: ./.github/workflows/build-deps-image.yaml
+    permissions:
+      contents: read
+      # The only job that publishes: it pushes the deps image to ghcr.
+      packages: write
+
+  lint:
+    name: Lint
+    needs: build-deps-image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Pulling the deps image from ghcr goes through GITHUB_TOKEN; without
+      # `packages: read` the manifest request comes back 403.
+      packages: read
+    container:
+      image: ${{ needs.build-deps-image.outputs.image }}
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          # See the note above the jobs for why.
+          persist-credentials: false
+
+      - name: Lint code
+        run: ./workflow.cmd lint
+
+  test:
+    name: Test (tox matrix)
+    needs: build-deps-image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Pulling the deps image from ghcr goes through GITHUB_TOKEN; without
+      # `packages: read` the manifest request comes back 403.
+      packages: read
+    container:
+      image: ${{ needs.build-deps-image.outputs.image }}
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          # See the note above the jobs for why.
+          persist-credentials: false
+
+      - name: Run tests
+        run: ./workflow.cmd test.tox
+
+  secure:
+    name: Security audit
+    needs: build-deps-image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Pulling the deps image from ghcr goes through GITHUB_TOKEN; without
+      # `packages: read` the manifest request comes back 403.
+      packages: read
+    container:
+      image: ${{ needs.build-deps-image.outputs.image }}
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          # See the note above the jobs for why.
+          persist-credentials: false
+
+      - name: Audit dependencies
+        run: ./workflow.cmd secure.audit
+
+  build:
+    name: Build
+    needs: build-deps-image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Pulling the deps image from ghcr goes through GITHUB_TOKEN; without
+      # `packages: read` the manifest request comes back 403.
+      packages: read
+    container:
+      image: ${{ needs.build-deps-image.outputs.image }}
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          # See the note above the jobs for why.
+          persist-credentials: false
+
+      - name: Build package
+        run: ./workflow.cmd build

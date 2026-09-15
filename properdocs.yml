@@ -1,0 +1,88 @@
+site_name: AFAS MCP Server
+site_author: Ellert van der Vecht
+site_description: Open-source MCP server that exposes AFAS Profit GetConnectors, UpdateConnectors and metainfo to AI agents
+
+theme:
+  name: mkdocs
+  custom_dir: docs-theme
+  color_mode: auto
+  user_color_mode_toggle: true
+  locale: en
+
+use_directory_urls: false
+
+nav:
+  - Home: index.md
+  - Tutorials:
+    - Getting started: tutorials/getting-started.md
+  - How-to:
+    - Connect an MCP client: how-to/connect-an-mcp-client.md
+    - Enable writes safely: how-to/enable-writes-safely.md
+  - Reference:
+    - Tools: reference/tools.md
+    - Configuration: reference/configuration.md
+    - API: reference/api.md
+    - Changelog: reference/changelog.md
+  - Explanation:
+    - About AFAS MCP Server: explanation/about-your-project.md
+  - Developer:
+    - The scaffold: developer/index.md
+    - Tutorials:
+      - First-run setup: developer/tutorials/first-run-setup.md
+      - Make your first release: developer/tutorials/make-your-first-release.md
+    - How-to:
+      - Document your project: developer/how-to/document-your-project.md
+      - Add a dependency: developer/how-to/add-a-dependency.md
+      - Add a workflow task: developer/how-to/add-a-workflow-task.md
+      - Customize the bootstrap: developer/how-to/customize-the-bootstrap.md
+      - Preview docs locally: developer/how-to/preview-docs-locally.md
+      - Run tests for one Python version: developer/how-to/run-tests-for-one-python-version.md
+      - Triage a security finding: developer/how-to/triage-a-security-finding.md
+      - Build and push a container: developer/how-to/build-and-push-a-container.md
+      - Maintain the repository with an agent: developer/how-to/maintain-with-an-agent.md
+    - Reference:
+      - Invoke task catalog: developer/reference/invoke-tasks.md
+      - Dependency groups: developer/reference/dependency-groups.md
+      - Configuration files: developer/reference/configuration-files.md
+      - CI framework internals: developer/reference/ci-framework.md
+    - Explanation:
+      - Design principles: developer/explanation/design-principles.md
+      - The CI tasks architecture: developer/explanation/the-ci-tasks-architecture.md
+      - How uv is used: developer/explanation/how-uv-is-used.md
+      - SBOM and security model: developer/explanation/sbom-and-security-model.md
+      - Testing strategy: developer/explanation/testing-strategy.md
+
+watch:
+  - src
+
+plugins:
+- include-markdown
+- mkdocstrings:
+    handlers:
+      python:
+        inventories:
+        - url: https://docs.python.org/3/objects.inv
+          domains: [std, py]
+        - https://typing-extensions.readthedocs.io/en/latest/objects.inv
+        paths: [src]
+        options:
+          backlinks: tree
+          docstring_options:
+            ignore_init_summary: true
+          docstring_style: google
+          docstring_section_style: list
+          heading_level: 4
+          inherited_members: true
+          merge_init_into_class: true
+          parameter_headings: true
+          separate_signature: true
+          show_bases: true
+          show_inheritance_diagram: true
+          show_root_heading: true
+          show_root_full_path: false
+          show_source: false
+          show_signature_annotations: true
+          show_symbol_type_heading: true
+          show_symbol_type_toc: true
+          signature_crossrefs: true
+          summary: true

@@ -1,0 +1,82 @@
+"""Container task definitions for building and running the deps image."""
+
+import hashlib
+from typing import cast
+
+from invoke import Collection, Context, Task, task
+
+from _CI.info import read as read_info
+
+from .configuration import DEPS_IMAGE_FILE, DOCKERFILE_DEPS, IMAGE_NAME, UV_LOCK
+from .github import publish_deps_image
+from .shared import container_engine, execute, is_ci, logged
+
+
+def deps_image_tag() -> str:
+    """Content-address the deps image on every input that changes what it contains.
+
+    The lockfile alone is not enough: editing ``Dockerfile.deps`` or bumping the base
+    image changes the image's contents without changing its tag, so CI would keep
+    running a stale image.
+
+    Each input is reduced to its own hex digest before being folded into the outer
+    hash. Those digests are fixed-width, so the concatenation is unambiguous — no
+    combination of inputs can collide with a different combination — and the whole
+    thing is reproducible in shell with `sha256sum`, which the GitLab pipeline needs
+    because its deps job runs in kaniko without Python. Keep the two in step.
+    """
+    digest = hashlib.sha256()
+    parts = (
+        UV_LOCK.read_bytes(),
+        DOCKERFILE_DEPS.read_bytes(),
+        read_info('info.base-image').encode('utf-8'),
+    )
+    for part in parts:
+        digest.update(hashlib.sha256(part).hexdigest().encode('ascii'))
+    return digest.hexdigest()[:32]
+
+
+@task
+@logged('container.build')
+def build(context: Context) -> None:
+    """Build the dependency cache container image locally."""
+    engine = container_engine()
+    base_image = read_info('info.base-image')
+    execute(
+        context,
+        f'{engine} build --build-arg BASE_IMAGE={base_image} -f {DOCKERFILE_DEPS} -t {IMAGE_NAME}:latest .',
+    )
+
+
+@task
+@logged('container.publish')
+def publish(context: Context) -> None:
+    """Build the deps image and publish to a container registry (CI) or keep it local.
+
+    In CI: delegates to the host-specific submodule (``github``)
+    to log in and push.
+
+    Locally: builds and tags the image without pushing anywhere.
+
+    Writes the full image reference to ``.deps-image`` for downstream steps. In CI
+    that reference is digest-pinned, so a tag repointed mid-run cannot change the
+    container a later job runs in.
+    """
+    tag = deps_image_tag()
+    if is_ci():
+        image = publish_deps_image(context, tag)
+    else:
+        image = f'{IMAGE_NAME}:{tag}'
+        engine = container_engine()
+        result = context.run(f'{engine} image inspect {image}', hide=True, warn=True)
+        if result and not result.failed:
+            print(f'Image already exists: {image}')
+        else:
+            base_image = read_info('info.base-image')
+            execute(context, f'{engine} build --build-arg BASE_IMAGE={base_image} -f {DOCKERFILE_DEPS} -t {image} .')
+    DEPS_IMAGE_FILE.write_text(image, encoding='utf-8')
+
+
+namespace = Collection('container')
+namespace.add_task(cast(Task, publish), default=True)
+namespace.add_task(cast(Task, build))

@@ -1,0 +1,15 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: d4de764
+_src_path: https://github.com/costastf/paleofuturistic_python
+email: evandervecht@schubergphilis.com
+full_name: Ellert van der Vecht
+git_hosting_service: github
+integrate_dependency_track: false
+integrate_pages: true
+license: Apache-2.0
+max_python_version: '3.14'
+min_python_version: '3.10'
+project_description: Open-source MCP server that exposes AFAS Profit GetConnectors,
+    UpdateConnectors and metainfo to AI agents
+project_name: AFAS MCP Server
+project_slug: afas_mcp_server

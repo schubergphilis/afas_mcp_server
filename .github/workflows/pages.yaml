@@ -1,0 +1,44 @@
+name: Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build-deps-image:
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build-deps-image.yaml
+
+  deploy:
+    needs: build-deps-image
+    runs-on: ubuntu-latest
+    container: ${{ needs.build-deps-image.outputs.image }}
+    permissions:
+      # `contents: write` is required, not an oversight: `properdocs gh-deploy` commits the
+      # built site to the `gh-pages` branch. That flow is deliberate — see "Why gh-pages
+      # branch instead of the Actions-source flow?" in the published docs — so the
+      # upload-pages-artifact/deploy-pages actions, and the narrower scopes they would
+      # allow, are intentionally not used.
+      contents: write
+      packages: read
+      pages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          fetch-depth: 0
+          # Deliberately left persisted, unlike every other checkout here: gh-deploy
+          # pushes with these credentials. This job builds no SBOM, so nothing reads the
+          # git config into a published artefact.
+          persist-credentials: true
+      - name: Build and deploy docs
+        run: ./workflow.cmd document.deploy-github
+        env:
+          GITHUB_TOKEN: ${{ github.token }}

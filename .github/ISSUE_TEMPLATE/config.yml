@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/schubergphilis/afas_mcp_server/security/advisories/new
+    about: Report privately through GitHub's vulnerability reporting, never in a public issue.
+  - name: Documentation
+    url: https://schubergphilis.github.io/afas_mcp_server/
+    about: Tutorials, how-tos, and the full tool and configuration reference.

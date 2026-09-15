@@ -1,0 +1,26 @@
+diff --git a/_CI/lib/vendor/bin/inv b/_CI/lib/vendor/bin/inv
+--- a/_CI/lib/vendor/bin/inv
++++ b/_CI/lib/vendor/bin/inv
+@@ -2,2 +2,9 @@
+ import sys
++from pathlib import Path
++CI_DIRECTORY_NAME = '_CI'
++for directory in Path(__file__).parents:
++    sys.path.insert(0, str(directory))
++    if directory.name == CI_DIRECTORY_NAME:
++        sys.path.insert(0, str(directory.parent))
++        break
+ from invoke.main import program
+diff --git a/_CI/lib/vendor/bin/invoke b/_CI/lib/vendor/bin/invoke
+--- a/_CI/lib/vendor/bin/invoke
++++ b/_CI/lib/vendor/bin/invoke
+@@ -2,2 +2,9 @@
+ import sys
++from pathlib import Path
++CI_DIRECTORY_NAME = '_CI'
++for directory in Path(__file__).parents:
++    sys.path.insert(0, str(directory))
++    if directory.name == CI_DIRECTORY_NAME:
++        sys.path.insert(0, str(directory.parent))
++        break
+ from invoke.main import program

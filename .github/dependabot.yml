@@ -1,0 +1,67 @@
+# Dependency management for this repository.
+#
+# Dependabot proposes the updates; CI judges them; `dependabot-auto-merge.yaml` merges the
+# low-risk ones and hands the rest to the maintainer agent (see AGENTS.md).
+#
+# Every ecosystem waits seven days after a release before proposing it. Compromised or broken
+# releases are usually reported and yanked within days, so the cooldown lets the ecosystem
+# screen a release before it can enter this lockfile. This replaces the fixed
+# `[tool.uv] exclude-newer` date the project template ships with: that date makes uv refuse
+# every newer version outright, which would make each Dependabot lock update fail instead of
+# waiting.
+version: 2
+updates:
+  - package-ecosystem: uv
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Amsterdam
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 10
+    # Conventional-commit titles so `cz check` and the changelog accept the squash commits:
+    # `build(deps): bump mcp ...` for runtime dependencies, `build(deps-dev): ...` for groups.
+    commit-message:
+      prefix: build
+      prefix-development: build
+      include: scope
+    groups:
+      # Everything that is not shipped in the wheel arrives as one weekly PR. The auto-merge
+      # workflow merges it when CI is green and no update in it is a major version.
+      dev-tooling:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - mcp
+          - mcp-types
+          - httpx2
+          - pydantic
+          - pydantic-settings
+          - typing-extensions
+    ignore:
+      # The uv pin appears in five places that must move together (see docs/developer/reference/
+      # dependency-groups.md); `./workflow.cmd develop.bump-uv` is the only thing that moves it.
+      - dependency-name: uv
+      # ruff 0.16 lints `_CI/` against `_CI/pyproject.toml` (requires-python >= 3.12) and reports
+      # findings whose fixes would break Python 3.10. Lift this once that mismatch is fixed.
+      - dependency-name: ruff
+        versions: [">=0.16.0"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Amsterdam
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: ci
+    groups:
+      # Actions are pinned by commit SHA with a version comment; Dependabot moves both.
+      github-actions:
+        patterns:
+          - "*"

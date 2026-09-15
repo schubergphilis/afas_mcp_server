@@ -1,0 +1,122 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - main
+
+# Floor for the workflow; the publish job widens it to what Trusted Publishing needs.
+# Without this the tag-detection job would inherit the repository default token.
+permissions:
+  contents: read
+
+jobs:
+  detect:
+    name: Detect release tag
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      tag: ${{ steps.find.outputs.tag }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          # Full history: the step below walks the pushed commits looking for a tag.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - id: find
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+        run: |
+          if [ "${BEFORE}" = "0000000000000000000000000000000000000000" ]; then
+            range="${AFTER}"
+          else
+            range="${BEFORE}..${AFTER}"
+          fi
+          tag=""
+          for sha in $(git log "${range}" --format='%H'); do
+            candidate=$(git tag --points-at "${sha}" | grep -E '^v[0-9]' | head -n1 || true)
+            if [ -n "${candidate}" ]; then
+              tag="${candidate}"
+              break
+            fi
+          done
+          if [ -n "${tag}" ]; then
+            echo "Release tag detected: ${tag}"
+            echo "tag=${tag}" >> "${GITHUB_OUTPUT}"
+          else
+            echo "No v-prefixed tag on the incoming commits; publish will skip."
+          fi
+
+  build-deps-image:
+    needs: detect
+    if: ${{ needs.detect.outputs.tag != '' }}
+    uses: ./.github/workflows/build-deps-image.yaml
+    permissions:
+      contents: read
+      packages: write
+
+  publish:
+    name: Publish package
+    needs: [detect, build-deps-image]
+    if: ${{ needs.detect.outputs.tag != '' }}
+    runs-on: ubuntu-latest
+    permissions:
+      # Required for PyPI Trusted Publishing. GitHub Actions only injects
+      # ACTIONS_ID_TOKEN_REQUEST_URL / _TOKEN when the job can write OIDC
+      # tokens; without this, `uv publish` has nothing to exchange and
+      # `release.publish` falls back to legacy UV_PUBLISH_* credentials.
+      id-token: write
+      # Declaring any `permissions:` entry flips every other scope to `none`
+      # for this job. The checkout step needs read access to fetch the release
+      # tag — without this it 403s. Kept at `read` (not write) so a compromised
+      # build step cannot push back to the repo.
+      contents: read
+      # The job runs inside the deps image from ghcr.io. Pulling that image
+      # uses GITHUB_TOKEN via the `container.credentials` block; without
+      # `packages: read` ghcr returns 403 on the manifest HEAD request.
+      # `read` only — `build-deps-image` is the job that publishes.
+      packages: read
+      # Lets `attest-build-provenance` record the attestation against this repository.
+      # It also needs `id-token: write` above to sign, which Trusted Publishing already
+      # requires — so provenance costs exactly this one extra scope.
+      attestations: write
+    container:
+      image: ${{ needs.build-deps-image.outputs.image }}
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    environment: pypi
+
+    steps:
+      - name: Checkout release tag
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          ref: ${{ needs.detect.outputs.tag }}
+          # Critical in this job specifically: it builds the SBOM, whose VCS reference is
+          # read from `origin` and ships inside the wheel to PyPI. A credential left in
+          # the git config is the one that becomes permanent and public.
+          persist-credentials: false
+
+      - name: Build distribution
+        run: ./workflow.cmd release.dist
+
+      # Signs a provenance statement binding these exact files to this workflow, commit and
+      # runner, so a consumer can verify where the wheel on PyPI came from:
+      #   gh attestation verify <file> --repo <owner>/<repo>
+      # It must sit between building and publishing, and `release.publish --prebuilt` below
+      # must not rebuild — attesting one set of files and uploading another would produce an
+      # attestation that verifies nothing.
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8  # v4.2.2
+        with:
+          subject-path: dist/*
+
+      - name: Publish package and upload SBOM
+        env:
+          UV_PUBLISH_URL: ${{ secrets.UV_PUBLISH_URL }}
+          UV_PUBLISH_PASSWORD: ${{ secrets.UV_PUBLISH_PASSWORD }}
+          UV_PUBLISH_USERNAME: ${{ secrets.UV_PUBLISH_USERNAME }}
+        run: ./workflow.cmd release.publish --prebuilt

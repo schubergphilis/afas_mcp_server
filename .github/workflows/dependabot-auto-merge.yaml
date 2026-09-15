@@ -1,0 +1,55 @@
+name: Dependabot auto-merge
+
+# Merges the Dependabot updates that experience says are safe once CI is green, and labels the
+# rest for the maintainer agent (see AGENTS.md, "Dependency updates").
+#
+# Safe: any GitHub Actions update, and the weekly `dev-tooling` group as long as no update in it
+# is a major version. Everything else, which means every runtime dependency and every major bump,
+# gets the `agent-review` label and waits for a review.
+#
+# `gh pr merge --auto` only waits for checks that branch protection *requires*. Without a
+# protected `main` that requires the Continuous Integration jobs, it would merge immediately;
+# the repository settings in docs/developer/how-to/maintain-with-an-agent.md are therefore
+# a prerequisite, not a nicety.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  triage:
+    name: Approve or hand over
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98  # v3.1.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Approve and enable auto-merge for low-risk updates
+        if: >-
+          steps.metadata.outputs.package-ecosystem == 'github_actions' ||
+          (steps.metadata.outputs.dependency-group == 'dev-tooling' &&
+           steps.metadata.outputs.update-type != 'version-update:semver-major')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          gh pr review --approve "$PR_URL" --body "Low-risk dependency update; merging automatically once CI passes."
+          gh pr merge --auto --squash "$PR_URL"
+
+      - name: Label the rest for the maintainer agent
+        if: >-
+          !(steps.metadata.outputs.package-ecosystem == 'github_actions' ||
+            (steps.metadata.outputs.dependency-group == 'dev-tooling' &&
+             steps.metadata.outputs.update-type != 'version-update:semver-major'))
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: gh pr edit "$PR_URL" --add-label agent-review

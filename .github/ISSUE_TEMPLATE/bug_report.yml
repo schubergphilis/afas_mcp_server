@@ -1,0 +1,53 @@
+name: Bug report
+description: Something the server does wrong or not at all
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Please **remove tokens, member ids and personal data** from anything you paste.
+        Security problems go through the Security tab, not here (see SECURITY.md).
+  - type: input
+    id: version
+    attributes:
+      label: Server version
+      description: Output of `afas-mcp-server --version`
+      placeholder: afas-mcp-server 0.3.1
+    validations:
+      required: true
+  - type: dropdown
+    id: transport
+    attributes:
+      label: Transport
+      options: [stdio, streamable-http]
+    validations:
+      required: true
+  - type: input
+    id: client
+    attributes:
+      label: MCP client
+      placeholder: Claude Desktop 1.x, Claude Code, Cursor, ...
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: Which tool was called, with which arguments (redacted), and what came back.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: afas
+    attributes:
+      label: AFAS side
+      description: Connector id and type (GetConnector / UpdateConnector), environment kind (production / test / accept), and whether the same call works from another tool such as Postman.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Server log (stderr), redacted
+      description: Run with `AFAS_LOG_LEVEL=DEBUG` if you can. Remove the Authorization header and any tokens.
+      render: text
