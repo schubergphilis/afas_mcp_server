@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Ellert van der Vecht">
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Testing strategy - AFAS MCP Server</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../css/brands.min.css" rel="stylesheet">
+        <link href="../../css/solid.min.css" rel="stylesheet">
+        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../../index.html">AFAS MCP Server</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href="../../index.html" class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Tutorials</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../tutorials/getting-started.html" class="dropdown-item">Getting started</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">How-to</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../how-to/connect-an-mcp-client.html" class="dropdown-item">Connect an MCP client</a>
+</li>
+                                    
+<li>
+    <a href="../../how-to/enable-writes-safely.html" class="dropdown-item">Enable writes safely</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Reference</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../reference/tools.html" class="dropdown-item">Tools</a>
+</li>
+                                    
+<li>
+    <a href="../../reference/configuration.html" class="dropdown-item">Configuration</a>
+</li>
+                                    
+<li>
+    <a href="../../reference/api.html" class="dropdown-item">API</a>
+</li>
+                                    
+<li>
+    <a href="../../reference/changelog.html" class="dropdown-item">Changelog</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Explanation</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../explanation/about-your-project.html" class="dropdown-item">About AFAS MCP Server</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Developer</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../index.html" class="dropdown-item">The scaffold</a>
+</li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Tutorials</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../tutorials/first-run-setup.html" class="dropdown-item">First-run setup</a>
+</li>
+            
+<li>
+    <a href="../tutorials/make-your-first-release.html" class="dropdown-item">Make your first release</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">How-to</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../how-to/document-your-project.html" class="dropdown-item">Document your project</a>
+</li>
+            
+<li>
+    <a href="../how-to/add-a-dependency.html" class="dropdown-item">Add a dependency</a>
+</li>
+            
+<li>
+    <a href="../how-to/add-a-workflow-task.html" class="dropdown-item">Add a workflow task</a>
+</li>
+            
+<li>
+    <a href="../how-to/customize-the-bootstrap.html" class="dropdown-item">Customize the bootstrap</a>
+</li>
+            
+<li>
+    <a href="../how-to/preview-docs-locally.html" class="dropdown-item">Preview docs locally</a>
+</li>
+            
+<li>
+    <a href="../how-to/run-tests-for-one-python-version.html" class="dropdown-item">Run tests for one Python version</a>
+</li>
+            
+<li>
+    <a href="../how-to/triage-a-security-finding.html" class="dropdown-item">Triage a security finding</a>
+</li>
+            
+<li>
+    <a href="../how-to/build-and-push-a-container.html" class="dropdown-item">Build and push a container</a>
+</li>
+            
+<li>
+    <a href="../how-to/maintain-with-an-agent.html" class="dropdown-item">Maintain the repository with an agent</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Reference</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../reference/invoke-tasks.html" class="dropdown-item">Invoke task catalog</a>
+</li>
+            
+<li>
+    <a href="../reference/dependency-groups.html" class="dropdown-item">Dependency groups</a>
+</li>
+            
+<li>
+    <a href="../reference/configuration-files.html" class="dropdown-item">Configuration files</a>
+</li>
+            
+<li>
+    <a href="../reference/ci-framework.html" class="dropdown-item">CI framework internals</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Explanation</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="design-principles.html" class="dropdown-item">Design principles</a>
+</li>
+            
+<li>
+    <a href="the-ci-tasks-architecture.html" class="dropdown-item">The CI tasks architecture</a>
+</li>
+            
+<li>
+    <a href="how-uv-is-used.html" class="dropdown-item">How uv is used</a>
+</li>
+            
+<li>
+    <a href="sbom-and-security-model.html" class="dropdown-item">SBOM and security model</a>
+</li>
+            
+<li>
+    <a href="testing-strategy.html" class="dropdown-item active" aria-current="page">Testing strategy</a>
+</li>
+    </ul>
+  </li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                            <li class="nav-item">
+                                <a rel="prev" href="sbom-and-security-model.html" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" class="nav-link disabled">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                              <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
+                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                <span class="d-lg-none ms-2">Toggle theme</span>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                                    <i class="fa-solid fa-sun fa-fw"></i>
+                                    <span class="ms-2">Light</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                                    <i class="fa-solid fa-moon fa-fw"></i>
+                                    <span class="ms-2">Dark</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
+                                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                    <span class="ms-2">Auto</span>
+                                    <i class="fa-solid fa-check ms-auto"></i>
+                                  </button>
+                                </li>
+                              </ul>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <script src="../../js/darkmode.js"></script>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <style>
+            /* The theme styles bare <details> as admonition boxes; undo that inside the sidebar. */
+            .bs-sidebar .sitenav-section details {
+                padding: 0; margin: 0; border: 0; border-radius: 0;
+                background: transparent; text-align: inherit;
+            }
+            .bs-sidebar #toc-collapse .nav-link { padding: 2px 10px; }
+            .sitenav-section > details > summary { cursor: pointer; list-style: none; }
+            .sitenav-section > details > summary::-webkit-details-marker { display: none; }
+            .sitenav-section > details > summary::before { content: "\25B8"; display: inline-block; width: 1em; }
+            .sitenav-section > details[open] > summary::before { content: "\25BE"; }
+            .bs-sidebar .sitenav-section ul { margin-left: 0.9em; }
+            .bs-sidebar .nav .nav .nav { margin-left: 0; }
+            .bs-sidebar .sitenav-title {
+                font-weight: 600; font-size: 0.85em; text-transform: uppercase;
+                letter-spacing: 0.05em; opacity: 0.6; padding: 0.5rem 10px 0.15rem;
+            }
+        </style>
+        <div class="sitenav-title">Navigation</div>
+        <ul class="nav flex-column">
+            
+            <li class="nav-item">
+                <a href="../../index.html" class="nav-link">Home</a>
+            </li>
+            
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">Tutorials</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../../tutorials/getting-started.html" class="nav-link">Getting started</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">How-to</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../../how-to/connect-an-mcp-client.html" class="nav-link">Connect an MCP client</a>
+            </li>
+            <li class="nav-item">
+                <a href="../../how-to/enable-writes-safely.html" class="nav-link">Enable writes safely</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">Reference</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../../reference/tools.html" class="nav-link">Tools</a>
+            </li>
+            <li class="nav-item">
+                <a href="../../reference/configuration.html" class="nav-link">Configuration</a>
+            </li>
+            <li class="nav-item">
+                <a href="../../reference/api.html" class="nav-link">API</a>
+            </li>
+            <li class="nav-item">
+                <a href="../../reference/changelog.html" class="nav-link">Changelog</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">Explanation</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../../explanation/about-your-project.html" class="nav-link">About AFAS MCP Server</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            
+            <li class="nav-item sitenav-section">
+                <details open>
+                    <summary class="nav-link">Developer</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../index.html" class="nav-link">The scaffold</a>
+            </li>
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">Tutorials</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../tutorials/first-run-setup.html" class="nav-link">First-run setup</a>
+            </li>
+            <li class="nav-item">
+                <a href="../tutorials/make-your-first-release.html" class="nav-link">Make your first release</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">How-to</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../how-to/document-your-project.html" class="nav-link">Document your project</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/add-a-dependency.html" class="nav-link">Add a dependency</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/add-a-workflow-task.html" class="nav-link">Add a workflow task</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/customize-the-bootstrap.html" class="nav-link">Customize the bootstrap</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/preview-docs-locally.html" class="nav-link">Preview docs locally</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/run-tests-for-one-python-version.html" class="nav-link">Run tests for one Python version</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/triage-a-security-finding.html" class="nav-link">Triage a security finding</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/build-and-push-a-container.html" class="nav-link">Build and push a container</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/maintain-with-an-agent.html" class="nav-link">Maintain the repository with an agent</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">Reference</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../reference/invoke-tasks.html" class="nav-link">Invoke task catalog</a>
+            </li>
+            <li class="nav-item">
+                <a href="../reference/dependency-groups.html" class="nav-link">Dependency groups</a>
+            </li>
+            <li class="nav-item">
+                <a href="../reference/configuration-files.html" class="nav-link">Configuration files</a>
+            </li>
+            <li class="nav-item">
+                <a href="../reference/ci-framework.html" class="nav-link">CI framework internals</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            <li class="nav-item sitenav-section">
+                <details open>
+                    <summary class="nav-link">Explanation</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="design-principles.html" class="nav-link">Design principles</a>
+            </li>
+            <li class="nav-item">
+                <a href="the-ci-tasks-architecture.html" class="nav-link">The CI tasks architecture</a>
+            </li>
+            <li class="nav-item">
+                <a href="how-uv-is-used.html" class="nav-link">How uv is used</a>
+            </li>
+            <li class="nav-item">
+                <a href="sbom-and-security-model.html" class="nav-link">SBOM and security model</a>
+            </li>
+            <li class="nav-item">
+                <a href="testing-strategy.html" class="nav-link active fw-bold">Testing strategy</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+                    </ul>
+                </details>
+            </li>
+        </ul>
+        <div class="sitenav-title">On this page</div>
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#testing-strategy" class="nav-link">Testing strategy</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#layer-1-pytest" class="nav-link">Layer 1 — pytest</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#layer-2-coverage" class="nav-link">Layer 2 — Coverage</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#layer-3-tox" class="nav-link">Layer 3 — tox</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#what-we-dont-ship" class="nav-link">What we don't ship</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#smoke-tests-vs-real-tests" class="nav-link">Smoke tests vs. real tests</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#parallel-execution" class="nav-link">Parallel execution</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#coverage-of-_ci" class="nav-link">Coverage of _CI/</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#see-also" class="nav-link">See also</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<!-- canonical: synced from docs/using/explanation/testing-strategy.md in the paleofuturistic_python template repo. Edit there first. -->
+<h1 id="testing-strategy">Testing strategy</h1>
+<p>The scaffold layers three things to test this project's code: pytest for the test runner, coverage for what got executed, and tox for the multi-version matrix. Each does one job.</p>
+<h2 id="layer-1-pytest">Layer 1 — pytest</h2>
+<p>Why pytest and not unittest:</p>
+<ul>
+<li><strong>Fixtures</strong>. Sharable, composable test setup.</li>
+<li><strong>Parametrization</strong>. One test, many input rows.</li>
+<li><strong>Markers</strong>. <code>@pytest.mark.slow</code>, <code>@pytest.mark.integration</code>, sliced via <code>-m</code>.</li>
+<li><strong>Plugin ecosystem</strong>. xdist (parallel), coverage, hypothesis, asyncio, ...</li>
+</ul>
+<p>The scaffold ships pytest + a small set of plugins (coverage, xdist, html, env, metadata). Discover the registered markers with <code>./workflow.cmd test.pytest --args="--markers"</code> after bootstrap.</p>
+<h2 id="layer-2-coverage">Layer 2 — Coverage</h2>
+<p><code>pytest-cov</code> runs alongside pytest. The scaffold tracks branch coverage (not just line coverage) and writes HTML + JSON reports under <code>reports/</code>.</p>
+<p><code>pyproject.toml</code>'s <code>[tool.coverage.report]</code> has <code>fail_under</code> set, and the test task <strong>ratchets</strong> this value upward after each green run: if the latest coverage run was 87% and <code>fail_under</code> was 80%, the task bumps <code>fail_under</code> to 87%. Once engaged, the bar only goes up — lowering <code>fail_under</code> is a deliberate, reviewable change that shows up in the diff.</p>
+<h3 id="dormant-during-scaffold">Dormant during scaffold</h3>
+<p>The ratchet starts <strong>dormant</strong>. The smoke test (<code>def test_sanity</code> in <code>tests/test_&lt;slug&gt;.py</code>) drives the scaffolded project to 100% coverage on its very first run; if the ratchet engaged on that signal, the first real change would crash the build at a 100% floor. So the test task checks for the presence of <code>def test_sanity</code> and, while it's still there, prints a status line on every run explaining the dormant state and how to engage:</p>
+<pre><code>[ratchet] coverage=100% — scaffold still pristine (test_sanity present); ratchet dormant
+[ratchet]   ratchet engages when you remove `test_sanity` in tests/test_&lt;slug&gt;.py
+[ratchet]   to engage immediately, set [tool.test-ratchet] mode = &quot;strict&quot; in pyproject.toml
+</code></pre>
+<p>The moment <code>test_sanity</code> is deleted or renamed — i.e., the moment real tests start getting written — the ratchet engages and works exactly as described above. Once any non-zero <code>fail_under</code> is written, dormancy is over for good; re-adding <code>test_sanity</code> later doesn't reactivate it.</p>
+<p>If this scaffold was seeded into a codebase that's already covered, set <code>[tool.test-ratchet] mode = "strict"</code> in <code>pyproject.toml</code> to bypass the dormancy check entirely.</p>
+<p>Coverage regressions still can't slip in silently — they just can't slip in <em>or out</em> during the scaffold phase.</p>
+<h2 id="layer-3-tox">Layer 3 — tox</h2>
+<p>tox + tox-uv runs the test suite against every Python version in the project's range. Configured in <code>pyproject.toml</code>'s <code>[tool.tox]</code>, generated from the Python version range chosen at generation time.</p>
+<p><code>./workflow.cmd test</code> runs only one Python version (whichever the active uv venv resolved to). The full matrix runs in CI per shipped workflow, or locally via <code>./workflow.cmd test.tox</code> — see <a href="../how-to/run-tests-for-one-python-version.html">Run tests for one Python version</a> for slicing it.</p>
+<h2 id="what-we-dont-ship">What we don't ship</h2>
+<ul>
+<li><strong>A testing pyramid.</strong> The scaffold doesn't pre-create unit/integration/e2e folders. The example smoke test lives directly in <code>tests/</code>. Structure tests how the project warrants.</li>
+<li><strong>Hypothesis or other property-based tooling.</strong> Add it as a <code>test</code> group dep if wanted.</li>
+<li><strong>Mutation testing.</strong> Mutmut or cosmic-ray. Add them as a <code>quality</code> group concern if the project reaches for them.</li>
+<li><strong>A "tests" service in <code>docker-compose</code>.</strong> The deps cache image (<code>Dockerfile.deps</code>) is for CI deps, not for app testing.</li>
+</ul>
+<h2 id="smoke-tests-vs-real-tests">Smoke tests vs. real tests</h2>
+<p>The scaffold generated one smoke test — a <code>tests/test_&lt;slug&gt;.py</code> that exercises the example <code>hello()</code> function with two functions: <code>test_sanity</code> (an <code>assert True</code> placeholder) and <code>test_integration</code> (the actual call). Keep them or delete them; either is fine, but <code>test_sanity</code> doubles as the <a href="#dormant-during-scaffold">ratchet dormancy marker</a>, so removing it engages the ratchet.</p>
+<h2 id="parallel-execution">Parallel execution</h2>
+<p><code>pytest-xdist</code> runs tests across CPU cores by default (<code>-n auto</code> in the pytest config). Some tests don't play well with parallelism — anything touching the filesystem in a fixed location, or relying on shared global state.</p>
+<p>For those, add <code>@pytest.mark.serial</code> and a corresponding <code>-m "not serial"</code> / <code>-m serial</code> two-pass setup. The scaffold doesn't ship this scaffolding because most projects don't need it.</p>
+<h2 id="coverage-of-_ci">Coverage of <code>_CI/</code></h2>
+<p>The scaffold treats <code>_CI/</code> as part of the codebase for linting purposes but <strong>not</strong> for test coverage. The CI tooling isn't reasonably unit-testable — its job is to glue together external commands. Coverage of <code>_CI/</code> is implicit via the workflow tasks running successfully end-to-end on every commit.</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../how-to/run-tests-for-one-python-version.html">Run tests for one Python version</a> — the practical commands for the version matrix.</li>
+<li><a href="design-principles.html">Design principles</a> — why the scaffold uses dependency groups instead of extras.</li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://properdocs.org/">ProperDocs</a>.</p>
+        </footer>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js"></script>
+
+        <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

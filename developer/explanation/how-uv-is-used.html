@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Ellert van der Vecht">
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>How uv is used - AFAS MCP Server</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../css/brands.min.css" rel="stylesheet">
+        <link href="../../css/solid.min.css" rel="stylesheet">
+        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../../index.html">AFAS MCP Server</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href="../../index.html" class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Tutorials</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../tutorials/getting-started.html" class="dropdown-item">Getting started</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">How-to</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../how-to/connect-an-mcp-client.html" class="dropdown-item">Connect an MCP client</a>
+</li>
+                                    
+<li>
+    <a href="../../how-to/enable-writes-safely.html" class="dropdown-item">Enable writes safely</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Reference</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../reference/tools.html" class="dropdown-item">Tools</a>
+</li>
+                                    
+<li>
+    <a href="../../reference/configuration.html" class="dropdown-item">Configuration</a>
+</li>
+                                    
+<li>
+    <a href="../../reference/api.html" class="dropdown-item">API</a>
+</li>
+                                    
+<li>
+    <a href="../../reference/changelog.html" class="dropdown-item">Changelog</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Explanation</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../explanation/about-your-project.html" class="dropdown-item">About AFAS MCP Server</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Developer</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../index.html" class="dropdown-item">The scaffold</a>
+</li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Tutorials</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../tutorials/first-run-setup.html" class="dropdown-item">First-run setup</a>
+</li>
+            
+<li>
+    <a href="../tutorials/make-your-first-release.html" class="dropdown-item">Make your first release</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">How-to</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../how-to/document-your-project.html" class="dropdown-item">Document your project</a>
+</li>
+            
+<li>
+    <a href="../how-to/add-a-dependency.html" class="dropdown-item">Add a dependency</a>
+</li>
+            
+<li>
+    <a href="../how-to/add-a-workflow-task.html" class="dropdown-item">Add a workflow task</a>
+</li>
+            
+<li>
+    <a href="../how-to/customize-the-bootstrap.html" class="dropdown-item">Customize the bootstrap</a>
+</li>
+            
+<li>
+    <a href="../how-to/preview-docs-locally.html" class="dropdown-item">Preview docs locally</a>
+</li>
+            
+<li>
+    <a href="../how-to/run-tests-for-one-python-version.html" class="dropdown-item">Run tests for one Python version</a>
+</li>
+            
+<li>
+    <a href="../how-to/triage-a-security-finding.html" class="dropdown-item">Triage a security finding</a>
+</li>
+            
+<li>
+    <a href="../how-to/build-and-push-a-container.html" class="dropdown-item">Build and push a container</a>
+</li>
+            
+<li>
+    <a href="../how-to/maintain-with-an-agent.html" class="dropdown-item">Maintain the repository with an agent</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Reference</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../reference/invoke-tasks.html" class="dropdown-item">Invoke task catalog</a>
+</li>
+            
+<li>
+    <a href="../reference/dependency-groups.html" class="dropdown-item">Dependency groups</a>
+</li>
+            
+<li>
+    <a href="../reference/configuration-files.html" class="dropdown-item">Configuration files</a>
+</li>
+            
+<li>
+    <a href="../reference/ci-framework.html" class="dropdown-item">CI framework internals</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Explanation</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="design-principles.html" class="dropdown-item">Design principles</a>
+</li>
+            
+<li>
+    <a href="the-ci-tasks-architecture.html" class="dropdown-item">The CI tasks architecture</a>
+</li>
+            
+<li>
+    <a href="how-uv-is-used.html" class="dropdown-item active" aria-current="page">How uv is used</a>
+</li>
+            
+<li>
+    <a href="sbom-and-security-model.html" class="dropdown-item">SBOM and security model</a>
+</li>
+            
+<li>
+    <a href="testing-strategy.html" class="dropdown-item">Testing strategy</a>
+</li>
+    </ul>
+  </li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                            <li class="nav-item">
+                                <a rel="prev" href="the-ci-tasks-architecture.html" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="sbom-and-security-model.html" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                              <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
+                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                <span class="d-lg-none ms-2">Toggle theme</span>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                                    <i class="fa-solid fa-sun fa-fw"></i>
+                                    <span class="ms-2">Light</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                                    <i class="fa-solid fa-moon fa-fw"></i>
+                                    <span class="ms-2">Dark</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
+                                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                    <span class="ms-2">Auto</span>
+                                    <i class="fa-solid fa-check ms-auto"></i>
+                                  </button>
+                                </li>
+                              </ul>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <script src="../../js/darkmode.js"></script>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <style>
+            /* The theme styles bare <details> as admonition boxes; undo that inside the sidebar. */
+            .bs-sidebar .sitenav-section details {
+                padding: 0; margin: 0; border: 0; border-radius: 0;
+                background: transparent; text-align: inherit;
+            }
+            .bs-sidebar #toc-collapse .nav-link { padding: 2px 10px; }
+            .sitenav-section > details > summary { cursor: pointer; list-style: none; }
+            .sitenav-section > details > summary::-webkit-details-marker { display: none; }
+            .sitenav-section > details > summary::before { content: "\25B8"; display: inline-block; width: 1em; }
+            .sitenav-section > details[open] > summary::before { content: "\25BE"; }
+            .bs-sidebar .sitenav-section ul { margin-left: 0.9em; }
+            .bs-sidebar .nav .nav .nav { margin-left: 0; }
+            .bs-sidebar .sitenav-title {
+                font-weight: 600; font-size: 0.85em; text-transform: uppercase;
+                letter-spacing: 0.05em; opacity: 0.6; padding: 0.5rem 10px 0.15rem;
+            }
+        </style>
+        <div class="sitenav-title">Navigation</div>
+        <ul class="nav flex-column">
+            
+            <li class="nav-item">
+                <a href="../../index.html" class="nav-link">Home</a>
+            </li>
+            
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">Tutorials</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../../tutorials/getting-started.html" class="nav-link">Getting started</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">How-to</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../../how-to/connect-an-mcp-client.html" class="nav-link">Connect an MCP client</a>
+            </li>
+            <li class="nav-item">
+                <a href="../../how-to/enable-writes-safely.html" class="nav-link">Enable writes safely</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">Reference</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../../reference/tools.html" class="nav-link">Tools</a>
+            </li>
+            <li class="nav-item">
+                <a href="../../reference/configuration.html" class="nav-link">Configuration</a>
+            </li>
+            <li class="nav-item">
+                <a href="../../reference/api.html" class="nav-link">API</a>
+            </li>
+            <li class="nav-item">
+                <a href="../../reference/changelog.html" class="nav-link">Changelog</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">Explanation</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../../explanation/about-your-project.html" class="nav-link">About AFAS MCP Server</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            
+            <li class="nav-item sitenav-section">
+                <details open>
+                    <summary class="nav-link">Developer</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../index.html" class="nav-link">The scaffold</a>
+            </li>
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">Tutorials</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../tutorials/first-run-setup.html" class="nav-link">First-run setup</a>
+            </li>
+            <li class="nav-item">
+                <a href="../tutorials/make-your-first-release.html" class="nav-link">Make your first release</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">How-to</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../how-to/document-your-project.html" class="nav-link">Document your project</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/add-a-dependency.html" class="nav-link">Add a dependency</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/add-a-workflow-task.html" class="nav-link">Add a workflow task</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/customize-the-bootstrap.html" class="nav-link">Customize the bootstrap</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/preview-docs-locally.html" class="nav-link">Preview docs locally</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/run-tests-for-one-python-version.html" class="nav-link">Run tests for one Python version</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/triage-a-security-finding.html" class="nav-link">Triage a security finding</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/build-and-push-a-container.html" class="nav-link">Build and push a container</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/maintain-with-an-agent.html" class="nav-link">Maintain the repository with an agent</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">Reference</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../reference/invoke-tasks.html" class="nav-link">Invoke task catalog</a>
+            </li>
+            <li class="nav-item">
+                <a href="../reference/dependency-groups.html" class="nav-link">Dependency groups</a>
+            </li>
+            <li class="nav-item">
+                <a href="../reference/configuration-files.html" class="nav-link">Configuration files</a>
+            </li>
+            <li class="nav-item">
+                <a href="../reference/ci-framework.html" class="nav-link">CI framework internals</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            <li class="nav-item sitenav-section">
+                <details open>
+                    <summary class="nav-link">Explanation</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="design-principles.html" class="nav-link">Design principles</a>
+            </li>
+            <li class="nav-item">
+                <a href="the-ci-tasks-architecture.html" class="nav-link">The CI tasks architecture</a>
+            </li>
+            <li class="nav-item">
+                <a href="how-uv-is-used.html" class="nav-link active fw-bold">How uv is used</a>
+            </li>
+            <li class="nav-item">
+                <a href="sbom-and-security-model.html" class="nav-link">SBOM and security model</a>
+            </li>
+            <li class="nav-item">
+                <a href="testing-strategy.html" class="nav-link">Testing strategy</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+                    </ul>
+                </details>
+            </li>
+        </ul>
+        <div class="sitenav-title">On this page</div>
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#how-uv-is-used" class="nav-link">How uv is used</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#what-uv-replaces" class="nav-link">What uv replaces</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#why-this-is-worth-the-lock-in" class="nav-link">Why this is worth the lock-in</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#what-the-template-gives-up" class="nav-link">What the template gives up</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#when-this-decision-could-be-revisited" class="nav-link">When this decision could be revisited</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#see-also" class="nav-link">See also</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<!-- canonical: synced from docs/using/explanation/how-uv-is-used.md in the paleofuturistic_python template repo. Edit there first. -->
+<h1 id="how-uv-is-used">How uv is used</h1>
+<p>This project uses <a href="https://docs.astral.sh/uv/">uv</a> for every Python operation: creating virtualenvs, installing dependencies, resolving the lockfile, publishing to PyPI, even fetching Python interpreters. This page explains why, and what the scaffold gives up to get there.</p>
+<h2 id="what-uv-replaces">What uv replaces</h2>
+<p>In an older lineage of the template, a fresh checkout required: a system Python, pipx, virtualenv, pipenv, pip-tools, tox-uv, and twine. Each had its own configuration surface, its own caching behaviour, and its own update cadence.</p>
+<p>uv replaces all of them with a single Rust binary that:</p>
+<ul>
+<li>Installs and pins Python interpreters per project (no system-Python dependency).</li>
+<li>Resolves and locks dependencies (no <code>pip-compile</code>, no <code>pipenv</code>).</li>
+<li>Creates and manages virtualenvs (no <code>python -m venv</code>).</li>
+<li>Publishes to PyPI (no <code>twine</code>).</li>
+<li>Runs tools in ephemeral environments (<code>uvx</code>, no global <code>pipx</code>).</li>
+</ul>
+<h2 id="why-this-is-worth-the-lock-in">Why this is worth the lock-in</h2>
+<p><strong>Speed.</strong> uv resolves a typical lockfile in under a second. pipenv took tens of seconds — sometimes minutes on large dependency graphs. The dev loop genuinely feels different.</p>
+<p><strong>One config surface.</strong> <code>pyproject.toml</code> plus <code>uv.lock</code>. Two files. No <code>requirements.in</code>, no <code>requirements.txt</code>, no <code>Pipfile</code>, no <code>Pipfile.lock</code>.</p>
+<p><strong>Reproducibility by default.</strong> uv's lockfile is platform-portable and hash-locked. CI and a contributor's laptop get bit-identical environments without opt-in flags.</p>
+<p><strong>Dependency groups, not extras-abuse.</strong> uv first-classed PEP 735 dependency groups, which are exactly what's needed for the dev/lint/test/document/security split. The template previously used <code>[project.optional-dependencies]</code> and had to explain that those aren't really "optional," they're internal grouping. See <a href="design-principles.html#why-groups-not-extras">Design principles</a> for the full rationale.</p>
+<h2 id="what-the-template-gives-up">What the template gives up</h2>
+<p><strong>Tool risk.</strong> uv is one company's project (Astral). If they pivot or the project stalls, a project built on it is more exposed than one that stuck with the pip/build/twine stack maintained by the PyPA. The scaffold mitigates by:</p>
+<ul>
+<li>Keeping <code>pyproject.toml</code> valid against PEP 517 / 518 / 621 — any PEP-compliant tool could build it.</li>
+<li>Not relying on uv-specific syntax beyond dependency groups (which are themselves standardised).</li>
+</ul>
+<p><strong>Older Python support.</strong> uv itself supports far older interpreters than the template targets, so this project's chosen minimum Python version (as low as 3.10) isn't a constraint uv adds.</p>
+<p><strong>Familiarity.</strong> Some contributors will arrive expecting <code>pip install -r requirements.txt</code>. The README points them at <code>./workflow.cmd</code>, and <a href="../tutorials/first-run-setup.html">First-run setup</a> walks the whole loop.</p>
+<h2 id="when-this-decision-could-be-revisited">When this decision could be revisited</h2>
+<p>If two of these became true together:</p>
+<ol>
+<li>uv's lockfile format incompatibly changed and broke existing projects.</li>
+<li>A maintained alternative offered comparable speed and PEP 735 support.</li>
+</ol>
+<p>Then the cost of migration would be one template revision and a <code>copier update</code>. The decision is reversible at the template level.</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="design-principles.html">Design principles</a> — why dependency groups replaced extras.</li>
+<li><a href="../reference/dependency-groups.html">Dependency groups</a> — the groups this project ships with.</li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://properdocs.org/">ProperDocs</a>.</p>
+        </footer>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js"></script>
+
+        <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

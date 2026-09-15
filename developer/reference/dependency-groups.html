@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Ellert van der Vecht">
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Dependency groups - AFAS MCP Server</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../css/brands.min.css" rel="stylesheet">
+        <link href="../../css/solid.min.css" rel="stylesheet">
+        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../../index.html">AFAS MCP Server</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href="../../index.html" class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Tutorials</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../tutorials/getting-started.html" class="dropdown-item">Getting started</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">How-to</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../how-to/connect-an-mcp-client.html" class="dropdown-item">Connect an MCP client</a>
+</li>
+                                    
+<li>
+    <a href="../../how-to/enable-writes-safely.html" class="dropdown-item">Enable writes safely</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Reference</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../reference/tools.html" class="dropdown-item">Tools</a>
+</li>
+                                    
+<li>
+    <a href="../../reference/configuration.html" class="dropdown-item">Configuration</a>
+</li>
+                                    
+<li>
+    <a href="../../reference/api.html" class="dropdown-item">API</a>
+</li>
+                                    
+<li>
+    <a href="../../reference/changelog.html" class="dropdown-item">Changelog</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Explanation</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../explanation/about-your-project.html" class="dropdown-item">About AFAS MCP Server</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Developer</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../index.html" class="dropdown-item">The scaffold</a>
+</li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Tutorials</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../tutorials/first-run-setup.html" class="dropdown-item">First-run setup</a>
+</li>
+            
+<li>
+    <a href="../tutorials/make-your-first-release.html" class="dropdown-item">Make your first release</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">How-to</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../how-to/document-your-project.html" class="dropdown-item">Document your project</a>
+</li>
+            
+<li>
+    <a href="../how-to/add-a-dependency.html" class="dropdown-item">Add a dependency</a>
+</li>
+            
+<li>
+    <a href="../how-to/add-a-workflow-task.html" class="dropdown-item">Add a workflow task</a>
+</li>
+            
+<li>
+    <a href="../how-to/customize-the-bootstrap.html" class="dropdown-item">Customize the bootstrap</a>
+</li>
+            
+<li>
+    <a href="../how-to/preview-docs-locally.html" class="dropdown-item">Preview docs locally</a>
+</li>
+            
+<li>
+    <a href="../how-to/run-tests-for-one-python-version.html" class="dropdown-item">Run tests for one Python version</a>
+</li>
+            
+<li>
+    <a href="../how-to/triage-a-security-finding.html" class="dropdown-item">Triage a security finding</a>
+</li>
+            
+<li>
+    <a href="../how-to/build-and-push-a-container.html" class="dropdown-item">Build and push a container</a>
+</li>
+            
+<li>
+    <a href="../how-to/maintain-with-an-agent.html" class="dropdown-item">Maintain the repository with an agent</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Reference</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="invoke-tasks.html" class="dropdown-item">Invoke task catalog</a>
+</li>
+            
+<li>
+    <a href="dependency-groups.html" class="dropdown-item active" aria-current="page">Dependency groups</a>
+</li>
+            
+<li>
+    <a href="configuration-files.html" class="dropdown-item">Configuration files</a>
+</li>
+            
+<li>
+    <a href="ci-framework.html" class="dropdown-item">CI framework internals</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Explanation</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../explanation/design-principles.html" class="dropdown-item">Design principles</a>
+</li>
+            
+<li>
+    <a href="../explanation/the-ci-tasks-architecture.html" class="dropdown-item">The CI tasks architecture</a>
+</li>
+            
+<li>
+    <a href="../explanation/how-uv-is-used.html" class="dropdown-item">How uv is used</a>
+</li>
+            
+<li>
+    <a href="../explanation/sbom-and-security-model.html" class="dropdown-item">SBOM and security model</a>
+</li>
+            
+<li>
+    <a href="../explanation/testing-strategy.html" class="dropdown-item">Testing strategy</a>
+</li>
+    </ul>
+  </li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                            <li class="nav-item">
+                                <a rel="prev" href="invoke-tasks.html" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="configuration-files.html" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                              <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
+                                <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                <span class="d-lg-none ms-2">Toggle theme</span>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                                    <i class="fa-solid fa-sun fa-fw"></i>
+                                    <span class="ms-2">Light</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                                    <i class="fa-solid fa-moon fa-fw"></i>
+                                    <span class="ms-2">Dark</span>
+                                    <i class="fa-solid fa-check ms-auto d-none"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="true">
+                                    <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
+                                    <span class="ms-2">Auto</span>
+                                    <i class="fa-solid fa-check ms-auto"></i>
+                                  </button>
+                                </li>
+                              </ul>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <script src="../../js/darkmode.js"></script>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <style>
+            /* The theme styles bare <details> as admonition boxes; undo that inside the sidebar. */
+            .bs-sidebar .sitenav-section details {
+                padding: 0; margin: 0; border: 0; border-radius: 0;
+                background: transparent; text-align: inherit;
+            }
+            .bs-sidebar #toc-collapse .nav-link { padding: 2px 10px; }
+            .sitenav-section > details > summary { cursor: pointer; list-style: none; }
+            .sitenav-section > details > summary::-webkit-details-marker { display: none; }
+            .sitenav-section > details > summary::before { content: "\25B8"; display: inline-block; width: 1em; }
+            .sitenav-section > details[open] > summary::before { content: "\25BE"; }
+            .bs-sidebar .sitenav-section ul { margin-left: 0.9em; }
+            .bs-sidebar .nav .nav .nav { margin-left: 0; }
+            .bs-sidebar .sitenav-title {
+                font-weight: 600; font-size: 0.85em; text-transform: uppercase;
+                letter-spacing: 0.05em; opacity: 0.6; padding: 0.5rem 10px 0.15rem;
+            }
+        </style>
+        <div class="sitenav-title">Navigation</div>
+        <ul class="nav flex-column">
+            
+            <li class="nav-item">
+                <a href="../../index.html" class="nav-link">Home</a>
+            </li>
+            
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">Tutorials</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../../tutorials/getting-started.html" class="nav-link">Getting started</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">How-to</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../../how-to/connect-an-mcp-client.html" class="nav-link">Connect an MCP client</a>
+            </li>
+            <li class="nav-item">
+                <a href="../../how-to/enable-writes-safely.html" class="nav-link">Enable writes safely</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">Reference</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../../reference/tools.html" class="nav-link">Tools</a>
+            </li>
+            <li class="nav-item">
+                <a href="../../reference/configuration.html" class="nav-link">Configuration</a>
+            </li>
+            <li class="nav-item">
+                <a href="../../reference/api.html" class="nav-link">API</a>
+            </li>
+            <li class="nav-item">
+                <a href="../../reference/changelog.html" class="nav-link">Changelog</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">Explanation</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../../explanation/about-your-project.html" class="nav-link">About AFAS MCP Server</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            
+            <li class="nav-item sitenav-section">
+                <details open>
+                    <summary class="nav-link">Developer</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../index.html" class="nav-link">The scaffold</a>
+            </li>
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">Tutorials</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../tutorials/first-run-setup.html" class="nav-link">First-run setup</a>
+            </li>
+            <li class="nav-item">
+                <a href="../tutorials/make-your-first-release.html" class="nav-link">Make your first release</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">How-to</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../how-to/document-your-project.html" class="nav-link">Document your project</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/add-a-dependency.html" class="nav-link">Add a dependency</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/add-a-workflow-task.html" class="nav-link">Add a workflow task</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/customize-the-bootstrap.html" class="nav-link">Customize the bootstrap</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/preview-docs-locally.html" class="nav-link">Preview docs locally</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/run-tests-for-one-python-version.html" class="nav-link">Run tests for one Python version</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/triage-a-security-finding.html" class="nav-link">Triage a security finding</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/build-and-push-a-container.html" class="nav-link">Build and push a container</a>
+            </li>
+            <li class="nav-item">
+                <a href="../how-to/maintain-with-an-agent.html" class="nav-link">Maintain the repository with an agent</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            <li class="nav-item sitenav-section">
+                <details open>
+                    <summary class="nav-link">Reference</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="invoke-tasks.html" class="nav-link">Invoke task catalog</a>
+            </li>
+            <li class="nav-item">
+                <a href="dependency-groups.html" class="nav-link active fw-bold">Dependency groups</a>
+            </li>
+            <li class="nav-item">
+                <a href="configuration-files.html" class="nav-link">Configuration files</a>
+            </li>
+            <li class="nav-item">
+                <a href="ci-framework.html" class="nav-link">CI framework internals</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+            <li class="nav-item sitenav-section">
+                <details >
+                    <summary class="nav-link">Explanation</summary>
+                    <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="../explanation/design-principles.html" class="nav-link">Design principles</a>
+            </li>
+            <li class="nav-item">
+                <a href="../explanation/the-ci-tasks-architecture.html" class="nav-link">The CI tasks architecture</a>
+            </li>
+            <li class="nav-item">
+                <a href="../explanation/how-uv-is-used.html" class="nav-link">How uv is used</a>
+            </li>
+            <li class="nav-item">
+                <a href="../explanation/sbom-and-security-model.html" class="nav-link">SBOM and security model</a>
+            </li>
+            <li class="nav-item">
+                <a href="../explanation/testing-strategy.html" class="nav-link">Testing strategy</a>
+            </li>
+                    </ul>
+                </details>
+            </li>
+                    </ul>
+                </details>
+            </li>
+        </ul>
+        <div class="sitenav-title">On this page</div>
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#dependency-groups" class="nav-link">Dependency groups</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#runtime" class="nav-link">Runtime</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#dev-time-groups" class="nav-link">Dev-time groups</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#adding-to-a-group" class="nav-link">Adding to a group</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#why-everything-is-pinned-and-what-bounds-the-rest" class="nav-link">Why everything is pinned, and what bounds the rest</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#the-uv-pin-and-the-one-command-that-moves-it" class="nav-link">The uv pin, and the one command that moves it</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#how-ci-picks-them-up" class="nav-link">How CI picks them up</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#see-also" class="nav-link">See also</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="dependency-groups">Dependency groups</h1>
+<p>The template uses <a href="https://peps.python.org/pep-0735/">PEP 735 dependency groups</a> (uv's first-class support for them) to separate dev-time tooling from runtime requirements. Each group corresponds to one workflow task family.</p>
+<h2 id="runtime">Runtime</h2>
+<p>The <code>[project.dependencies]</code> list in <code>pyproject.toml</code>. These ship in the published wheel. Add via:</p>
+<pre><code class="language-bash">uv add &lt;package&gt;
+</code></pre>
+<h2 id="dev-time-groups">Dev-time groups</h2>
+<p>Listed under <code>[dependency-groups]</code> in <code>pyproject.toml</code>. They're installed by <code>develop.bootstrap</code> and on demand by individual workflow tasks, but never end up in the wheel.</p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Packages</th>
+<th>Used by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dev</code></td>
+<td>Aggregator that pulls in every group below.</td>
+<td>Default <code>uv sync</code> target; convenient for IDE setup.</td>
+</tr>
+<tr>
+<td><code>develop</code></td>
+<td><code>pre-commit</code>, <code>commitizen</code>, <code>tomlkit</code></td>
+<td><code>./workflow.cmd develop.*</code>, <code>release.*</code> (commitizen).</td>
+</tr>
+<tr>
+<td><code>lint</code></td>
+<td><code>ruff</code>, <code>pylint</code>, <code>ty</code>, <code>complexipy</code></td>
+<td><code>./workflow.cmd lint</code> and <code>format</code>.</td>
+</tr>
+<tr>
+<td><code>test</code></td>
+<td><code>pytest</code>, <code>pytest-cov</code>, <code>pytest-xdist</code>, <code>pytest-env</code>, <code>pytest-metadata</code>, <code>pytest-html</code>, <code>coverage</code>, <code>tox</code>, <code>tox-uv</code></td>
+<td><code>./workflow.cmd test</code>.</td>
+</tr>
+<tr>
+<td><code>document</code></td>
+<td><code>properdocs</code>, <code>mkdocstrings[python]</code>, <code>mkdocs-include-markdown-plugin</code></td>
+<td><code>./workflow.cmd document</code>.</td>
+</tr>
+<tr>
+<td><code>quality</code></td>
+<td><code>pyscn</code></td>
+<td><code>./workflow.cmd quality</code>.</td>
+</tr>
+<tr>
+<td><code>security</code></td>
+<td><code>pip-audit</code>, <code>cyclonedx-py</code></td>
+<td><code>./workflow.cmd secure</code>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="adding-to-a-group">Adding to a group</h2>
+<pre><code class="language-bash">uv add --group &lt;group-name&gt; &lt;package&gt;
+</code></pre>
+<p>This updates both <code>pyproject.toml</code> and <code>uv.lock</code>. Commit both. See <a href="../how-to/add-a-dependency.html">How-to: add a dependency</a> for the full flow.</p>
+<h2 id="why-everything-is-pinned-and-what-bounds-the-rest">Why everything is pinned, and what bounds the rest</h2>
+<p>Every entry in every group is pinned to an exact version, and <code>uv.lock</code> records the whole
+transitive closure. CI installs from the lock, so a resolution only changes when a commit
+changes it.</p>
+<p><strong>This project departs from the template here.</strong> The template also stamps a fixed
+<code>[tool.uv] exclude-newer</code> date that makes uv refuse anything published later, and expects
+upgrades to happen by moving that date and re-resolving by hand. This repository is instead
+maintained by Dependabot and an agent (see <a href="https://github.com/schubergphilis/afas_mcp_server/blob/main/AGENTS.md"><code>AGENTS.md</code></a>), and a fixed
+date would make every Dependabot lock update fail rather than wait. The seven-day cooldown
+the date provided lives in <code>.github/dependabot.yml</code> (<code>cooldown: default-days: 7</code>), which
+gates what is <em>proposed</em>: a release has to have been public for a week before Dependabot
+opens a PR for it.</p>
+<p>So upgrades still happen deliberately, one PR at a time:</p>
+<ul>
+<li>Dependabot opens PRs every Monday: one grouped PR for development tooling, one per runtime
+  dependency. Non-major tooling and GitHub Actions updates merge automatically when CI is
+  green; the rest is labelled <code>agent-review</code> and reviewed.</li>
+<li>Transitive dependencies are refreshed monthly with <code>uv lock --upgrade</code> in a PR titled
+  <code>build(deps): refresh lockfile</code>.</li>
+<li>Dependabot never touches <code>uv</code> itself (see below) and, for now, ignores <code>ruff &gt;= 0.16</code>; both
+  exceptions are documented in <code>.github/dependabot.yml</code>.</li>
+</ul>
+<p><code>[tool.docker-versions]</code> is pinned by tag <em>and</em> digest. When bumping uv, change the version
+in the tag and the digest together: a reference carrying both resolves to the digest, so a
+bumped tag with a stale digest silently keeps the old image.</p>
+<h2 id="the-uv-pin-and-the-one-command-that-moves-it">The uv pin, and the one command that moves it</h2>
+<p>uv gets its own treatment because <code>[tool.uv] required-version</code> is an <strong>exact</strong> match: a stale
+uv pin does not merely lag, it refuses to run. And the version appears in five places that
+must agree:</p>
+<table>
+<thead>
+<tr>
+<th>Where</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[tool.uv] required-version</code></td>
+<td>the constraint every <code>uv</code> invocation checks</td>
+</tr>
+<tr>
+<td><code>uv==</code> in the <code>test</code> group</td>
+<td>tox-uv installs a uv binary into <code>.venv/bin</code> that would otherwise shadow the image's</td>
+</tr>
+<tr>
+<td><code>uv_build</code> upper bound in <code>[build-system]</code></td>
+<td>the build backend ships in lockstep with uv</td>
+</tr>
+<tr>
+<td>the <code>base-image</code> tag in <code>[tool.docker-versions]</code></td>
+<td>CI runs inside that image</td>
+</tr>
+<tr>
+<td><code>uv.lock</code></td>
+<td>resolved from the <code>test</code> group entry</td>
+</tr>
+</tbody>
+</table>
+<p>Like the quarantine date, <strong>the pin was the newest release that had been public for a week
+when this project was generated</strong> — not a literal inherited from the template, which would
+have grown staler the longer the template went unbumped.</p>
+<p>It does not advance on its own. This moves all five together, re-resolving the image digest
+and the lockfile in one step:</p>
+<pre><code class="language-bash">./workflow.cmd develop.bump-uv
+</code></pre>
+<p>It picks the newest release at least <strong>7 days</strong> old — long enough that a same-day release
+withdrawn hours later never reaches you, and the reason the pin is always resolvable under an
+<code>exclude-newer</code> stamped at generation. It refuses a version the <code>uv-build</code> backend has not
+published, says nothing changed rather than pretending, and warns when a bump crosses a minor
+version, because uv is pre-1.0 and minor releases may break behaviour.</p>
+<p>To take a specific version, including one newer than the cool-down allows:</p>
+<pre><code class="language-bash">./workflow.cmd develop.bump-uv --version=0.12.1
+</code></pre>
+<p><strong>Editing any of those five by hand is the failure this command exists to avoid</strong> — most of all
+the tag, whose digest has to be re-resolved with it.</p>
+<h2 id="how-ci-picks-them-up">How CI picks them up</h2>
+<p>The CI workflow installs only the group it needs for each job — <code>lint</code> job installs the <code>lint</code> group, <code>test</code> job installs <code>test</code>. This keeps job containers small and parallel-safe.</p>
+<p>The container images built by <code>./workflow.cmd container.publish</code> cache the <code>dev</code> group's resolution so subsequent CI runs skip the install step.</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../how-to/add-a-dependency.html">Add a dependency</a> — adding to any group.</li>
+<li><a href="configuration-files.html">Configuration files</a> — where the groups are declared.</li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://properdocs.org/">ProperDocs</a>.</p>
+        </footer>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js"></script>
+
+        <div class="modal" id="properdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
