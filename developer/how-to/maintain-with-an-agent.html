@@ -531,7 +531,9 @@
 <h2 id="before-you-start">Before you start<a class="headerlink" href="#before-you-start" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Admin access to the repository.</li>
-<li>A Claude API key from the <a href="https://platform.claude.com">Claude Console</a>, or a subscription token from <code>claude setup-token</code>.</li>
+<li>An admin of your organization in the <a href="https://platform.claude.com">Claude Console</a>, for a ten-minute one-time setup
+  of workload identity federation. (An API key stored as a secret also works; a subscription token from
+  <code>claude setup-token</code> does not for SSO-managed accounts.)</li>
 <li>The <a href="https://cli.github.com">GitHub CLI</a> logged in as an admin.</li>
 </ul>
 <h2 id="repository-settings">Repository settings<a class="headerlink" href="#repository-settings" title="Permanent link">&para;</a></h2>
@@ -541,12 +543,43 @@
 <p><strong>Install the Claude GitHub App</strong> on the repository: <a href="https://github.com/apps/claude">https://github.com/apps/claude</a>. It authenticates the agent's commits and comments.</p>
 </li>
 <li>
-<p><strong>Add the authentication secret</strong> the workflows read:</p>
+<p><strong>Give the agent access to the Claude API without storing a credential.</strong> The workflows use
+   <a href="https://platform.claude.com/docs/en/manage-claude/workload-identity-federation">workload identity federation</a>:
+   each run exchanges GitHub's OIDC token for short-lived API access through a Console service account. A Console
+   organization admin does this once under <em>Settings → Workload identity</em>:</p>
 </li>
 </ol>
-<div class="highlight"><pre><span></span><code>gh<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>ANTHROPIC_API_KEY<span class="w"> </span>--repo<span class="w"> </span><span class="nv">$OWNER</span>/<span class="nv">$REPO</span>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Register an issuer</td>
+<td>URL <code>https://token.actions.githubusercontent.com</code>, JWKS source <em>discovery</em></td>
+</tr>
+<tr>
+<td>Create a service account</td>
+<td>Add it to the workspace the agent should bill to; note its <code>svac_...</code> id</td>
+</tr>
+<tr>
+<td>Create a federation rule</td>
+<td>Target that service account; match subject prefix <code>repo:schubergphilis/afas_mcp_server:</code>; audience <code>https://api.anthropic.com</code>; note its <code>fdrl_...</code> id</td>
+</tr>
+</tbody>
+</table>
+<p>Then store the identifiers as repository variables. They are not secrets:</p>
+<div class="highlight"><pre><span></span><code>gh<span class="w"> </span>variable<span class="w"> </span><span class="nb">set</span><span class="w"> </span>ANTHROPIC_FEDERATION_RULE_ID<span class="w"> </span>--repo<span class="w"> </span><span class="nv">$OWNER</span>/<span class="nv">$REPO</span><span class="w"> </span>--body<span class="w"> </span>fdrl_...
+gh<span class="w"> </span>variable<span class="w"> </span><span class="nb">set</span><span class="w"> </span>ANTHROPIC_ORGANIZATION_ID<span class="w"> </span>--repo<span class="w"> </span><span class="nv">$OWNER</span>/<span class="nv">$REPO</span><span class="w"> </span>--body<span class="w"> </span>&lt;organization<span class="w"> </span>uuid&gt;
+gh<span class="w"> </span>variable<span class="w"> </span><span class="nb">set</span><span class="w"> </span>ANTHROPIC_SERVICE_ACCOUNT_ID<span class="w"> </span>--repo<span class="w"> </span><span class="nv">$OWNER</span>/<span class="nv">$REPO</span><span class="w"> </span>--body<span class="w"> </span>svac_...
 </code></pre></div>
-<p>Use <code>CLAUDE_CODE_OAUTH_TOKEN</code> instead, and change the <code>anthropic_api_key</code> lines in both Claude workflows, when authenticating with a subscription.</p>
+<p>If the rule spans several workspaces, add <code>anthropic_workspace_id: ${{ vars.ANTHROPIC_WORKSPACE_ID }}</code> to the three
+   Claude steps and set that variable too. To use an API key instead, store it as the <code>ANTHROPIC_API_KEY</code> secret and
+   replace the three <code>anthropic_*</code> inputs with <code>anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}</code>; never set both,
+   a static credential makes the action skip federation.</p>
 <ol>
 <li><strong>Let workflows approve pull requests</strong>, which the auto-merge workflow needs:</li>
 </ol>
@@ -588,7 +621,7 @@ gh<span class="w"> </span>api<span class="w"> </span>-X<span class="w"> </span>P
 <li><strong>Cap the cost</strong>: <code>--max-turns</code> in <code>claude_args</code> and <code>timeout-minutes</code> on the jobs bound each run; the Claude Console shows spend per key.</li>
 </ul>
 <h2 id="what-stays-with-humans">What stays with humans<a class="headerlink" href="#what-stays-with-humans" title="Permanent link">&para;</a></h2>
-<p>Merging behaviour changes, releasing and publishing, approving the <code>pypi</code> deployment, verifying anything against a real AFAS environment, changing the license or adding a dependency with a non-permissive license, handling security disclosures, and rotating the API key.</p>
+<p>Merging behaviour changes, releasing and publishing, approving the <code>pypi</code> deployment, verifying anything against a real AFAS environment, changing the license or adding a dependency with a non-permissive license, handling security disclosures, and changing the federation rule or service account the agent authenticates with.</p>
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://github.com/schubergphilis/afas_mcp_server/blob/main/AGENTS.md"><code>AGENTS.md</code></a>: the manual itself.</li>
