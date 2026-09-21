@@ -94,7 +94,7 @@ test = [
 
 [build-system]
 # The upper bound tracks the pinned uv. Bump with `./workflow.cmd develop.bump-uv`.
-requires = ["uv_build>=0.8.15,<=0.12.10"]
+requires = ["uv_build>=0.8.15,<=0.12.13"]
 build-backend = "uv_build"
 
 [tool.pyscn.complexity]
