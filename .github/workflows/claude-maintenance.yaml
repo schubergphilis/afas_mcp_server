@@ -76,7 +76,7 @@ jobs:
 
       - name: Review the update
         if: steps.pr.outputs.review == 'true'
-        uses: anthropics/claude-code-action@cfc3eb22bfed5c26ef66e3223c982af27e4524de  # v1
+        uses: anthropics/claude-code-action@8ce9314fa9a404564fa7e954cd84f25bcba2b829  # v1
         with:
           # Workload identity federation via repository variables; see claude.yaml for the rationale.
           anthropic_federation_rule_id: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
@@ -123,7 +123,7 @@ jobs:
           enable-cache: true
 
       - name: Run the maintenance checklist
-        uses: anthropics/claude-code-action@cfc3eb22bfed5c26ef66e3223c982af27e4524de  # v1
+        uses: anthropics/claude-code-action@8ce9314fa9a404564fa7e954cd84f25bcba2b829  # v1
         with:
           # Workload identity federation via repository variables; see claude.yaml for the rationale.
           anthropic_federation_rule_id: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
