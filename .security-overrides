@@ -29,3 +29,11 @@
 # CVE-2024-1234::2026-12-31
 # GHSA-xxxx-yyyy-zzzz
 # PYSEC-2025-0001
+
+# filelock 4.0.11 (dev tooling only: tox, virtualenv, python-discovery; not a
+# runtime dependency of the server). The fix, 4.2.1+, needs Python >= 3.11 and
+# this project still supports 3.10; filelock 4.1.0, the newest for 3.10, has
+# six CVEs instead of three. Re-review on expiry or when 3.10 is dropped.
+CVE-2026-112907::2026-12-31
+CVE-2026-112913::2026-12-31
+CVE-2026-112940::2026-12-31
