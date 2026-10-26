@@ -1,6 +1,6 @@
 [project]
 name = "afas_mcp_server"
-version = "0.0.0"
+version = "0.1.0"
 description = "Open-source MCP server that exposes AFAS Profit GetConnectors, UpdateConnectors and metainfo to AI agents"
 readme = "README.md"
 authors = [
