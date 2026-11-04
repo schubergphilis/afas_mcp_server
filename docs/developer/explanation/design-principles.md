@@ -66,7 +66,7 @@ The cost is one Python module (`_CI/tasks/sbom.py`) and one extra build step; th
 
 - **No framework choice.** This is a library scaffold. It does not know about FastAPI, Django, or Click. Add what you need.
 - **No monorepo support.** One package, one repo.
-- **No Python below the project's chosen minimum version (as low as 3.10).** `tomllib` is imported via a 3.10-compatible fallback, so it's no longer a reason to require a higher floor.
+- **No Python below the project's chosen minimum version (3.11 here).** `tomllib` is in the standard library from 3.11, so it's no longer a reason to require a higher floor.
 - **No GitHub-only or GitLab-only assumptions in the dev cycle.** Host-specific code lives in `_CI/tasks/<host>.py`; the rest of the workflow runs identically.
 
 ## See also

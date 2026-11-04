@@ -44,8 +44,8 @@ updates:
       # The uv pin appears in five places that must move together (see docs/developer/reference/
       # dependency-groups.md); `./workflow.cmd develop.bump-uv` is the only thing that moves it.
       - dependency-name: uv
-      # ruff 0.16 lints `_CI/` against `_CI/pyproject.toml` (requires-python >= 3.12) and reports
-      # findings whose fixes would break Python 3.10. Lift this once that mismatch is fixed.
+      # ruff 0.16 reports findings under `_CI/` that are not triaged yet. Lift this once they are
+      # (see the ruff comment in pyproject.toml).
       - dependency-name: ruff
         versions: [">=0.16.0"]
 

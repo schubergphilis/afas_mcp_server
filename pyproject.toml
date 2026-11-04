@@ -59,9 +59,9 @@ lint = [
     "complexipy==6.2.0",
     "pylint==4.0.9",
     # Held at 0.15.x on purpose, and ignored for >= 0.16 in .github/dependabot.yml: ruff 0.16
-    # lints `_CI/` against `_CI/pyproject.toml`, which declares `requires-python = ">=3.12"`
-    # while this project targets 3.11, so its findings assume syntax this project cannot use.
-    # Lift both once the python-target mismatch is fixed.
+    # reports findings under `_CI/` that nobody has triaged yet (e.g. UP036 on the tomli
+    # fallback, UP017 on `datetime.UTC`). Both are valid at the 3.11 floor that `_CI/` and this
+    # project share. Lift both once those findings are triaged.
     "ruff==0.15.22",
     "ty==0.0.69",
 ]
