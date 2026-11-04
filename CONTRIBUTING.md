@@ -46,7 +46,7 @@ token for a **test** environment, and run `uv run afas-mcp-server --check`.
 5. Commit with a [Conventional Commits](https://www.conventionalcommits.org/) message
    (`feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `build:`, `ci:`, `chore:`). The changelog is
    generated from these.
-6. Open a pull request. Fill in the template; CI runs lint, tests across Python 3.10 to 3.14, a
+6. Open a pull request. Fill in the template; CI runs lint, tests across Python 3.11 to 3.14, a
    dependency audit and a build.
 
 The maintainer agent may review your PR, ask questions, or push a follow-up commit to fix lint

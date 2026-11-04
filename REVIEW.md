@@ -14,7 +14,7 @@ What the review lanes hold a PR in this repo to. AGENTS.md has the house rules; 
 - A claim of AFAS behaviour that CI cannot verify, without the PR saying so.
 
 ## Minor
-- `TYPE_CHECKING` blocks, `from __future__ import annotations`, or syntax newer than Python 3.10.
+- `TYPE_CHECKING` blocks, `from __future__ import annotations`, or syntax newer than Python 3.11.
 - A public item without a Google docstring, a logger not named per class, or a module-level function with a leading underscore.
 - A function that mutates its arguments instead of returning a value.
 - A PR that bundles more than one logical change.

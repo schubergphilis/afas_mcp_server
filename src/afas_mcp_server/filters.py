@@ -1,7 +1,7 @@
 """Filter, sort and paging expressions for GetConnector calls, rendered the way the AFAS REST API expects them."""
 
 import json
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel, Field
 
@@ -14,7 +14,7 @@ SEPARATORS = (AND_SEPARATOR, OR_SEPARATOR)
 FilterValue = str | int | float | bool | None
 
 
-class Operator(str, Enum):
+class Operator(StrEnum):
     """Comparison operators AFAS supports in GetConnector filters, by readable name."""
 
     EQUALS = 'equals'

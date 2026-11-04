@@ -69,8 +69,9 @@ def bump_uv(context: Context, version: str = '') -> None:
         if not has_uv_build(target):
             print(f'uv {target} exists but uv-build {target} does not; refusing a version that cannot build.')
             raise SystemExit(1)
-        digest = image_digest(target, read_info('info.python-version'))
-        apply_to_pyproject(PYPROJECT, target, digest)
+        python_version = read_info('info.python-version')
+        digest = image_digest(target, python_version)
+        apply_to_pyproject(PYPROJECT, target, digest, python_version)
     except UvReleaseError as exc:
         print(f'Could not bump uv: {exc}')
         raise SystemExit(1) from None

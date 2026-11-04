@@ -9,7 +9,7 @@ description = 'A vendored version of invoke that can be used to construct portab
 # tomli fallback as dead code (UP036), and rewriting `timezone.utc` to the 3.11-only
 # `datetime.UTC` (UP017). Stating the floor means a suggestion is never newer than the
 # oldest interpreter the generated tooling can run on.
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 
 [build-system]
 requires = ['setuptools', 'wheel']

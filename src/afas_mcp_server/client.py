@@ -4,11 +4,10 @@ import base64
 import binascii
 import json
 import logging
-from typing import Any
+from typing import Any, Self
 from urllib.parse import quote
 
 import httpx2
-from typing_extensions import Self
 
 from .configuration import Settings
 from .filters import Filter, query_params

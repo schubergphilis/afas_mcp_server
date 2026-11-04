@@ -186,26 +186,28 @@ def current_pin(pyproject: str) -> str:
     return match.group(1)
 
 
-def rewrite_pins(pyproject: str, version: str, digest: str) -> str:
+def rewrite_pins(pyproject: str, version: str, digest: str, python_version: str) -> str:
     """Return `pyproject` text with every uv pin moved to `version`, and the image digest set.
 
     Rewrites, in order: the `test` group's `uv==` entry, the `uv_build` upper bound, the
-    `required-version` constraint, and the base image's tag plus digest. The digest is applied
-    in the same pass as the tag on purpose — see the module docstring for why splitting them
-    is dangerous.
+    `required-version` constraint, and the base image's tag plus digest. The tag is rebuilt from
+    `python_version` too, so a raised Python floor cannot be left beside a digest of the new
+    image. The digest is applied in the same pass as the tag on purpose — see the module
+    docstring for why splitting them is dangerous.
 
     Raises:
         UvReleaseError: If any of the four substitutions matches nothing, which would leave a
             half-bumped file.
     """
+    tag = IMAGE_TAG_TEMPLATE.format(version=version, python_version=python_version)
     substitutions = (
         ('test-group pin', r'"uv==[^"]+"', f'"uv=={version}"'),
         ('uv_build bound', r'(requires = \["uv_build>=[^,]+,<=)[^"]+(")', rf'\g<1>{version}\g<2>'),
         ('required-version', r'^required-version = "==[^"]+"$', f'required-version = "=={version}"'),
         (
             'base-image reference',
-            r'^base-image = "([^:]+):[^"]*(-python\d+\.\d+-trixie-slim)@sha256:[0-9a-f]+"$',
-            rf'base-image = "\g<1>:{version}\g<2>@{digest}"',
+            r'^base-image = "([^:]+):[^"]*-python\d+\.\d+-trixie-slim@sha256:[0-9a-f]+"$',
+            rf'base-image = "\g<1>:{tag}@{digest}"',
         ),
     )
     updated = pyproject
@@ -217,7 +219,7 @@ def rewrite_pins(pyproject: str, version: str, digest: str) -> str:
     return updated
 
 
-def apply_to_pyproject(path: Path, version: str, digest: str) -> None:
+def apply_to_pyproject(path: Path, version: str, digest: str, python_version: str) -> None:
     """Move every uv pin in the `pyproject.toml` at `path` to `version`.
 
     Raises:
@@ -229,6 +231,6 @@ def apply_to_pyproject(path: Path, version: str, digest: str) -> None:
     except OSError as exc:
         msg = f'could not read {path}: {exc}'
         raise UvReleaseError(msg) from exc
-    updated = rewrite_pins(original, version, digest)
+    updated = rewrite_pins(original, version, digest, python_version)
     if updated != original:
         path.write_text(updated, encoding='utf-8')
