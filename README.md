@@ -5,8 +5,8 @@
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](https://opensource.org/license/apache-2.0)
 [![Documentation: Diátaxis](https://img.shields.io/badge/docs-Di%C3%A1taxis-009485?logo=readthedocs&logoColor=white)](https://diataxis.fr/)
 [![Build](https://img.shields.io/badge/build-unknown-lightgrey)](https://github.com/features/actions)
-[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://coverage.readthedocs.io/)
-[![pyscn quality](https://img.shields.io/badge/pyscn-C-yellow)](https://pyscn.ludo-tech.org)
+[![Coverage](https://img.shields.io/badge/coverage-unknown-lightgrey)](https://coverage.readthedocs.io/)
+[![pyscn quality](https://img.shields.io/badge/pyscn-not%20rated-lightgrey)](https://pyscn.ludo-tech.org)
 
 An open-source [Model Context Protocol](https://modelcontextprotocol.io) server for [AFAS Profit](https://www.afas.nl).
 It lets AI assistants such as Claude Desktop, Claude Code, Cursor or any other MCP client read data through your
