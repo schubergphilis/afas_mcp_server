@@ -2,7 +2,7 @@
 
 import pytest
 
-from _CI.uv_release import UvReleaseError, rewrite_pins
+from _CI.uv_release import UvReleaseError, current_pin, rewrite_pins
 
 PYPROJECT = """\
 [dependency-groups]
@@ -20,6 +20,24 @@ required-version = ">=0.13.4"
 [tool.image]
 base-image = "ghcr.io/astral-sh/uv:0.13.4-python3.10-trixie-slim@sha256:0123456789abcdef"
 """
+
+
+def test_current_pin_reads_the_version_from_the_floor() -> None:
+    """The bump starts from the version in the `>=` floor, not from any other pin."""
+    assert current_pin(PYPROJECT) == '0.13.4'
+
+
+@pytest.mark.parametrize(
+    'pyproject',
+    [
+        pytest.param(PYPROJECT.replace('>=0.13.4', '==0.13.4'), id='legacy-exact-pin'),
+        pytest.param(PYPROJECT.replace('required-version', 'other-key'), id='missing-key'),
+    ],
+)
+def test_current_pin_refuses_anything_but_a_floor(pyproject: str) -> None:
+    """A legacy exact pin or a missing key raises instead of guessing a version to bump from."""
+    with pytest.raises(UvReleaseError, match='required-version floor'):
+        current_pin(pyproject)
 
 
 def test_rewrite_pins_moves_every_pin_to_the_new_version() -> None:
