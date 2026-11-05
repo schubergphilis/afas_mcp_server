@@ -542,7 +542,7 @@
 <ul>
 <li><strong>No framework choice.</strong> This is a library scaffold. It does not know about FastAPI, Django, or Click. Add what you need.</li>
 <li><strong>No monorepo support.</strong> One package, one repo.</li>
-<li><strong>No Python below the project's chosen minimum version (as low as 3.10).</strong> <code>tomllib</code> is imported via a 3.10-compatible fallback, so it's no longer a reason to require a higher floor.</li>
+<li><strong>No Python below the project's chosen minimum version (3.11 here).</strong> <code>tomllib</code> is in the standard library from 3.11, so it's no longer a reason to require a higher floor.</li>
 <li><strong>No GitHub-only or GitLab-only assumptions in the dev cycle.</strong> Host-specific code lives in <code>_CI/tasks/&lt;host&gt;.py</code>; the rest of the workflow runs identically.</li>
 </ul>
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>

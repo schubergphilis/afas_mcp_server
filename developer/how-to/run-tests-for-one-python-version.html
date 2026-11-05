@@ -489,9 +489,9 @@ run a targeted subset, stay on the <code>./workflow.cmd</code> tasks below.</p>
 <p>Runs every env declared in <code>pyproject.toml</code>'s <code>[tool.tox]</code> section, in parallel. The envs are
 <code>py&lt;major&gt;&lt;minor&gt;</code> (no dot) — one per version in your <code>min_python_version</code>..<code>max_python_version</code> range.</p>
 <h2 id="a-single-python-version">A single Python version<a class="headerlink" href="#a-single-python-version" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>./workflow.cmd<span class="w"> </span>test.tox<span class="w"> </span>--env<span class="o">=</span>py310
+<div class="highlight"><pre><span></span><code>./workflow.cmd<span class="w"> </span>test.tox<span class="w"> </span>--env<span class="o">=</span>py311
 </code></pre></div>
-<p>Pass any single env name (<code>py310</code>, <code>py311</code>, …). Omit <code>--env</code> to run the whole matrix.</p>
+<p>Pass any single env name (<code>py311</code>, <code>py312</code>, …). Omit <code>--env</code> to run the whole matrix.</p>
 <h2 id="a-targeted-subset-current-venv">A targeted subset (current venv)<a class="headerlink" href="#a-targeted-subset-current-venv" title="Permanent link">&para;</a></h2>
 <p>Forward extra arguments to pytest with <code>--args</code>:</p>
 <div class="highlight"><pre><span></span><code>./workflow.cmd<span class="w"> </span>test.pytest<span class="w"> </span>--args<span class="o">=</span><span class="s2">"tests/test_specific_file.py"</span>
@@ -501,7 +501,7 @@ run a targeted subset, stay on the <code>./workflow.cmd</code> tasks below.</p>
 <p>This uses whichever Python version uv resolved for the project, slicing by file, name, or marker.</p>
 <blockquote>
 <p><strong>Advanced — below the <code>./workflow.cmd</code> abstraction.</strong> For tight interactive loops (e.g. <code>-x --pdb</code>,
-plugin flags) you can call the tools directly: <code>uv run pytest -k sanity</code>, <code>uv run tox -e py310</code>. This
+plugin flags) you can call the tools directly: <code>uv run pytest -k sanity</code>, <code>uv run tox -e py311</code>. This
 bypasses the task runner — you take responsibility for the environment and flags you pass. If you find
 yourself doing it often, model it as a task instead: see
 <a href="add-a-workflow-task.html">Add a workflow task</a>.</p>
@@ -511,7 +511,7 @@ yourself doing it often, model it as a task instead: see
 <code>matrix</code> block in <code>.github/workflows/continuous-integration.yaml</code> or the <code>parallel:</code> block in
 <code>.gitlab-ci.yml</code>.</p>
 <h2 id="when-you-need-a-version-uv-hasnt-fetched-yet">When you need a version uv hasn't fetched yet<a class="headerlink" href="#when-you-need-a-version-uv-hasnt-fetched-yet" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>python<span class="w"> </span>install<span class="w"> </span><span class="m">3</span>.10
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>python<span class="w"> </span>install<span class="w"> </span><span class="m">3</span>.11
 </code></pre></div>
 <p>uv fetches and pins it; tox picks it up automatically on the next run.</p>
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
