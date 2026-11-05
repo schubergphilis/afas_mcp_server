@@ -49,9 +49,9 @@ CI=true ./workflow.cmd document.build  # docs must build without warnings
 
 Conventions, all enforced by the linters where possible:
 
-- Python 3.10 syntax, single quotes, 120 columns, Google docstrings on everything public.
+- Python 3.11 syntax, single quotes, 120 columns, Google docstrings on everything public.
 - Import at runtime; no `TYPE_CHECKING` blocks or `from __future__ import annotations`. Use
-  `typing_extensions.Self` for self-referential returns.
+  `typing.Self` for self-referential returns.
 - One logger per class (`logging.getLogger(f'{__name__}.{self.__class__.__name__}')`).
 - Nouns are values, verbs are work; no leading underscores on module-level functions; return
   values instead of mutating arguments; components resolve their own state.

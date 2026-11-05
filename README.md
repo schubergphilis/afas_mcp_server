@@ -1,7 +1,7 @@
 # AFAS MCP Server
 
 [![Version](https://img.shields.io/badge/version-0.0.0-blue)](https://pypi.org/project/afas_mcp_server/)
-[![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue?logo=python&logoColor=white)](https://www.python.org)
+[![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue?logo=python&logoColor=white)](https://www.python.org)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](https://opensource.org/license/apache-2.0)
 [![Documentation: Diátaxis](https://img.shields.io/badge/docs-Di%C3%A1taxis-009485?logo=readthedocs&logoColor=white)](https://diataxis.fr/)
 [![Build](https://img.shields.io/badge/build-unknown-lightgrey)](https://github.com/features/actions)

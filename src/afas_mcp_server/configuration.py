@@ -2,12 +2,11 @@
 
 import base64
 import binascii
-from enum import Enum
-from typing import Annotated
+from enum import StrEnum
+from typing import Annotated, Self
 
 from pydantic import Field, SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing_extensions import Self
 
 XML_ENVELOPE_PREFIX = '<token'
 XML_ENVELOPE_TEMPLATE = '<token><version>1</version><data>{data}</data></token>'
@@ -16,7 +15,7 @@ REST_SERVICES_PATH = 'profitrestservices'
 LOG_LEVELS = ('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL')
 
 
-class Environment(str, Enum):
+class Environment(StrEnum):
     """The kind of AFAS Online environment, which selects the REST hostname."""
 
     PRODUCTION = 'production'
