@@ -63,9 +63,10 @@ bumped tag with a stale digest silently keeps the old image.
 
 ## The uv pin, and the one command that moves it
 
-uv gets its own treatment because `[tool.uv] required-version` is an **exact** match: a stale
-uv pin does not merely lag, it refuses to run. And the version appears in five places that
-must agree:
+uv gets its own treatment because `[tool.uv] required-version` is a **floor**: an older uv
+does not merely lag, it refuses to run. It is a floor rather than an exact match because
+Dependabot runs its own, usually newer, uv against this file and rejects the whole update
+when the constraint excludes it. And the version appears in five places that must agree:
 
 | Where | Why |
 |---|---|

@@ -15,7 +15,7 @@ test = [
 requires = ["uv_build>=0.8.15,<=0.13.4"]
 
 [tool.uv]
-required-version = "==0.13.4"
+required-version = ">=0.13.4"
 
 [tool.image]
 base-image = "ghcr.io/astral-sh/uv:0.13.4-python3.10-trixie-slim@sha256:0123456789abcdef"
@@ -28,7 +28,7 @@ def test_rewrite_pins_moves_every_pin_to_the_new_version() -> None:
 
     assert '"uv==0.13.5",' in updated
     assert 'requires = ["uv_build>=0.8.15,<=0.13.5"]' in updated
-    assert 'required-version = "==0.13.5"' in updated
+    assert 'required-version = ">=0.13.5"' in updated
     assert 'base-image = "ghcr.io/astral-sh/uv:0.13.5-python3.11-trixie-slim@sha256:fedcba9876543210"' in updated
     assert '0.13.4' not in updated
 

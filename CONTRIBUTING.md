@@ -26,7 +26,7 @@ cd afas_mcp_server
 ```
 
 `./workflow.cmd` wraps uv and the pinned tools; on Windows the same file works from PowerShell
-or cmd. If your uv version differs from `[tool.uv] required-version` in `pyproject.toml`, run
+or cmd. If your uv version is below `[tool.uv] required-version` in `pyproject.toml`, run
 the pinned one with `uvx uv@<version> run ...` instead of upgrading or downgrading globally.
 
 To try the server against a real AFAS environment, copy `.env.example` to `.env`, fill in a
