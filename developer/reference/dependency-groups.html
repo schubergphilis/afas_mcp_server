@@ -567,9 +567,10 @@ opens a PR for it.</p>
 in the tag and the digest together: a reference carrying both resolves to the digest, so a
 bumped tag with a stale digest silently keeps the old image.</p>
 <h2 id="the-uv-pin-and-the-one-command-that-moves-it">The uv pin, and the one command that moves it<a class="headerlink" href="#the-uv-pin-and-the-one-command-that-moves-it" title="Permanent link">&para;</a></h2>
-<p>uv gets its own treatment because <code>[tool.uv] required-version</code> is an <strong>exact</strong> match: a stale
-uv pin does not merely lag, it refuses to run. And the version appears in five places that
-must agree:</p>
+<p>uv gets its own treatment because <code>[tool.uv] required-version</code> is a <strong>floor</strong>: an older uv
+does not merely lag, it refuses to run. It is a floor rather than an exact match because
+Dependabot runs its own, usually newer, uv against this file and rejects the whole update
+when the constraint excludes it. And the version appears in five places that must agree:</p>
 <table>
 <thead>
 <tr>
