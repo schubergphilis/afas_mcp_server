@@ -43,7 +43,7 @@ CI=true ./workflow.cmd secure.audit    # pip-audit against .security-overrides
 CI=true ./workflow.cmd document.build  # docs must build without warnings
 ```
 
-`uv` must match `[tool.uv] required-version` in `pyproject.toml`; run a pinned one with
+`uv` must satisfy `[tool.uv] required-version` in `pyproject.toml`; run a pinned one with
 `uvx uv@<version> ...` if the ambient version differs. Never edit the five uv pins by hand;
 `./workflow.cmd develop.bump-uv` moves them together.
 

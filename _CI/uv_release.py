@@ -1,6 +1,7 @@
 """Stdlib-only helpers for resolving and applying a fresh uv pin.
 
-uv is pinned exactly (`[tool.uv] required-version = "==X"`), and that one version reaches
+uv is pinned to one version (`[tool.uv] required-version = ">=X"`, a floor rather than an exact
+match so Dependabot's own, newer uv still accepts the project), and that version reaches
 five places in a project's `pyproject.toml`: the constraint itself, the `uv` entry in the
 `test` group, the `uv_build` upper bound, and the base image's tag — which also carries a
 digest that has to move with it. A reference carrying tag *and* digest resolves to the
@@ -177,11 +178,11 @@ def current_pin(pyproject: str) -> str:
     """Return the uv version a concrete `pyproject.toml`'s text currently pins.
 
     Raises:
-        UvReleaseError: If `[tool.uv] required-version` is absent or not an exact pin.
+        UvReleaseError: If `[tool.uv] required-version` is absent or not a `>=` floor.
     """
-    match = re.search(r'^required-version = "==([^"]+)"$', pyproject, re.MULTILINE)
+    match = re.search(r'^required-version = ">=([^"]+)"$', pyproject, re.MULTILINE)
     if not match:
-        msg = 'could not find an exact [tool.uv] required-version to bump from'
+        msg = 'could not find a [tool.uv] required-version floor to bump from'
         raise UvReleaseError(msg)
     return match.group(1)
 
@@ -203,7 +204,7 @@ def rewrite_pins(pyproject: str, version: str, digest: str, python_version: str)
     substitutions = (
         ('test-group pin', r'"uv==[^"]+"', f'"uv=={version}"'),
         ('uv_build bound', r'(requires = \["uv_build>=[^,]+,<=)[^"]+(")', rf'\g<1>{version}\g<2>'),
-        ('required-version', r'^required-version = "==[^"]+"$', f'required-version = "=={version}"'),
+        ('required-version', r'^required-version = ">=[^"]+"$', f'required-version = ">={version}"'),
         (
             'base-image reference',
             r'^base-image = "([^:]+):[^"]*-python\d+\.\d+-trixie-slim@sha256:[0-9a-f]+"$',
