@@ -1,7 +1,7 @@
 """The MCP server: tools that expose the connectors of one AFAS Profit environment to an AI agent."""
 
 import logging
-from collections.abc import AsyncIterator, Awaitable
+from collections.abc import AsyncGenerator, Awaitable
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from importlib.metadata import PackageNotFoundError, version
@@ -364,7 +364,7 @@ def build_server(settings: Settings | None = None, transport: httpx2.AsyncBaseTr
     resolved = settings if settings is not None else Settings()
 
     @asynccontextmanager
-    async def lifespan(_server: MCPServer) -> AsyncIterator[AppContext]:
+    async def lifespan(_server: MCPServer) -> AsyncGenerator[AppContext]:
         async with AfasClient(resolved, transport=transport) as client:
             LOGGER.info('connected to %s (writes %s)', resolved.rest_base_url, 'on' if resolved.allow_writes else 'off')
             yield AppContext(settings=resolved, client=client)
