@@ -1,25 +1,31 @@
 # AFAS MCP Server
 
-[![Version](https://img.shields.io/badge/version-0.0.0-blue)](https://pypi.org/project/afas_mcp_server/)
-[![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue?logo=python&logoColor=white)](https://www.python.org)
-[![License](https://img.shields.io/badge/license-Apache--2.0-blue)](https://opensource.org/license/apache-2.0)
-[![Documentation: Diátaxis](https://img.shields.io/badge/docs-Di%C3%A1taxis-009485?logo=readthedocs&logoColor=white)](https://diataxis.fr/)
-[![Build](https://img.shields.io/badge/build-unknown-lightgrey)](https://github.com/features/actions)
-[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://coverage.readthedocs.io/)
-[![pyscn quality](https://img.shields.io/badge/pyscn-not%20rated-lightgrey)](https://pyscn.ludo-tech.org)
+[![CI](https://img.shields.io/github/actions/workflow/status/schubergphilis/afas_mcp_server/continuous-integration.yaml?label=CI&style=for-the-badge)](https://github.com/schubergphilis/afas_mcp_server/actions/workflows/continuous-integration.yaml)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue?style=for-the-badge)](https://pypi.org/project/afas_mcp_server/)
+[![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue?logo=python&logoColor=white&style=for-the-badge)](https://www.python.org)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue?style=for-the-badge)](https://github.com/schubergphilis/afas_mcp_server/blob/main/LICENSE)
+[![Documentation: Diátaxis](https://img.shields.io/badge/docs-Di%C3%A1taxis-009485?logo=readthedocs&logoColor=white&style=for-the-badge)](https://diataxis.fr/)
+[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen?style=for-the-badge)](https://coverage.readthedocs.io/)
+[![pyscn quality](https://img.shields.io/badge/pyscn-not%20rated-lightgrey?style=for-the-badge)](https://pyscn.ludo-tech.org)
+[![Issues](https://img.shields.io/github/issues/schubergphilis/afas_mcp_server?style=for-the-badge)](https://github.com/schubergphilis/afas_mcp_server/issues)
 
 An open-source [Model Context Protocol](https://modelcontextprotocol.io) server for [AFAS Profit](https://www.afas.nl).
-It lets AI assistants such as Claude Desktop, Claude Code, Cursor or any other MCP client read data through your
-GetConnectors, inspect connector schemas, and, only when you switch it on, write through UpdateConnectors.
+It lets AI assistants such as Claude Desktop, Claude Code or Cursor read data through your GetConnectors, look at
+connector schemas and, only when you switch it on, write through UpdateConnectors.
 
-- **Read-only by default.** Insert, update and delete tools exist only when `AFAS_ALLOW_WRITES=true`.
-- **Your connectors, your rules.** The server sees exactly the GetConnectors and UpdateConnectors that the AFAS app
+It is read-only by default. One server process uses one AFAS app connector token, so the assistant can reach only
+the connectors that token allows.
+
+## What it does
+
+- **Reads by default.** Insert, update and delete tools exist only when `AFAS_ALLOW_WRITES=true`.
+- **Uses your connectors.** The server sees exactly the GetConnectors and UpdateConnectors that the AFAS app
   connector behind the token allows. Nothing is bundled or hard-coded.
-- **Schema-aware.** Field definitions come from AFAS metainfo, and write payloads are validated against the
+- **Knows the schema.** Field definitions come from AFAS metainfo, and write payloads are checked against the
   UpdateConnector schema before anything is sent.
-- **Readable filters.** Filters are expressed by field id and operator name (`contains`, `greater_than`, ...) and
-  rendered into the AFAS query syntax, including OR groups and the JSON filter fallback.
-- **Runs anywhere an MCP client does.** stdio for desktop clients, streamable HTTP for shared deployments.
+- **Takes readable filters.** Filters use a field id and an operator name (`contains`, `greater_than`, ...) and are
+  turned into the AFAS query syntax, including OR groups and the JSON filter fallback.
+- **Runs where your MCP client runs.** stdio for desktop clients, streamable HTTP for shared deployments.
 
 ## How it fits together
 
@@ -57,13 +63,13 @@ The assistant discovers connectors and fields through AFAS metainfo, reads rows 
 and paging, and can only reach UpdateConnectors when the operator has enabled writes, and then only after the
 payload has been checked against the connector's schema.
 
-## Quick start
+## Install
 
 1. In AFAS Profit, create an app connector (*Algemeen > Beheer > App connector*), add the GetConnectors and
    UpdateConnectors the assistant may use, and create a token for a user. Note the environment number from your
    AFAS Online URL, e.g. `12345` in `https://12345.afasonline.com`.
 
-2. Install [uv](https://docs.astral.sh/uv/) and verify the connection:
+2. Install [uv](https://docs.astral.sh/uv/) and check the connection:
 
    ```bash
    export AFAS_MEMBER_ID=12345
@@ -96,13 +102,17 @@ payload has been checked against the connector's schema.
    claude mcp add afas -e AFAS_MEMBER_ID=12345 -e AFAS_TOKEN='<token>...</token>' -- uvx afas-mcp-server
    ```
 
-4. Ask your assistant something like *"Which AFAS connectors can you use?"* or *"Show the ten most recently
-   changed employees."* It will discover connectors, read their field definitions and page through rows.
-
 Until the package is published on PyPI, run it from a checkout instead: `uv run afas-mcp-server`, or from git with
 `uvx --from git+https://github.com/schubergphilis/afas_mcp_server afas-mcp-server`.
 
-## Tools
+## Use
+
+Ask your assistant something like *"Which AFAS connectors can you use?"* or *"Show the ten most recently changed
+employees."* It will discover connectors, read their field definitions and page through rows.
+
+Command line: `afas-mcp-server [--transport stdio|streamable-http] [--host H] [--port P] [--path /mcp] [--check]`.
+
+### Tools
 
 | Tool | Changes data | Purpose |
 | --- | --- | --- |
@@ -118,7 +128,7 @@ Until the package is published on PyPI, run it from a checkout instead: `uv run 
 
 The full parameter reference is in [docs/reference/tools.md](docs/reference/tools.md).
 
-## Configuration
+### Configuration
 
 Settings come from `AFAS_*` environment variables or a `.env` file in the working directory
 (see [`.env.example`](https://github.com/schubergphilis/afas_mcp_server/blob/main/.env.example)).
@@ -136,9 +146,7 @@ Settings come from `AFAS_*` environment variables or a `.env` file in the workin
 | `AFAS_LANGUAGE` | `nl-nl` | Language of AFAS messages: `nl-nl`, `nl-be`, `fr-fr`, `de-de` or `en-us`. |
 | `AFAS_LOG_LEVEL` | `INFO` | Log level; logs go to stderr so stdio stays clean. |
 
-Command line: `afas-mcp-server [--transport stdio|streamable-http] [--host H] [--port P] [--path /mcp] [--check]`.
-
-## Writing to AFAS
+### Writing to AFAS
 
 Writes are off until you set `AFAS_ALLOW_WRITES=true`. With writes on, the assistant is instructed to describe the
 UpdateConnector, validate the payload and show the change before sending it, and every write tool validates the
@@ -148,7 +156,7 @@ payload against the schema first (switch off per call with `validate: false`). R
 - Give the token an app connector with only the connectors the assistant needs.
 - Keep separate tokens, and separate server instances, for read-only and writing use.
 
-## Security notes
+### Keeping the token safe
 
 - The token is a credential for your ERP and HR data. Keep it in environment variables or a `.env` file that is not
   committed; never paste it into a prompt.
@@ -156,7 +164,18 @@ payload against the schema first (switch off per call with `validate: false`). R
 - The streamable HTTP transport has no authentication of its own. Bind it to localhost or put it behind a reverse
   proxy that authenticates clients.
 
-## How this repository is maintained
+## Documentation
+
+The docs follow [Diátaxis](https://diataxis.fr/); start at [docs/index.md](docs/index.md). Build and open them with
+`./workflow.cmd document`, or read them online at <https://schubergphilis.github.io/afas_mcp_server/> once GitHub
+Pages is enabled for the repository.
+
+- **Tutorial:** [Getting started](docs/tutorials/getting-started.md)
+- **How-to:** [Connect an MCP client](docs/how-to/connect-an-mcp-client.md) · [Enable writes safely](docs/how-to/enable-writes-safely.md)
+- **Reference:** [Tools](docs/reference/tools.md) · [Configuration](docs/reference/configuration.md) · [API](docs/reference/api.md) · [Changelog](docs/reference/changelog.md)
+- **Explanation:** [About AFAS MCP Server](docs/explanation/about-your-project.md)
+
+## Contributing
 
 An AI agent, running as the [Claude Code GitHub Action](https://code.claude.com/docs/en/github-actions), maintains
 this repository under human supervision. Its standing instructions are in [AGENTS.md](https://github.com/schubergphilis/afas_mcp_server/blob/main/AGENTS.md): what it must never
@@ -177,12 +196,7 @@ how it runs the checks, and the weekly checklist it works through.
 Contributors follow the same rules; see [CONTRIBUTING.md](https://github.com/schubergphilis/afas_mcp_server/blob/main/CONTRIBUTING.md). The wiring and the repository settings
 it relies on are described in [Maintain the repository with an agent](docs/developer/how-to/maintain-with-an-agent.md).
 
-## Documentation
-
-Full documentation lives in [`docs/`](docs/index.md): build and open it with `./workflow.cmd document`, or read it
-online at <https://schubergphilis.github.io/afas_mcp_server/> once GitHub Pages is enabled for the repository.
-
-## Developing
+### Developing
 
 > Development flow as [Paleofuturistic Python](https://github.com/schubergphilis/paleofuturistic_python)
 
@@ -196,4 +210,4 @@ The scaffold manual lives in the docs' **Developer** section: start with
 
 ## License
 
-Apache-2.0. AFAS and AFAS Profit are trademarks of AFAS Software B.V.; this project is not affiliated with AFAS.
+[Apache-2.0](https://github.com/schubergphilis/afas_mcp_server/blob/main/LICENSE). AFAS and AFAS Profit are trademarks of AFAS Software B.V.; this project is not affiliated with AFAS.
