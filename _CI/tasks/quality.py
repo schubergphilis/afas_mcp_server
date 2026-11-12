@@ -37,8 +37,8 @@ def update_pyscn_badge() -> None:
     color = GRADE_COLORS.get(grade, 'lightgrey')
     content = readme.read_text(encoding='utf-8')
     updated = re.sub(
-        r'(\[!\[pyscn quality\]\(https://img\.shields\.io/badge/pyscn-)[^)]+(\))',
-        rf'\g<1>{grade}-{color}\2',
+        r'(\[!\[pyscn quality\]\(https://img\.shields\.io/badge/pyscn-)[^)?]+',
+        rf'\g<1>{grade}-{color}',
         content,
     )
     if updated != content:

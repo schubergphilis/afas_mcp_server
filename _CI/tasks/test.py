@@ -122,8 +122,8 @@ def update_coverage_badge() -> None:
     color = coverage_color(pct)
     content = readme.read_text(encoding='utf-8')
     updated = re.sub(
-        r'(\[!\[Coverage\]\(https://img\.shields\.io/badge/coverage-)[^)]+(\))',
-        rf'\g<1>{pct}%25-{color}\2',
+        r'(\[!\[Coverage\]\(https://img\.shields\.io/badge/coverage-)[^)?]+',
+        rf'\g<1>{pct}%25-{color}',
         content,
     )
     if updated != content:

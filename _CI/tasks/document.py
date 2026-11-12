@@ -24,8 +24,8 @@ def update_package_version_badge() -> None:
     version = match.group(1)
     content = readme.read_text(encoding='utf-8')
     updated = re.sub(
-        r'(\[!\[Version\]\(https://img\.shields\.io/badge/version-)[^)]+(\))',
-        rf'\g<1>{version}-blue\2',
+        r'(\[!\[Version\]\(https://img\.shields\.io/badge/version-)[^)?]+',
+        rf'\g<1>{version}-blue',
         content,
     )
     if updated != content:
@@ -48,8 +48,8 @@ def update_python_badge() -> None:
     label = '%20%7C%20'.join(versions)
     content = readme.read_text(encoding='utf-8')
     updated = re.sub(
-        r'(\[!\[Python\]\(https://img\.shields\.io/badge/python-)[^)]+(\))',
-        rf'\g<1>{label}-blue?logo=python&logoColor=white\2',
+        r'(\[!\[Python\]\(https://img\.shields\.io/badge/python-)[^)?]+',
+        rf'\g<1>{label}-blue',
         content,
     )
     if updated != content:
