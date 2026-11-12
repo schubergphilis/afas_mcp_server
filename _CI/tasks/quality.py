@@ -11,7 +11,6 @@ from .configuration import PYSCN_REPORTS_DIR
 from .shared import execute, is_ci, logged, open_target, run, run_steps
 
 GRADE_COLORS = {'A': 'brightgreen', 'B': 'green', 'C': 'yellow', 'D': 'orange', 'F': 'red'}
-BADGE_PATTERN = re.compile(r'(!\[pyscn quality\]\(https://img\.shields\.io/badge/pyscn-)[^)]+(\)\[)')
 
 
 def latest_pyscn_report() -> Path:
