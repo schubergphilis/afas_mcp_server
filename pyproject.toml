@@ -51,7 +51,7 @@ develop = [
 document = [
     "properdocs==1.6.7",
     "properdocs-theme-mkdocs==1.6.7",
-    "mkdocs-include-markdown-plugin==7.3.0",
+    "mkdocs-include-markdown-plugin==7.3.1",
     "mkdocstrings[python]==1.0.8",
 ]
 lint = [
@@ -63,20 +63,20 @@ lint = [
     # fallback, UP017 on `datetime.UTC`). Both are valid at the 3.11 floor that `_CI/` and this
     # project share. Lift both once those findings are triaged.
     "ruff==0.15.22",
-    "ty==0.0.95",
+    "ty==0.0.99",
 ]
 quality = [
-    "pyscn==1.33.1",
+    "pyscn==1.33.2",
 ]
 security = [
-    "cyclonedx-bom==7.6.0",
+    "cyclonedx-bom==8.0.1",
     "cyclonedx-python-lib[json-validation]==11.12.0",
     "pip-audit==2.10.1",
 ]
 test = [
     "pytest==9.2.0",
     "pytest-cov==7.1.0",
-    "pytest-env==1.8.4",
+    "pytest-env==1.8.5",
     "pytest-html==4.2.0",
     "pytest-xdist==3.8.0",
     # Pin uv to match [tool.uv] required-version — tox-uv depends on the uv
@@ -86,8 +86,8 @@ test = [
     # places the uv version appears, and one of them carries an image digest that has
     # to move with it.
     "uv==0.13.7",
-    "tox==4.67.5",
-    "tox-uv==1.37.3",
+    "tox==4.67.13",
+    "tox-uv==1.37.7",
 ]
 
 [build-system]
