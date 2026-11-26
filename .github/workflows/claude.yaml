@@ -60,7 +60,7 @@ jobs:
           enable-cache: true
 
       - name: Run Claude Code
-        uses: anthropics/claude-code-action@61a9c274fa7110a66dfafc1bbbced03833eb25fe  # v1
+        uses: anthropics/claude-code-action@f3b070c88125d33dbae5653df5f143101d4ea9dc  # v1
         with:
           # Workload identity federation: the job's GitHub OIDC token (hence `id-token: write`) is
           # exchanged for Claude API access through a Console service account, so no long-lived
