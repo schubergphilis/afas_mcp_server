@@ -259,7 +259,8 @@ include = ["_CI/tasks/sbom.py"]
 
 [tool.ty.overrides.rules]
 unknown-argument = "ignore"
-unresolved-attribute = "ignore"
+missing-attribute = "ignore"
+missing-union-attribute = "ignore"
 too-many-positional-arguments = "ignore"
 invalid-argument-type = "ignore"
 
